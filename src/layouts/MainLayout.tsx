@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import {
-  BarChartOutlined,
-  FolderOutlined,
-  HomeOutlined,
+  MedicineBoxOutlined,
+  PlusSquareOutlined,
+  SafetyOutlined,
 
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
+import longLogoResize from '../assets/longLogoResize.png';
+import Search from 'antd/es/input/Search';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -31,9 +33,9 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('병원', '/', <HomeOutlined />),
-  getItem('약국', 'sub1', <FolderOutlined />),
-  getItem('응급실', 'sub2', <BarChartOutlined />),
+  getItem('병원 찾기', '/hospital', <SafetyOutlined />),
+  getItem('약국 찾기', '/pharmacy', <MedicineBoxOutlined />),
+  // getItem('응급실 찾기', '/emergency', <PlusSquareOutlined />),
 ];
 
 
@@ -54,10 +56,8 @@ const ChartBoardLayout: React.FC = () => {
     }
   }
 
-  // '+ SQL 쿼리' 버튼 누르면 navigate
-  const handleNewSqlClick = () => {
-    navigate("/customsql");
-  }
+  const onSearch = () => {}
+
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -66,9 +66,34 @@ const ChartBoardLayout: React.FC = () => {
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleMenuClick}/>
       </Sider>
       <Layout>
-        <Header style={{ padding:"0 16px", background: colorBgContainer, display: "flex", justifyContent: "flex-end", alignItems: "center"}}>
-          <Button type="primary" onClick={handleNewSqlClick}>+ SQL 쿼리</Button>
-        </Header>
+        
+
+
+      <Header
+        style={{
+          padding: "0 16px",
+          background: colorBgContainer,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {/* 왼쪽: 로고 */}
+        <img src={longLogoResize} style={{ height: "30px" }} />
+
+        {/* 오른쪽: 검색창 + 버튼 */}
+        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+          <Search
+            placeholder="병원명 검색하기"
+            onSearch={onSearch}
+            style={{ width: 300 }}
+          />
+          <Button>로그인 · 회원가입</Button>
+        </div>
+      </Header>
+
+
+
         <Content style={{ margin: '16px' }}>
           {/* <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
