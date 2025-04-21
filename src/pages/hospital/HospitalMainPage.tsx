@@ -8,6 +8,7 @@ import hospitalRandom0 from '../../assets/hospitalImg/hospitalRandom6.jpg';
 import { useEffect, useState } from "react";
 import { select15FromGangnamGangDongHospital } from "../../api/chartboardApi";
 import { AppstoreAddOutlined, EnvironmentOutlined, GlobalOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 
 const HospitalMainPage = () => {
@@ -18,6 +19,7 @@ const HospitalMainPage = () => {
         hospital_main_category: string;
         hospital_main_address: string;
         hospital_name: string;
+        hospital_id: number;
     }
     // select15FromGangnamGangDongHospital 결과 저장
     const [hospitalInfo, setHospitalInfo] = useState<HospitalInfo []>([]);
@@ -86,7 +88,13 @@ const HospitalMainPage = () => {
     const handleMoreHospitalClick = () => {
         setOffset((prev) => prev + 15);
     }
-      
+
+    // Card(병원) 누르면, HospitalInfoPage로 navigate, state로 hospital_id, source 보냄
+    const navigate = useNavigate();
+    const handleHospitalCardClick = (hospitalId: number, hospitalSource: string, index: number) => {
+        navigate("/hospital/info", {state: {hospitalId, hospitalSource, index}})
+    }
+    
     return (  
         <>
         <div>정렬기준 추후에 추가 예정</div>
@@ -97,14 +105,19 @@ const HospitalMainPage = () => {
                     key={index}
                     title={info.hospital_name}
                     variant="borderless"
-                    style={{ width: 'calc(50% - 8px)', minHeight: '160px'}}
+                    style={{ width: 'calc(50% - 8px)', minHeight: '160px', cursor: "pointer"}}
                     className="border-1 border-gray-200"
+                    onClick={() => {handleHospitalCardClick(info.hospital_id, info.source, index)}}
                 >
                     <div className="flex justify-between items-center">
-                        <div>
+                        <div >
                             {/* p 태그 3개를 하나의 div로 묶음 */}
                             <p><EnvironmentOutlined /> {info.hospital_main_address}</p>
-                            <p><GlobalOutlined /> {"한국어, " + getRefinedLanguages(info.hospital_languages)}</p>
+                            <p><GlobalOutlined /> 
+                                {/* {"한국어, " + getRefinedLanguages(info.hospital_languages)} */}
+                                {getRefinedLanguages(info.hospital_languages) ? " 한국어, " + getRefinedLanguages(info.hospital_languages) : " 한국어"}
+
+                            </p>
                             <p><AppstoreAddOutlined /> {info.hospital_main_category}</p>
                         </div>
 

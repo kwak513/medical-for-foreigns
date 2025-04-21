@@ -56,21 +56,27 @@ const ChartBoardLayout: React.FC = () => {
     }
   }
 
+  const handleLogoClick = () => {
+    navigate("/hospital")
+  }
+
   const onSearch = () => {}
 
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleMenuClick}/>
+    <Layout style={{ minHeight: '100vh', marginLeft: 200 }}>
+      <Sider /* collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} */style={{ height: '100vh', overflow: 'auto', position: 'fixed', left: 0, top: 0}}>
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleMenuClick} />
       </Sider>
       <Layout>
-        
-
 
       <Header
         style={{
+          position: "fixed",
+          top: 0,
+          left: 200,
+          width: "calc(100% - 200px)",
+          zIndex: 1,
           padding: "0 16px",
           background: colorBgContainer,
           display: "flex",
@@ -79,7 +85,10 @@ const ChartBoardLayout: React.FC = () => {
         }}
       >
         {/* 왼쪽: 로고 */}
-        <img src={longLogoResize} style={{ height: "30px" }} />
+        <div style={{cursor: "pointer"}} onClick={handleLogoClick}>
+          <img src={longLogoResize} style={{ height: "30px" }} />
+        </div>
+        
 
         {/* 오른쪽: 검색창 + 버튼 */}
         <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
@@ -94,7 +103,7 @@ const ChartBoardLayout: React.FC = () => {
 
 
 
-        <Content style={{ margin: '16px' }}>
+        <Content style={{ margin: '16px', marginTop: 80 }}>
           {/* <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>

@@ -4,6 +4,10 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 
 const HospitalMainPage = lazy(() => import("../pages/hospital/HospitalMainPage"));
+const HospitalInfoPage = lazy(() => import("../pages/hospital/HospitalInfoPage"));
+const HospitalRegisterPage = lazy(() => import("../pages/hospital/HospitalRegisterPage"));
+
+
 const PharmacyMainPage = lazy(() => import("../pages/pharmacy/PharmacyMainPage"));
 const EmergencyMainPage = lazy(() => import("../pages/emergency/EmergencyMainPage"));
 // const Collection1 = lazy(() => import("../pages/collections/Collection1Page"));
@@ -32,7 +36,11 @@ const router = createBrowserRouter([
                 <MainLayout />
         ),
         children: [
+            {path: "/", element: <Suspense fallback={<LoadingScreen />}><HospitalMainPage /></Suspense>},
             {path: "/hospital", element: <Suspense fallback={<LoadingScreen />}><HospitalMainPage /></Suspense>},
+            {path: "/hospital/info", element: <Suspense fallback={<LoadingScreen />}><HospitalInfoPage /></Suspense>},
+            {path: "/hospital/register", element: <Suspense fallback={<LoadingScreen />}><HospitalRegisterPage /></Suspense>},
+
             {path: "/pharmacy", element: <Suspense fallback={<LoadingScreen />}><PharmacyMainPage /></Suspense>},
             {path: "/emergency", element: <Suspense fallback={<LoadingScreen />}><EmergencyMainPage /></Suspense>},
             // {path: "chartlist", element: <Suspense fallback={<LoadingScreen />}><CollectionChartList /></Suspense>},

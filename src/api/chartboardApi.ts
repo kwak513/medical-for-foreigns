@@ -2,12 +2,23 @@ import axios from "axios";
 
 const API_SERVER_URL = "http://localhost:8080";
 
-// 강남구와 강동구 병원 정보 가져오기(병원명, 시·구 주소, 가능 언어, 대표과 1개), 메인 리스트 페이지에서 사용할거임.
+// 메인 리스트 페이지에서 사용할 강남구와 강동구 병원 정보 가져오기(id, 병원명, 시·구 주소, 가능 언어, 대표과 1개)
 export const select15FromGangnamGangDongHospital = async(offsetNum:number) => {
     const res = await axios.get(`${API_SERVER_URL}/select15FromGangnamGangDongHospital`, {params: {offsetNum}});
     return res.data;
 }
 
+// 병원 상세 페이지에서 사용할 '강남구' 병원 정보 가져오기
+export const selectFromGangnamHospital = async(hospitalId:number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromGangnamHospital`, {params: {hospitalId}});
+    return res.data;
+}
+
+// 병원 상세 페이지에서 사용할 '강동구' 병원 정보 가져오기
+export const selectFromGangdongHospital = async(hospitalId:number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromGangdongHospital`, {params: {hospitalId}});
+    return res.data;
+}
 // interface ChartInfoDto{
 //     chartType: string;
 //     resultTableInfo: Array<Record<string, any>>;
