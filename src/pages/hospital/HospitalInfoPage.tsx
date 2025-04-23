@@ -8,8 +8,8 @@ import hospitalRandom4 from '../../assets/hospitalImg/hospitalRandom4.jpg';
 import hospitalRandom5 from '../../assets/hospitalImg/hospitalRandom5.jpg';
 import hospitalRandom0 from '../../assets/hospitalImg/hospitalRandom6.jpg';
 import Title from "antd/es/typography/Title";
-import { Button, Card, Col, Divider, Tag } from "antd";
-import { AppstoreAddOutlined, CopyOutlined, EnvironmentOutlined, GlobalOutlined, MessageOutlined, PhoneOutlined, StarOutlined } from "@ant-design/icons";
+import { Button,  Divider, Tag } from "antd";
+import { AppstoreAddOutlined, ClockCircleOutlined, CopyOutlined, EnvironmentOutlined, GlobalOutlined, MessageOutlined, PhoneOutlined, StarOutlined } from "@ant-design/icons";
 
 const HospitalInfoPage = () => {
 
@@ -149,7 +149,7 @@ console.log("selectFromGangdongHospital data: ", data);
                         )
                     } */}
                     <Tag style={{fontSize: '16px', padding: '5px'}}>한국어</Tag>
-                    {hospitalDetail.length > 0 && 
+                    {hospitalDetail.length > 0 &&  hospitalDetail[0].hospital_languages.length > 0 &&
                         getRefinedLanguages(hospitalDetail[0].hospital_languages).split(",").map((language, idx) => {
                             return (
                                 <Tag key={idx} style={{ fontSize: '16px', marginBottom: '10px',  marginRight: '10px', padding: '5px'}}>
@@ -179,6 +179,27 @@ console.log("selectFromGangdongHospital data: ", data);
                 </Title>
 
             </div>
+
+            <Divider />
+            <div>
+                <Title level={4}>
+                    <ClockCircleOutlined />  진료 시간:
+                    
+                </Title>
+
+                <Title level={5}>
+                    <div className="mb-1">• 월~금 09:00~18:00 (점심시간 12:00~13:00)</div>
+                    <div className="mb-1">• 토요일 09:00~13:00</div>
+                    <div className="mb-1">• 일요일/공휴일 휴무</div>
+                </Title>
+
+                <small style={{ color: "#888", display: "block", marginTop: "10px" }}>
+                    ※ 해당 정보는 실제 병원 데이터가 아닌 더미 데이터입니다.
+                </small>
+
+            </div>
+
+
 
             <Divider />
 

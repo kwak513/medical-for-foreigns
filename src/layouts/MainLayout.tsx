@@ -6,7 +6,7 @@ import {
 
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Button, Layout, Menu, theme } from 'antd';
+import { Button, FloatButton, Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import longLogoResize from '../assets/longLogoResize.png';
 import Search from 'antd/es/input/Search';
@@ -40,27 +40,45 @@ const items: MenuItem[] = [
 
 
 
-
 const ChartBoardLayout: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  // const [collapsed, setCollapsed] = useState(false);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   const navigate = useNavigate();
 
-  // menu 누르면 navigate
+
+  //  HospitalMainPage에 보낼 offset (menu, logo를 누르면 HospitalMainPage의 offset을 0으로 초기화해야해서, Outlet인 HospitalMainPage에 context로 보낼거임)
+  const [offset, setOffset] = useState(0);
+
+  // '병원명 검색하기' 하면, HospitalMainPage로 이동하고, 사용자가 검색한 병원명을 state로 넘겨줌.
+  const [searchHospitalName, setSearchHospitalName] = useState('');
+
+  // menu 누르면 navigate, 기존 offset과 검색어 초기화
   const handleMenuClick = (e) => {
     if(e.key.startsWith("/")){
-      navigate(e.key);
+      setOffset(0);  // offset 초기화
+      setSearchHospitalName(''); // 검색어 초기화
+      navigate(e.key, { state: { searchHospitalName: null }});  // 검색어 초기화
     }
   }
 
+  // 로고 누르면, 기존 offset과 검색어 초기화
   const handleLogoClick = () => {
-    navigate("/hospital")
+    setOffset(0);  // offset 초기화
+    setSearchHospitalName(''); // 검색어 초기화
+    navigate("/hospital", { state: { searchHospitalName: null }}) // 검색어 초기화
   }
 
-  const onSearch = () => {}
+  
+
+  const onSearch = () => {
+    console.log("병원명 검색!")
+    navigate("/hospital", {state: {searchHospitalName}} )
+
+  }
 
 
   return (
@@ -96,6 +114,8 @@ const ChartBoardLayout: React.FC = () => {
             placeholder="병원명 검색하기"
             onSearch={onSearch}
             style={{ width: 300 }}
+            value={searchHospitalName}
+            onChange={(e) => {setSearchHospitalName(e.target.value)}}
           />
           <Button>로그인 · 회원가입</Button>
         </div>
@@ -116,11 +136,14 @@ const ChartBoardLayout: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <Outlet />
+            {/* Outlet 중 하나인 HospitalMainPage에 offset 보내줌. */}
+            <Outlet context={{offset, setOffset}}/>
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
         </Footer>
+
+        <FloatButton.BackTop visibilityHeight={0} />
       </Layout>
     </Layout>
   );

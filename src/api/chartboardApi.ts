@@ -19,6 +19,12 @@ export const selectFromGangdongHospital = async(hospitalId:number) => {
     const res = await axios.get(`${API_SERVER_URL}/selectFromGangdongHospital`, {params: {hospitalId}});
     return res.data;
 }
+
+// 병원명 검색하기
+export const selectByHospitalName = async(hospitalName:string, offsetNum: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectByHospitalName`, {params: {hospitalName, offsetNum}});
+    return res.data;
+}
 // interface ChartInfoDto{
 //     chartType: string;
 //     resultTableInfo: Array<Record<string, any>>;
