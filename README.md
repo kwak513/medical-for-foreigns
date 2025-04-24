@@ -1,4 +1,4 @@
-![image.png](attachment:cdbb76d8-f80b-4b3b-bc58-dca7339d2f9a:image.png)
+![Image](https://github.com/user-attachments/assets/41ddb301-0e83-4594-9706-9727cbae9dd7)
 
 ### [프로젝트 소개]
 
@@ -16,7 +16,8 @@
 
 - **기능**: 강동구와 강남구의 병원 정보를 30개씩 조회, ‘병원 더보기’ 버튼 클릭하면, offset 15씩 증가시킴
 
-![image.png](attachment:ec993bce-7e7f-44a4-a8d3-d564f4fc6904:image.png)
+![Image](https://github.com/user-attachments/assets/024367f6-b4fd-4010-b8c0-4b0ff2dfdacb)
+
 
 ```java
 String sql = 
@@ -51,11 +52,11 @@ String sql =
 
 - **기능**: 병원 상세 페이지 (병원명, 주소, 가능 언어, 진료과목 등 )
 
-![image.png](attachment:81a9a7d8-2756-4c12-b276-a63feb6c749b:image.png)
+![Image](https://github.com/user-attachments/assets/017ccd59-0ade-46dc-8457-32e4f41dfeb0)
 
-![image.png](attachment:dab58c87-b27b-44e9-a576-071abaffdfc0:image.png)
+![Image](https://github.com/user-attachments/assets/0ee6d3fe-e18f-4e4d-a70c-d4b147de8e18)
 
-![image.png](attachment:653e553d-86cb-4dbc-a154-3f3cff725e46:image.png)
+![Image](https://github.com/user-attachments/assets/8112a413-c4fa-4b4a-9596-818ebb2d0d3b)
 
  source를 기준으로 gangnam_hospital 또는 gangdong_hospital에서 SELECT
 
@@ -98,17 +99,18 @@ String sql = "SELECT gangdong_name AS hospital_name, "
 
 - **기능**: 병원 진료 예약 페이지(진료 날짜와 시간, 희망 언어, 증상/과목 등)
 
-![image.png](attachment:6a4f3389-821d-40d8-a3fd-adcc07359dd4:image.png)
+![Image](https://github.com/user-attachments/assets/ce86e516-d1ab-4f6e-863e-eacb3edfb21a)
 
-![image.png](attachment:78704620-e259-48cc-a67d-79ddc5a5c520:image.png)
+![Image](https://github.com/user-attachments/assets/6f3425f2-4100-45b5-96d0-552990db1b40)
 
-![image.png](attachment:5206f1de-78d7-45af-9427-b0f1d4c2dec4:image.png)
+![Image](https://github.com/user-attachments/assets/aa5ac807-c635-48bb-b500-692c427d9791)
 
-![image.png](attachment:b84f5c12-5076-4a8e-ac8e-f762ebba3b58:image.png)
+![Image](https://github.com/user-attachments/assets/dfe6375a-77fb-4810-bebf-3cf2a6106fac)
+
 
 - **기능**: 병원명 검색
 
-![image.png](attachment:07969894-14ff-4c24-b830-86e512b864b3:image.png)
+![Image](https://github.com/user-attachments/assets/20b71346-8be8-4688-b867-a6548f3c294d)
 
 ```java
 String sql = "(SELECT gangdong_name AS hospital_name, "
