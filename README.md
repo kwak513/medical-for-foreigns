@@ -21,33 +21,33 @@
 
 ```java
 String sql = 
-						"(SELECT gangdong_name AS hospital_name, "
-						+ "gangdong_languages AS hospital_languages, "
-						+ "gangdong_main_address AS hospital_main_address, "
-						+ "SUBSTRING_INDEX(gangdong_category, ',', 1) AS hospital_main_category, "
-						+ "'gangdong' AS source, "
-						+ "id AS hospital_id "
-						+ "FROM gangdong_hospital "
-						+ "ORDER BY hospital_id ASC "
-						+ "LIMIT 15 OFFSET :OFFSET) "
-						+ "UNION "
-						+ "(SELECT gangnam_name AS hospital_name, "
-						+ "gangnam_languages AS hospital_languages, "
-						+ "gangnam_main_address AS hospital_main_address, "
-						+ "SUBSTRING_INDEX(gangnam_category, ',', 1) AS hospital_main_category, "
-						+ "'gangnam' AS source, "
-						+ "id AS hospital_id "
-						+ "FROM gangnam_hospital "
-						+ "ORDER BY hospital_id ASC "
-						+ "LIMIT 15 OFFSET :OFFSET);"
-				;
-			Query query = em.createNativeQuery(sql, Tuple.class);
-			query.setParameter("OFFSET", offsetNum);
+	"(SELECT gangdong_name AS hospital_name, "
+	+ "gangdong_languages AS hospital_languages, "
+	+ "gangdong_main_address AS hospital_main_address, "
+	+ "SUBSTRING_INDEX(gangdong_category, ',', 1) AS hospital_main_category, "
+	+ "'gangdong' AS source, "
+	+ "id AS hospital_id "
+	+ "FROM gangdong_hospital "
+	+ "ORDER BY hospital_id ASC "
+	+ "LIMIT 15 OFFSET :OFFSET) "
+	+ "UNION "
+	+ "(SELECT gangnam_name AS hospital_name, "
+	+ "gangnam_languages AS hospital_languages, "
+	+ "gangnam_main_address AS hospital_main_address, "
+	+ "SUBSTRING_INDEX(gangnam_category, ',', 1) AS hospital_main_category, "
+	+ "'gangnam' AS source, "
+	+ "id AS hospital_id "
+	+ "FROM gangnam_hospital "
+	+ "ORDER BY hospital_id ASC "
+	+ "LIMIT 15 OFFSET :OFFSET);"
+;
+Query query = em.createNativeQuery(sql, Tuple.class);
+query.setParameter("OFFSET", offsetNum);
 		
-			List<Tuple> rs = query.getResultList();
+List<Tuple> rs = query.getResultList();
 			
-			List<Map<String, Object>> rsToMap = JPAUtil.convertTupleToMap(rs);
-			return rsToMap;
+List<Map<String, Object>> rsToMap = JPAUtil.convertTupleToMap(rs);
+return rsToMap;
 ```
 
 - **기능**: 병원 상세 페이지 (병원명, 주소, 가능 언어, 진료과목 등 )
@@ -58,54 +58,56 @@ String sql =
 
 ![Image](https://github.com/user-attachments/assets/8112a413-c4fa-4b4a-9596-818ebb2d0d3b)
 
- source를 기준으로 gangnam_hospital 또는 gangdong_hospital에서 SELECT
+ -source를 기준으로 gangnam_hospital 또는 gangdong_hospital에서 SELECT
 
 ```java
-
-	String sql = "SELECT gangnam_name AS hospital_name, "
-					+ "gangnam_phone_number AS hospital_phone_number, "
-					+ "gangnam_languages AS hospital_languages, "
-					+ "gangnam_main_address AS hospital_main_address, "
-					+ "gangnam_address AS hospital_address, "
-					+ "gangnam_category AS hospital_category "
-					+ "FROM gangnam_hospital WHERE ID = :ID";;
-			Query query = em.createNativeQuery(sql, Tuple.class);
-			query.setParameter("ID", hospitalId);
+String sql = "SELECT gangnam_name AS hospital_name, "
+	+ "gangnam_phone_number AS hospital_phone_number, "
+	+ "gangnam_languages AS hospital_languages, "
+	+ "gangnam_main_address AS hospital_main_address, "
+	+ "gangnam_address AS hospital_address, "
+	+ "gangnam_category AS hospital_category "
+	+ "FROM gangnam_hospital WHERE ID = :ID";;
+Query query = em.createNativeQuery(sql, Tuple.class);
+query.setParameter("ID", hospitalId);
 		
-			List<Tuple> rs = query.getResultList();
+List<Tuple> rs = query.getResultList();
 			
-			List<Map<String, Object>> rsToMap = JPAUtil.convertTupleToMap(rs);
-			return rsToMap;
+List<Map<String, Object>> rsToMap = JPAUtil.convertTupleToMap(rs);
+return rsToMap;
 ```
 
 ```java
 String sql = "SELECT gangdong_name AS hospital_name, "
-					+ "gangdong_phone_number AS hospital_phone_number, "
-					+ "gangdong_languages AS hospital_languages, "
-					+ "gangdong_main_address AS hospital_main_address, "
-					+ "gangdong_address AS hospital_address, "
-					+ "gangdong_category AS hospital_category "
-					+ "FROM gangdong_hospital WHERE ID = :ID";
+	+ "gangdong_phone_number AS hospital_phone_number, "
+	+ "gangdong_languages AS hospital_languages, "
+	+ "gangdong_main_address AS hospital_main_address, "
+	+ "gangdong_address AS hospital_address, "
+	+ "gangdong_category AS hospital_category "
+	+ "FROM gangdong_hospital WHERE ID = :ID";
 			
 			
-			Query query = em.createNativeQuery(sql, Tuple.class);
-			query.setParameter("ID", hospitalId);
+Query query = em.createNativeQuery(sql, Tuple.class);
+query.setParameter("ID", hospitalId);
 		
-			List<Tuple> rs = query.getResultList();
+List<Tuple> rs = query.getResultList();
 			
-			List<Map<String, Object>> rsToMap = JPAUtil.convertTupleToMap(rs);
-			return rsToMap;
+List<Map<String, Object>> rsToMap = JPAUtil.convertTupleToMap(rs);
+return rsToMap;
 ```
 
 - **기능**: 병원 진료 예약 페이지(진료 날짜와 시간, 희망 언어, 증상/과목 등)
 
-![Image](https://github.com/user-attachments/assets/ce86e516-d1ab-4f6e-863e-eacb3edfb21a)
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/user-attachments/assets/ce86e516-d1ab-4f6e-863e-eacb3edfb21a" width="48%" />
+  <img src="https://github.com/user-attachments/assets/6f3425f2-4100-45b5-96d0-552990db1b40" width="48%" />
+</div>
 
-![Image](https://github.com/user-attachments/assets/6f3425f2-4100-45b5-96d0-552990db1b40)
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/user-attachments/assets/aa5ac807-c635-48bb-b500-692c427d9791" width="48%" />
+  <img src="https://github.com/user-attachments/assets/dfe6375a-77fb-4810-bebf-3cf2a6106fac" width="48%" />
+</div>
 
-![Image](https://github.com/user-attachments/assets/aa5ac807-c635-48bb-b500-692c427d9791)
-
-![Image](https://github.com/user-attachments/assets/dfe6375a-77fb-4810-bebf-3cf2a6106fac)
 
 
 - **기능**: 병원명 검색
@@ -114,36 +116,36 @@ String sql = "SELECT gangdong_name AS hospital_name, "
 
 ```java
 String sql = "(SELECT gangdong_name AS hospital_name, "
-						+ "gangdong_languages AS hospital_languages, "
-						+ "gangdong_main_address AS hospital_main_address, "
-						+ "SUBSTRING_INDEX(gangdong_category, ',', 1) AS hospital_main_category, "
-						+ "'gangdong' AS source, "
-						+ "id AS hospital_id "
-						+"FROM gangdong_hospital "
-						+"WHERE gangdong_name LIKE CONCAT('%', :hospital_name, '%') "
-						+ "ORDER BY id ASC "
-						+ "LIMIT 15 OFFSET :OFFSET) "
-						+ "UNION "
-						+"(SELECT gangnam_name AS hospital_name, "
-						+ "gangnam_languages AS hospital_languages, "
-						+ "gangnam_main_address AS hospital_main_address, "
-						+ "SUBSTRING_INDEX(gangnam_category, ',', 1) AS hospital_main_category, "
-						+ "'gangnam' AS source, "
-						+ "id AS hospital_id "
-						+"FROM gangnam_hospital "
-						+"WHERE gangnam_name LIKE CONCAT('%', :hospital_name, '%') "
-						+ "ORDER BY id ASC "
-						+ "LIMIT 15 OFFSET :OFFSET) "
+	+ "gangdong_languages AS hospital_languages, "
+	+ "gangdong_main_address AS hospital_main_address, "
+	+ "SUBSTRING_INDEX(gangdong_category, ',', 1) AS hospital_main_category, "
+	+ "'gangdong' AS source, "
+	+ "id AS hospital_id "
+	+"FROM gangdong_hospital "
+	+"WHERE gangdong_name LIKE CONCAT('%', :hospital_name, '%') "
+	+ "ORDER BY id ASC "
+	+ "LIMIT 15 OFFSET :OFFSET) "
+	+ "UNION "
+	+"(SELECT gangnam_name AS hospital_name, "
+	+ "gangnam_languages AS hospital_languages, "
+	+ "gangnam_main_address AS hospital_main_address, "
+	+ "SUBSTRING_INDEX(gangnam_category, ',', 1) AS hospital_main_category, "
+	+ "'gangnam' AS source, "
+	+ "id AS hospital_id "
+	+"FROM gangnam_hospital "
+	+"WHERE gangnam_name LIKE CONCAT('%', :hospital_name, '%') "
+	+ "ORDER BY id ASC "
+	+ "LIMIT 15 OFFSET :OFFSET) "
 						;
 						
-			Query query = em.createNativeQuery(sql, Tuple.class);
-			query.setParameter("hospital_name", hospitalName);
-			query.setParameter("OFFSET", offsetNum);
+Query query = em.createNativeQuery(sql, Tuple.class);
+query.setParameter("hospital_name", hospitalName);
+query.setParameter("OFFSET", offsetNum);
 		
-			List<Tuple> rs = query.getResultList();
+List<Tuple> rs = query.getResultList();
 			
-			List<Map<String, Object>> rsToMap = JPAUtil.convertTupleToMap(rs);
-			return rsToMap;
+List<Map<String, Object>> rsToMap = JPAUtil.convertTupleToMap(rs);
+return rsToMap;
 ```
 
 ### [사용 기술]
