@@ -20,9 +20,21 @@ export const selectFromGangdongHospital = async(hospitalId:number) => {
     return res.data;
 }
 
-// 병원명 검색하기
-export const selectByHospitalName = async(hospitalName:string, offsetNum: number) => {
-    const res = await axios.get(`${API_SERVER_URL}/selectByHospitalName`, {params: {hospitalName, offsetNum}});
+// // 병원명 검색하기
+// export const selectByHospitalName = async(hospitalName:string, offsetNum: number) => {
+//     const res = await axios.get(`${API_SERVER_URL}/selectByHospitalName`, {params: {hospitalName, offsetNum}});
+//     return res.data;
+// }
+
+// // 필터링 기능(사용 언어, 진료과목, 지역)
+// export const filterHospitalByLangDepartLocation = async(language:string, department:string, location:string, offsetNum: number) => {
+//     const res = await axios.get(`${API_SERVER_URL}/filterHospitalByLangDepartLocation`, {params: {language, department, location, offsetNum}});
+//     return res.data;
+// }
+
+// 병원 & 필터링 기능(사용 언어, 진료과목, 지역) 동시에.
+export const searchAndFilterHospital = async(hospitalName:string, language:string, department:string, location:string, offsetNum: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/searchAndFilterHospital`, {params: {hospitalName, language, department, location, offsetNum}});
     return res.data;
 }
 // interface ChartInfoDto{

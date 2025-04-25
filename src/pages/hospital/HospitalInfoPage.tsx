@@ -242,10 +242,12 @@ console.log("selectFromGangdongHospital data: ", data);
             <Divider />
 
             <div>
-                <Title level={3}>
-                    <MessageOutlined />  리뷰
-                    
-                </Title>
+                <div className="flex justify-between">
+                    <Title level={3}>
+                        <MessageOutlined />  리뷰
+                    </Title>
+                    <Button>리뷰 작성하기</Button>
+                </div>
             </div>
         
 

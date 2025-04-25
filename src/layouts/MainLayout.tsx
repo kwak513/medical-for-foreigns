@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   MedicineBoxOutlined,
   PlusSquareOutlined,
@@ -72,7 +72,12 @@ const ChartBoardLayout: React.FC = () => {
     navigate("/hospital", { state: { searchHospitalName: null }}) // 검색어 초기화
   }
 
-  
+  useEffect(() => {
+    // 검색어가 비어있으면 (공백이면) HospitalMainPage로 이동 => 사용자가 검색어 지우고 검색 버튼 안눌러도 자동으로 해줘야, 필터링 제대로 적용됨.
+    if (searchHospitalName.trim() === '') {
+      navigate("/hospital"); // 검색어 없이 이동
+    }
+  }, [searchHospitalName, navigate]);
 
   const onSearch = () => {
     console.log("병원명 검색!")
@@ -84,7 +89,7 @@ const ChartBoardLayout: React.FC = () => {
   return (
     <Layout style={{ minHeight: '100vh', marginLeft: 200 }}>
       <Sider /* collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} */style={{ height: '100vh', overflow: 'auto', position: 'fixed', left: 0, top: 0}}>
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleMenuClick} />
+        <Menu theme="dark" defaultSelectedKeys={['/hospital']} mode="inline" items={items} onClick={handleMenuClick} />
       </Sider>
       <Layout>
 
