@@ -37,6 +37,45 @@ export const searchAndFilterHospital = async(hospitalName:string, language:strin
     const res = await axios.get(`${API_SERVER_URL}/searchAndFilterHospital`, {params: {hospitalName, language, department, location, offsetNum}});
     return res.data;
 }
+
+
+interface MemberRegisterDto{
+    username: string;
+    password: string;
+}
+
+// 회원가입
+export const memberRegister = async(memberRegisterDto: MemberRegisterDto) => {
+    const res = await axios.post(`${API_SERVER_URL}/memberRegister`, memberRegisterDto)
+    return res.data;
+}
+
+// 로그인
+export const memberLogin = async(username: string, password: string) => {
+    const res = await axios.get(`${API_SERVER_URL}/memberLogin`, {params: {username, password}});
+    return res.data;
+}
+
+
+interface HospitalReviewDto{
+    memberId: number;
+    hospitalId: number;
+    source: string;
+    rate: number;
+    originalTxt: string;
+}
+
+// 병원 리뷰 작성 
+export const insertHospitalReview = async(hospitalReviewDto: HospitalReviewDto) => {
+    const res = await axios.post(`${API_SERVER_URL}/insertHospitalReview`, hospitalReviewDto)
+    return res.data;
+}
+
+// 병원 id 통해서, hospital_review select 해오기
+export const selectFromHospitalReview = async(hospitalId: number, source: string) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromHospitalReview`, {params: {hospitalId, source}});
+    return res.data;
+}
 // interface ChartInfoDto{
 //     chartType: string;
 //     resultTableInfo: Array<Record<string, any>>;

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
-  MedicineBoxOutlined,
-  PlusSquareOutlined,
   SafetyOutlined,
+  UserOutlined,
 
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
@@ -34,7 +33,7 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem('병원 찾기', '/hospital', <SafetyOutlined />),
-  getItem('약국 찾기', '/pharmacy', <MedicineBoxOutlined />),
+  getItem('마이페이지', '/mypage', <UserOutlined/>),
   // getItem('응급실 찾기', '/emergency', <PlusSquareOutlined />),
 ];
 
@@ -85,6 +84,16 @@ const ChartBoardLayout: React.FC = () => {
 
   }
 
+  const handleMemberClick = () => {
+    navigate("/login")
+  }
+
+  const handleLogoutClick = () => {
+    sessionStorage.removeItem('isLoggedIn');
+    alert("로그아웃 되었습니다.")
+    navigate("/login")
+  }
+  
 
   return (
     <Layout style={{ minHeight: '100vh', marginLeft: 200 }}>
@@ -122,7 +131,13 @@ const ChartBoardLayout: React.FC = () => {
             value={searchHospitalName}
             onChange={(e) => {setSearchHospitalName(e.target.value)}}
           />
-          <Button>로그인 · 회원가입</Button>
+
+          {sessionStorage.getItem("isLoggedIn") !== "true" &&
+            <Button onClick={handleMemberClick}>로그인 · 회원가입</Button>
+          }
+          {sessionStorage.getItem("isLoggedIn") === "true" &&
+            <Button onClick={handleLogoutClick}>로그아웃</Button>
+          }
         </div>
       </Header>
 

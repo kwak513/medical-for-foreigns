@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { selectFromGangdongHospital, selectFromGangnamHospital } from "../../api/chartboardApi";
+import { selectFromGangdongHospital, selectFromGangnamHospital, selectFromHospitalReview } from "../../api/chartboardApi";
 import hospitalRandom1 from '../../assets/hospitalImg/hospitalRandom1.jpg';
 import hospitalRandom2 from '../../assets/hospitalImg/hospitalRandom2.jpg';
 import hospitalRandom3 from '../../assets/hospitalImg/hospitalRandom3.jpg';
@@ -8,7 +8,7 @@ import hospitalRandom4 from '../../assets/hospitalImg/hospitalRandom4.jpg';
 import hospitalRandom5 from '../../assets/hospitalImg/hospitalRandom5.jpg';
 import hospitalRandom0 from '../../assets/hospitalImg/hospitalRandom6.jpg';
 import Title from "antd/es/typography/Title";
-import { Button,  Divider, Tag } from "antd";
+import { Button,  Card,  Divider, Rate, Tag } from "antd";
 import { AppstoreAddOutlined, ClockCircleOutlined, CopyOutlined, EnvironmentOutlined, GlobalOutlined, MessageOutlined, PhoneOutlined, StarOutlined } from "@ant-design/icons";
 
 const HospitalInfoPage = () => {
@@ -55,6 +55,27 @@ console.log("selectFromGangdongHospital data: ", data);
         }
     }, [])
 
+    interface HospitalReview{
+        "original_language": string;
+        "rate": number;
+        "created_at": string;
+        "id": number;
+        "original_text": string;
+    }
+    // 병원의 리뷰 정보 가져오기
+    const [hospitalReview, setHospitalReview] = useState<HospitalReview[]>([]);
+    useEffect(() => {
+        selectFromHospitalReview(hospitalId, hospitalSource)
+            .then((list) => {
+                setHospitalReview(list);
+
+            })
+            .catch((err) => {
+                console.log("selectFromHospitalReview 실패: ", err);
+                alert("병원 리뷰를 불러오지 못했습니다.")
+            })
+    }, [])
+
     //  병원 이미지 데모 데이터
     const images = [
         hospitalRandom1,
@@ -98,6 +119,11 @@ console.log("selectFromGangdongHospital data: ", data);
     // "진료 예약하기" 버튼 클릭 시, 
     const handleRegisterHospitalClick = () => {
         navigate("/hospital/register", {state: {hospitalDetail}})
+    }
+
+    // "리뷰 작성하기" 버튼 클릭 시,
+    const handleWriteReviewClick = () => {
+        navigate("/hospital/review", {state: {hospitalDetail, hospitalId, hospitalSource}})
     }
     return (
         <>
@@ -241,15 +267,48 @@ console.log("selectFromGangdongHospital data: ", data);
             </div>
             <Divider />
 
+            
+
+            {/* --- 리뷰 --- */}
             <div>
-                <div className="flex justify-between">
-                    <Title level={3}>
-                        <MessageOutlined />  리뷰
+                <div className="flex justify-between items-center mb-4"> 
+                    <Title level={3} style={{ marginBottom: 0 }}> 
+                        <MessageOutlined />  리뷰 ({hospitalReview.length})
                     </Title>
-                    <Button>리뷰 작성하기</Button>
+
+                    {/* 로그인 상태일 때만 리뷰 작성 버튼 표시 */}
+                    {sessionStorage.getItem("isLoggedIn") === "true" &&
+                        <Button onClick={handleWriteReviewClick}>리뷰 작성하기</Button>
+                    }
                 </div>
+
+                {/* --- 병원 리뷰 --- */}
+                {hospitalReview && hospitalReview.length > 0 ? (
+                    <div style={{ marginTop: '20px' }}>
+                        {hospitalReview.map((review) => (
+                            <Card key={review.id} style={{ marginBottom: '16px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                    
+                                    <Rate disabled defaultValue={0} value={review.rate} style={{ fontSize: '18px' }} />
+                                    
+                                    <span style={{ fontSize: '0.9em', color: '#888' }}>
+                                        {new Date(review.created_at).toLocaleDateString()} 
+                                    </span>
+                                </div>
+                                
+                                <p>{review.original_text}</p>
+                                <small style={{ color: '#aaa' }}>원본 언어: {review.original_language}</small>
+                            </Card>
+                        ))}
+                    </div>
+                ) : (
+                    // 리뷰가 없을 때 메시지 표시
+                    <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
+                        아직 등록된 리뷰가 없습니다.
+                    </div>
+                )}
             </div>
-        
+
 
         </>
     );
