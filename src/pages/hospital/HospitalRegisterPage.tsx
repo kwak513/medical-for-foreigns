@@ -4,13 +4,21 @@ import { Option } from "antd/es/mentions";
 import Title from "antd/es/typography/Title";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment, { Moment } from 'moment';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { insertHospitalReservation } from "../../api/chartboardApi";
 
 const HospitalRegisterPage = () => {  // DB에 저장, value/onChange, 공백 불가 로직 추가해야함
 
+    // 로그인 안하고 접근 불가
+      useEffect(() => {
+          if(sessionStorage.getItem("isLoggedIn") !== "true"){
+              navigate("/login");
+          }
+      }, [])
+
     // HospitalInfoPage state로 보낸 값(hospitalDetail)을 location으로 받기
     const location = useLocation();
-    const {hospitalDetail} = location.state;
+    const {hospitalDetail, hospitalId, hospitalSource} = location.state;
     /* hospitalDetail 형식: 
     interface HospitalDetail{
         hospital_category: string;
@@ -146,12 +154,48 @@ const HospitalRegisterPage = () => {  // DB에 저장, value/onChange, 공백 �
 
 // ------------------------------ 
 
+  // 희망 언어
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('한국어');
+  // 자세한 증상 설명
+  const [detailSymptom, setDetailSymptom] = useState<string>('');
+  
+  const [selectedDate, setSelectedDate] = useState<string>('');
+
     const navigate =useNavigate();
 
     const handleRegisterClick = () => {
       if(window.confirm("예약을 진행하시겠습니까??")){
-        alert("예약이 완료되었습니다.");
-        navigate("/");
+        
+        const reservationDto = {
+          language: selectedLanguage,
+          mainSymptom: mainCategory,
+          subSymptom: subCategory,
+          detailSymptom: detailSymptom,
+          source: hospitalSource,
+          hospitalId: hospitalId,
+          memberId: Number(sessionStorage.getItem("userId")),
+          reservationTime: selectedDate /*&& selectedDate.toDate() */
+        }
+console.log("reservationDto: " + reservationDto);
+        insertHospitalReservation(reservationDto)
+          .then((bool) => {
+            if(bool){
+              alert("예약이 완료되었습니다.");
+              navigate("/");
+            }
+            else{
+              alert("예약에 실패했습니다. ");
+            }
+
+            
+          })
+          .catch((err) => {
+            console.log("insertHospitalReservation 실패: ", err);
+            alert("서버 오류로 예약에 실패했습니다. ")
+        })
+
+
+        
       }
       
     }
@@ -203,14 +247,15 @@ const HospitalRegisterPage = () => {  // DB에 저장, value/onChange, 공백 �
                     format="YYYY-MM-DD HH:mm"
                     disabledDate={disableDate}
                     disabledTime={disableTime}
-                    
+                    value={selectedDate ? moment(selectedDate) : null}
+                    onChange={(date: Moment | null) => setSelectedDate(date ? date.format("YYYY-MM-DD HH:mm") : '')}
                 />
             </div>
 
             {/* 희망 언어 */}
             <div style={{ display: 'flex', marginBottom: '20px', width: '100%' }}>
             <Title level={4} style={{ marginRight: '10px', width: '30%' }}>희망 언어:</Title>
-            <Select defaultValue="한국어" style={{ width: '70%' }} >
+            <Select defaultValue={selectedLanguage} onChange={setSelectedLanguage} style={{ width: '70%' }} >
                 <Option value="한국어">한국어</Option>
                 {hospitalDetail.length > 0 && 
                         getRefinedLanguages(hospitalDetail[0].hospital_languages).split(",").map((language, idx) => {
@@ -263,7 +308,7 @@ const HospitalRegisterPage = () => {  // DB에 저장, value/onChange, 공백 �
             {/* 자세한 증상 설명 */}
             <div style={{ display: 'flex', marginBottom: '20px', width: '100%' }}>
               <Title level={4} style={{ marginRight: '10px', width: '30%' }}>자세한 증상 설명:</Title>
-                <Input.TextArea rows={4} style={{ width: '70%' }} placeholder="ex) 머리가 아프고 열이 나요. " />
+                <Input.TextArea rows={4} style={{ width: '70%' }} placeholder="ex) 머리가 아프고 열이 나요. " value={detailSymptom} onChange={(e) => setDetailSymptom(e.target.value)}/>
               </div>
 
               {/* 예약 버튼 */}

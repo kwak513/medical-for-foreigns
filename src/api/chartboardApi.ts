@@ -38,7 +38,7 @@ export const searchAndFilterHospital = async(hospitalName:string, language:strin
     return res.data;
 }
 
-
+// -------------------------- 회원  --------------------------
 interface MemberRegisterDto{
     username: string;
     password: string;
@@ -56,7 +56,14 @@ export const memberLogin = async(username: string, password: string) => {
     return res.data;
 }
 
+// 회원 정보 조회(username)
+export const selectUsername = async(memberId: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectUsername`, {params: {memberId}});
+    return res.data;
+}
 
+
+// -------------------------- 리뷰  --------------------------
 interface HospitalReviewDto{
     memberId: number;
     hospitalId: number;
@@ -76,6 +83,68 @@ export const selectFromHospitalReview = async(hospitalId: number, source: string
     const res = await axios.get(`${API_SERVER_URL}/selectFromHospitalReview`, {params: {hospitalId, source}});
     return res.data;
 }
+
+
+// 회원이 작성한 리뷰 조회
+export const selectReviewByMemberId = async(memberId: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectReviewByMemberId`, {params: {memberId}});
+    return res.data;
+}
+
+// -------------------------- 진료예약 관련--------------------------	
+interface HospitalReservationDto{
+    language: string;
+	mainSymptom: string;
+	subSymptom: string;
+	detailSymptom: string;
+	source: string;
+	hospitalId: number;
+	memberId: number;
+    reservationTime: string;
+}
+// 진료예약 insert
+export const insertHospitalReservation = async(hospitalReservationDto: HospitalReservationDto) => {
+    const res = await axios.post(`${API_SERVER_URL}/insertHospitalReservation`, hospitalReservationDto)
+    return res.data;
+}
+
+// member id 통해서, hospital_reservation select 해오기
+export const selectFromHospitalReservation = async(memberId: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromHospitalReservation`, {params: {memberId}});
+    return res.data;
+}
+
+// -------------------------- 즐겨찾기 관련--------------------------	
+interface MemberFavoriteDto{
+    memberId: number;
+    hospitalId: number;
+    hospitalSource: string;
+}
+
+// 즐겨찾기 추가 - member_favorite 테이블에 insert
+export const insertIntoMemberFavorite = async(memberFavoriteDto: MemberFavoriteDto) => {
+    const res = await axios.post(`${API_SERVER_URL}/insertIntoMemberFavorite`, memberFavoriteDto)
+    return res.data;
+}
+
+// 회원의 즐겨찾기 조회(병원 id, 병원명, 병원 메인 주소)
+export const selectFromMemberFavorite = async(memberId: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromMemberFavorite`, {params: {memberId}});
+    return res.data;
+}
+
+// 병원 id와 회원 id로, 회원이 즐겨찾기한 병원인지 확인 
+export const isFavoriteCheck = async(memberId: number, hospitalId:number, source: string) => {
+    const res = await axios.get(`${API_SERVER_URL}/isFavoriteCheck`, {params: {memberId, hospitalId, source}});
+    return res.data;
+}
+
+// 즐겨찾기 삭제(취소)
+export const deleteMemberFavorite = async(memberId: number, hospitalId:number, source: string) => {
+    const res = await axios.delete(`${API_SERVER_URL}/deleteMemberFavorite`, {params: {memberId, hospitalId, source}});
+    return res.data;
+}
+
 // interface ChartInfoDto{
 //     chartType: string;
 //     resultTableInfo: Array<Record<string, any>>;

@@ -270,8 +270,8 @@ useEffect(() => {
 
     // Card(병원) 누르면, HospitalInfoPage로 navigate, state로 hospital_id, source 보냄
     const navigate = useNavigate();
-    const handleHospitalCardClick = (hospitalId: number, hospitalSource: string, index: number) => {
-        navigate("/hospital/info", {state: {hospitalId, hospitalSource, index}})
+    const handleHospitalCardClick = (hospitalId: number, hospitalSource: string) => {
+        navigate("/hospital/info", {state: {hospitalId, hospitalSource}})
     }
 
     // //  필터링 기준 - 가능 언어
@@ -471,37 +471,41 @@ useEffect(() => {
 
         </div>
         <Divider />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        
+        {/* 병원 카드 목록  */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {hospitalInfo.map((info, index) => (
                 <Card
                     key={index}
                     title={info.hospital_name}
-                    variant="borderless"
-                    style={{ width: 'calc(50% - 8px)', minHeight: '160px', cursor: "pointer"}}
-                    className="border-1 border-gray-200"
-                    onClick={() => {handleHospitalCardClick(info.hospital_id, info.source, index)}}
+                    className="min-h-[160px] cursor-pointer border border-gray-200 hover:shadow-md transition-shadow duration-200" // Tailwind 클래스 사용
+                    onClick={() => {handleHospitalCardClick(info.hospital_id, info.source, info.hospital_id)}}
                 >
-                    <div className="flex justify-between items-center">
-                        <div >
-                            {/* p 태그 3개를 하나의 div로 묶음 */}
-                            <p><EnvironmentOutlined /> {info.hospital_main_address}</p>
-                            <p><GlobalOutlined /> 
-                                {/* {"한국어, " + getRefinedLanguages(info.hospital_languages)} */}
-                                {getRefinedLanguages(info.hospital_languages) ? " 한국어, " + getRefinedLanguages(info.hospital_languages) : " 한국어"}
-
-                            </p>
-                            <p><AppstoreAddOutlined /> {info.hospital_main_category}</p>
+                    <div className="flex justify-between items-start h-full">
+                        <div className="flex flex-col justify-between h-full flex-grow pr-2">
+                            <div> 
+                                <p className="text-sm text-gray-600 mb-1 line-clamp-2"> 
+                                    <EnvironmentOutlined className="mr-1" /> {info.hospital_main_address}
+                                </p>
+                                <p className="text-sm text-gray-600 mb-1">
+                                    <GlobalOutlined className="mr-1" />
+                                    {getRefinedLanguages(info.hospital_languages) ? " 한국어, " + getRefinedLanguages(info.hospital_languages) : " 한국어"}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                    <AppstoreAddOutlined className="mr-1" /> {info.hospital_main_category}
+                                </p>
+                            </div>
                         </div>
 
-                        <div style={{ width: '100px', height: '100px', overflow: 'hidden', borderRadius: '8px' }}>
-                            {/* 이미지를 div로 감싸고 스타일링 */}
-                            <img alt="병원 이미지" src={images[index % 6]} className="w-full h-full object-cover" />
+                        {/* 오른쪽 이미지*/}
+                        <div className="w-24 h-24 overflow-hidden rounded-lg flex-shrink-0"> 
+                            <img alt="병원 이미지" src={images[info.hospital_id % 6]} className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </Card>
-            
             ))}
         </div>
+
 
         {hasMoreInfo && hospitalInfo.length > 0 &&
             <div className="flex justify-center items-center mt-7">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { selectFromGangdongHospital, selectFromGangnamHospital, selectFromHospitalReview } from "../../api/chartboardApi";
+import { deleteMemberFavorite, insertIntoMemberFavorite, isFavoriteCheck, selectFromGangdongHospital, selectFromGangnamHospital, selectFromHospitalReview, selectFromMemberFavorite } from "../../api/chartboardApi";
 import hospitalRandom1 from '../../assets/hospitalImg/hospitalRandom1.jpg';
 import hospitalRandom2 from '../../assets/hospitalImg/hospitalRandom2.jpg';
 import hospitalRandom3 from '../../assets/hospitalImg/hospitalRandom3.jpg';
@@ -9,13 +9,13 @@ import hospitalRandom5 from '../../assets/hospitalImg/hospitalRandom5.jpg';
 import hospitalRandom0 from '../../assets/hospitalImg/hospitalRandom6.jpg';
 import Title from "antd/es/typography/Title";
 import { Button,  Card,  Divider, Rate, Tag } from "antd";
-import { AppstoreAddOutlined, ClockCircleOutlined, CopyOutlined, EnvironmentOutlined, GlobalOutlined, MessageOutlined, PhoneOutlined, StarOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined, ClockCircleOutlined, CopyOutlined, EnvironmentOutlined, GlobalOutlined, MessageOutlined, PhoneOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 
 const HospitalInfoPage = () => {
 
     // HospitalMainPage에서 state로 보낸 값(hospitalId, hospitalSource)을 location으로 받기
     const location = useLocation();
-    const {hospitalId, hospitalSource, index} = location.state;
+    const {hospitalId, hospitalSource} = location.state;
 
     // selectFromGangnamHospital 또는 selectFromGangdongHospital의 결과 형식
     interface HospitalDetail{
@@ -118,47 +118,126 @@ console.log("selectFromGangdongHospital data: ", data);
     const navigate = useNavigate();
     // "진료 예약하기" 버튼 클릭 시, 
     const handleRegisterHospitalClick = () => {
-        navigate("/hospital/register", {state: {hospitalDetail}})
+        navigate("/hospital/register", {state: {hospitalDetail, hospitalId, hospitalSource}})
     }
 
     // "리뷰 작성하기" 버튼 클릭 시,
     const handleWriteReviewClick = () => {
         navigate("/hospital/review", {state: {hospitalDetail, hospitalId, hospitalSource}})
     }
+
+    // 즐겨찾기
+    const [isBookmarked, setIsBookmarked] = useState(false);
+    
+    useEffect(() => {
+        // 병원 id와 회원 id를 기준으로 즐겨찾기되어 있는 병원인지
+        isFavoriteCheck(Number(sessionStorage.getItem("userId")), hospitalId, hospitalSource)
+            .then((bool) => {
+                setIsBookmarked(bool);
+            })
+            .catch((err) => {
+                console.log("isFavoriteCheck 실패: ", err);
+                alert("즐겨찾기 여부를 불러오지 못했습니다.")
+            })
+
+    }, [isBookmarked])
+    
+
+    // --- 즐겨찾기 토글 핸들러 ---
+    const handleBookmarkClick = () => {
+
+        const favoriteData = {
+            memberId: Number(sessionStorage.getItem("userId")),
+            hospitalId: hospitalId,
+            hospitalSource: hospitalSource
+        }
+        // 즐겨찾기 선택
+        if (!isBookmarked) {
+            insertIntoMemberFavorite(favoriteData)
+                .then((bool) => {
+                    if(bool == true){
+                        setIsBookmarked(true);
+                        alert("즐겨찾기에 추가되었습니다.");
+                    }
+                    
+                })
+                .catch((err) => {
+                    console.log("insertIntoMemberFavorite 실패: ", err);
+                    alert("즐겨찾기를 추가하지 못했습니다.")
+                })
+        } 
+        //  즐겨찾기 취소
+        else if(isBookmarked){
+            deleteMemberFavorite(Number(sessionStorage.getItem("userId")), hospitalId, hospitalSource)
+                .then((bool) => {
+                    if(bool == true){
+                        setIsBookmarked(false);
+                        alert("즐겨찾기에서 해제되었습니다.");
+                    }
+                    
+                })
+                .catch((err) => {
+                    console.log("deleteMemberFavorite 실패: ", err);
+                    alert("즐겨찾기를 해제하지 못했습니다.")
+                })
+        }
+    };
+// --------------------------
+
+    
     return (
         <>
-            <div className="flex gap-20 items-center">
-                
-                <div style={{ width: '300px', height: '300px', overflow: 'hidden', borderRadius: '8px' }}>
-                    {/* 이미지를 div로 감싸고 스타일링 */}
-                    <img alt="병원 이미지" src={images[index % 6]} className="w-full h-full object-cover" />
+            {/* 병원 정보 + 즐겨찾기 버튼 */}
+            {/* 기본: 세로 쌓임, md 이상: 가로 배치 */}
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 md:gap-0 mb-5">
+
+            {/* 왼쪽: 이미지 + 병원 정보 */}
+            <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-center w-full"> 
+                <div className="w-full max-w-xs sm:max-w-sm md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] overflow-hidden rounded-lg flex-shrink-0"> 
+                    <img alt="병원 이미지" src={images[hospitalId % 6]} className="w-full h-full object-cover" />
                 </div>
-
-                <div>
-                    {/* div 태그 3개, Button을 하나의 div로 묶음 */}
+                <div className="flex flex-col w-full md:w-auto"> 
                     <div>
-                        <Title level={2}>{hospitalDetail.length > 0 && hospitalDetail[0].hospital_name}</Title>
+                        <Title level={2} className="!mb-2">{hospitalDetail.length > 0 && hospitalDetail[0].hospital_name}</Title>
                     </div>
-                    <div className="flex items-baseline">
+                    <div className="flex items-baseline mb-1">
                         <EnvironmentOutlined />
-                        <span>&nbsp;&nbsp;</span>
-
-                        <Title level={5} className="text-gray-600">{hospitalDetail.length > 0 && hospitalDetail[0].hospital_main_address}</Title>
+                        <span className="ml-2">
+                            <Title level={5} className="text-gray-600 !mb-0">{hospitalDetail.length > 0 && hospitalDetail[0].hospital_main_address}</Title>
+                        </span>
                     </div>
-                    <div className="flex items-baseline">
+                    <div className="flex items-baseline mb-2">
                         <PhoneOutlined />
-                        <span>&nbsp;&nbsp;</span>
-
-                        <Title level={5}>{hospitalDetail.length > 0 && hospitalDetail[0].hospital_phone_number}</Title>
+                        <span className="ml-2">
+                            <Title level={5} className="!mb-0">{hospitalDetail.length > 0 && hospitalDetail[0].hospital_phone_number}</Title>
+                        </span>
                     </div>
-                    
-                    <Button variant="solid" style={{backgroundColor: "rgb(14 137 136)", color: "#fff", marginTop: "10px"}} onClick={handleRegisterHospitalClick}>
-                        진료 예약하기
-                    </Button>
+                    {sessionStorage.getItem("isLoggedIn") === "true" &&
+                        <Button variant="solid" style={{backgroundColor: "rgb(14 137 136)", color: "#fff"}} className="mt-3 self-start md:self-auto" onClick={handleRegisterHospitalClick}>
+                            진료 예약하기
+                        </Button>
+                    }
                 </div>
             </div>
 
-            <Divider />
+            {/* 오른쪽: 즐겨찾기 버튼 */}
+            {sessionStorage.getItem("isLoggedIn") === "true" && (
+                <div className="self-start md:self-start flex-shrink-0 mt-2 md:mt-0"> 
+                    <Button
+                        icon={isBookmarked ? <StarFilled style={{ color: '#fadb14' }} /> : <StarOutlined />}
+                        onClick={handleBookmarkClick}
+                        size="large"
+                    >
+                        {isBookmarked ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+                    </Button>
+                </div>
+            )}
+
+            </div>
+
+            <Divider /> {/* 구분선 */}
+
+
 
             <div>
                 <Title level={4}>
