@@ -52,7 +52,7 @@ const HospitalMainPage = () => {
     // '강남구' 데이터에서 '미국/일본/중국/러시아/중동/몽골/베트남'로 넘어오는 걸 언어로 변환
     const languageMapping  = {
         '미국': '영어',
-        '일본': '일어',
+        '일본': '일본어',
         '중국': '중국어',
         '러시아': '러시아어',
         '중동': '중동어',
@@ -282,7 +282,7 @@ useEffect(() => {
         {key: '1',label: (<span>한국어</span>), onClick: () => {setSelectedLanguage('한국어')}},
         {key: '2',label: (<span>영어</span>), onClick: () => {setSelectedLanguage('영어')},},
         {key: '3',label: (<span>중국어</span>), onClick: () => {setSelectedLanguage('중국어')},},
-        {key: '4',label: (<span>일어</span>), onClick: () => {setSelectedLanguage('일어')}},
+        {key: '4',label: (<span>일본어</span>), onClick: () => {setSelectedLanguage('일본어')}},
         {key: '5',label: (<span>러시아어</span>), onClick: () => {setSelectedLanguage('러시아어')},},
         {key: '6',label: (<span>베트남어</span>), onClick: () => {setSelectedLanguage('베트남어')},},
         {key: '7',label: (<span>몽골어</span>), onClick: () => {setSelectedLanguage('몽골어')},},
@@ -309,6 +309,7 @@ useEffect(() => {
 
     const handleCancel = () => {
         setIsDepartmentModalOpen(false);
+        setSelectedDepartment('전체 과목');
     };
 
     // 진료과 모달 내부의 카드 css
@@ -339,6 +340,7 @@ useEffect(() => {
 
     const handleLocationCancel = () => {
         setIsLocationModalOpen(false);
+        setSelectedLocation('서울시 전체')
     };
 
     

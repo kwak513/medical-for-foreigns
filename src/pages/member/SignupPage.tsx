@@ -1,9 +1,14 @@
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Input } from "antd";
+import { LockOutlined, UserOutlined, PhoneOutlined, MailOutlined } from "@ant-design/icons"; // Added PhoneOutlined, MailOutlined
+import { Button, Input, Select, DatePicker } from "antd"; // Added Select, DatePicker
 import Title from "antd/es/typography/Title";
 import { useEffect, useState, KeyboardEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { memberRegister } from "../../api/chartboardApi";
+// If using Ant Design v4 or need specific date object handling, you might need:
+// import moment from 'moment'; // or dayjs
+// import type { DatePickerProps } from 'antd';
+
+const { Option } = Select; // Destructure Option from Select
 
 const SignupPage = () => {
 
@@ -13,45 +18,69 @@ const SignupPage = () => {
         //  로그인 되어 있으면 접근 X
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
             alert('이미 로그인 되어 있습니다.');
-            navigate('/'); 
+            navigate('/');
         }
-        }, [])
+    }, [])
 
-        const [username, setUsername] = useState('');
-        const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [gender, setGender] = useState<string | undefined>(undefined); // placeholder 보이도록
+    const [dateOfBirth, setDateOfBirth] = useState<string | null>(null); 
+    const [email, setEmail] = useState('');
+    // --------------------------
 
-        //  회원가입 버튼 클릭 시
-        const handleSignup = () => {
-            if (!username.trim() || !password.trim()) {
-                alert("아이디와 비밀번호를 모두 입력해주세요.");
-                return; 
-            }
-
-            memberRegister({ username: username, password: password }) 
-                .then((bool) => {
-                    if(bool){
-                        alert("회원가입 되었습니다.")
-                        navigate('/login');
-    
-                    }
-                    else{
-                        alert("이미 존재하는 회원입니다. ")
-                    }
-                })
-                .catch((err) => {
-                    console.log("memberLogin 실패: ", err);
-                    alert("서버 오류로 회원가입 실패했습니다.")
-                })
+    //  회원가입 버튼 클릭 시
+    const handleSignup = () => {
+        // --- 유효성 검사 ---
+        if (!username.trim() || !password.trim() || !phoneNumber.trim() || !gender || !dateOfBirth || !email.trim()) {
+            alert("아이디, 비밀번호를 포함한 모든 필수 정보를 입력해주세요."); 
+            return;
+        }
+        
+        if (!/\S+@\S+\.\S+/.test(email)) {
+            alert("유효한 이메일 주소를 입력해주세요.");
+            return;
+        }
+        
+        const registrationData = {
+            username: username,
+            password: password,
+            phoneNum: phoneNumber,
+            gender: gender,
+            birthDate: dateOfBirth, 
+            email: email
         };
+    
+        memberRegister(registrationData)
+            .then((bool) => {
+                if(bool){
+                    alert("회원가입 되었습니다.")
+                    navigate('/login');
 
-    // 비밀번호 입력 필드에서 Enter 키 누를 때 로그인 시도
-    const handlePasswordKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+                }
+                else{
+                    alert("이미 존재하는 아이디 또는 이메일입니다.")
+                }
+            })
+            .catch((err) => {
+                console.log("memberRegister 실패: ", err); 
+                alert("서버 오류로 회원가입 실패했습니다.")
+            })
+    };
+
+    const handleEmailKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             handleSignup();
         }
     };
 
-    return (  
+    const handleDateChange = (date: any, dateString: string | string[]) => {
+        setDateOfBirth(dateString as string);
+    };
+
+
+    return (
         <>
             <div style={{ textAlign: 'center', marginTop: '40px', marginBottom: '30px' }}>
                 <Title level={2}>
@@ -66,7 +95,7 @@ const SignupPage = () => {
                     flexDirection: 'column',
                     margin: '0 auto',
                     maxWidth: '400px',
-                    padding: '0 20px', 
+                    padding: '0 20px',
                 }}
             >
                 {/* 아이디 입력 */}
@@ -88,9 +117,63 @@ const SignupPage = () => {
                         onChange={(e) => { setPassword(e.target.value) }}
                         placeholder="비밀번호"
                         prefix={<LockOutlined />}
-                        onKeyDown={handlePasswordKeyDown} 
+                        
                     />
                 </div>
+
+                {/* 전화번호 입력 */}
+                <div style={{ marginBottom: '20px', width: '100%' }}>
+                    <Input
+                        size="large"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        placeholder="전화번호 (예: 010-1234-5678)"
+                        prefix={<PhoneOutlined />}
+                        type="tel"
+                    />
+                </div>
+
+                {/* 성별 선택 */}
+                <div style={{ marginBottom: '20px', width: '100%' }}>
+                    <Select
+                        size="large"
+                        value={gender}
+                        onChange={(value) => setGender(value)}
+                        placeholder="성별 선택"
+                        style={{ width: '100%' }} 
+                    >
+                        <Option value="남성">남성</Option>
+                        <Option value="여성">여성</Option>
+                        <Option value="기타">기타</Option>
+                    </Select>
+                </div>
+
+                {/* 생년월일 선택 */}
+                <div style={{ marginBottom: '20px', width: '100%' }}>
+                    <DatePicker
+                        size="large"
+                        onChange={handleDateChange}
+                        placeholder="생년월일 (YYYY-MM-DD)"
+                        style={{ width: '100%' }} 
+                        format="YYYY-MM-DD" 
+                        picker="date"
+                    />
+                </div>
+
+                {/* 이메일 입력 */}
+                <div style={{ marginBottom: '20px', width: '100%' }}>
+                    <Input
+                        size="large"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="이메일 주소"
+                        prefix={<MailOutlined />}
+                        type="email" 
+                        onKeyDown={handleEmailKeyDown}
+                    />
+                </div>
+                {/* -------------------------- */}
+
 
                 {/* 회원가입 버튼 */}
                 <div style={{ width: '100%', marginTop: '10px' }}>
@@ -105,15 +188,15 @@ const SignupPage = () => {
                 </div>
 
                 {/* 로그인 링크 */}
-                <div style={{ width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}> 
+                <div style={{ width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}>
                     <Link to="/login" style={{ color: '#1677ff', fontSize: '0.9em' }}>
-                        로그인
+                        이미 계정이 있으신가요? 로그인
                     </Link>
-                    
+
                 </div>
             </div>
         </>
     );
 }
- 
+
 export default SignupPage;

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { selectFromHospitalReservation, selectFromMemberFavorite, selectReviewByMemberId, selectUsername } from "../../api/chartboardApi";
+import { selectFromHospitalReservation, selectFromMemberFavorite, selectReviewByMemberId, selectUserInfo, selectUsername } from "../../api/chartboardApi";
 import { CalendarOutlined, DeleteOutlined, EnvironmentOutlined, HeartOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
-import { Button, Card, Divider, List, Popconfirm, Rate, Tag, Typography } from "antd";
+import { Button, Card, Descriptions, Divider, List, Popconfirm, Rate, Tag, Typography } from "antd";
 import Paragraph from "antd/es/typography/Paragraph";
 const { Text } = Typography;
 
@@ -19,7 +19,15 @@ const MyPage = () => {
         }
     }, [])
 
-    const [username, setUsername] = useState<string>('');
+    const [userinfo, setUserinfo] = useState<UserinfoDto | undefined>(undefined);
+    interface UserinfoDto{
+        username: string;
+        phone_num: string;
+        gender: string;
+        birth_date: string;
+        email: string;
+    }
+
     const [reservationInfo, setReservationInfo] = useState<ReservationDto[]>([]);
 
     interface ReservationDto{
@@ -54,8 +62,8 @@ const MyPage = () => {
 
     useEffect(() => {
         // 회원의 username
-        selectUsername(Number(sessionStorage.getItem("userId")))
-            .then((data) => {setUsername(data)})
+        selectUserInfo(Number(sessionStorage.getItem("userId")))
+            .then((data) => {setUserinfo(data)})
             .catch((err) => {
                 console.log("selectUsername 실패: ", err);
                 alert("회원 정보를 불러오지 못했습니다.")
@@ -104,11 +112,24 @@ const MyPage = () => {
                 <UserOutlined /> 마이페이지
             </Title>
 
-            {username && (
-                <Title level={4} style={{ marginBottom: '30px' }}>
-                    환영합니다, {username}님!
-                </Title>
-            )}
+            {/* --- 회원 정보 --- */}
+            <section style={{ marginBottom: '40px' }}>
+                <Title level={3}>회원 정보</Title>
+                {userinfo ? (
+                    <Card>
+                        <Descriptions bordered column={{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }} size="default">
+                            <Descriptions.Item label="아이디">{userinfo.username}</Descriptions.Item>
+                            <Descriptions.Item label="이메일">{userinfo.email}</Descriptions.Item>
+                            <Descriptions.Item label="전화번호">{userinfo.phone_num}</Descriptions.Item>
+                            <Descriptions.Item label="생년월일">{userinfo.birth_date}</Descriptions.Item>
+                            <Descriptions.Item label="성별" span={2}>{userinfo.gender}</Descriptions.Item>
+                        </Descriptions>
+                        <Button type="link" style={{ marginTop: '10px' }}>정보 수정</Button>
+                    </Card>
+                ) : (
+                    <Text type="secondary">회원 정보를 불러오는 중...</Text>
+                )}
+            </section>
 
             <Divider />
 
@@ -117,7 +138,7 @@ const MyPage = () => {
                 <Title level={3}><CalendarOutlined /> 예약한 진료 ({reservationInfo.length})</Title>
                 {reservationInfo.length > 0 ? (
                     <List
-                        grid={{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3 }} // 반응형 그리드
+                        grid={{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3 }} 
                         dataSource={reservationInfo}
                         renderItem={item => (
                             <List.Item>

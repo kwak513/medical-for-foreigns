@@ -11,6 +11,8 @@ const HospitalReviewPage = lazy(() => import("../pages/hospital/review/HospitalR
 const LoginPage = lazy(() => import("../pages/member/LoginPage"));
 const SignupPage = lazy(() => import("../pages/member/SignupPage"));
 const MyPage = lazy(() => import("../pages/member/MyPage"));
+const FindIdPage = lazy(() => import("../pages/member/FindIdPage"));
+const FindPasswordPage = lazy(() => import("../pages/member/FindPasswordPage"));
 
 // const Collection1 = lazy(() => import("../pages/collections/Collection1Page"));
 // const CollectionMain = lazy(() => import("../pages/collections/CollectionMainPage"));
@@ -48,13 +50,8 @@ const router = createBrowserRouter([
             {path: "/login", element: <Suspense fallback={<LoadingScreen />}><LoginPage /></Suspense>},
             {path: "/signup", element: <Suspense fallback={<LoadingScreen />}><SignupPage /></Suspense>},
             {path: "/mypage", element: <Suspense fallback={<LoadingScreen />}><MyPage /></Suspense>},
-            // {path: "chartlist", element: <Suspense fallback={<LoadingScreen />}><CollectionChartList /></Suspense>},
-            // {path: "dashboardlist", element: <Suspense fallback={<LoadingScreen />}><CollectionDashboardList /></Suspense>},
-            // {path: "rowtochart", element: <Suspense fallback={<LoadingScreen />}><RowToChart /></Suspense>},
-            // {path: "rowtodashboard", element: <Suspense fallback={<LoadingScreen />}><RowToDashboard /></Suspense>},
-            
-            // {path: "dblist", element: <Suspense fallback={<LoadingScreen />}><DatabaseList /></Suspense>},
-            // {path: "customsql", element: <Suspense fallback={<LoadingScreen />}><CustomSqlSearch /></Suspense>},
+            {path: "/findid", element: <Suspense fallback={<LoadingScreen />}><FindIdPage /></Suspense>},
+            {path: "/findpassword", element: <Suspense fallback={<LoadingScreen />}><FindPasswordPage /></Suspense>},
         ]
 
     }

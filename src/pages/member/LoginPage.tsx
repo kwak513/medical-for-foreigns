@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Input, Button, Typography } from "antd";
+import { Input, Button, Typography, Space } from "antd";
 import { useEffect, useState, KeyboardEvent } from "react"; 
 import { Link, useNavigate } from "react-router-dom";
 import { memberLogin } from "../../api/chartboardApi";
@@ -115,12 +115,20 @@ const LoginPage = () => {
                     </Button>
                 </div>
 
-                {/* 회원가입 링크 */}
-                <div style={{ width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}> 
-                    <Link to="/signup" style={{ color: '#1677ff', fontSize: '0.9em' }}>
-                        회원가입
-                    </Link>
-                    
+                {/* 회원가입, 아이디/비밀번호 찾기 */}
+                <div style={{ width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}>
+                    <Space split={<span style={{ margin: '0 8px', color: '#ccc' }}>|</span>} style={{ fontSize: '0.9em' }}>
+                        <Link to="/signup" style={{ color: '#1677ff' }}>
+                            회원가입
+                        </Link>
+                        <Link to="/findid" style={{ color: '#1677ff' }}>
+                            아이디 찾기
+                        </Link>
+                        <Link to="/findpassword" style={{ color: '#1677ff' }}>
+                            비밀번호 찾기
+                        </Link>
+                        {/* ------------------- */}
+                    </Space>
                 </div>
             </div>
         </>

@@ -42,6 +42,10 @@ export const searchAndFilterHospital = async(hospitalName:string, language:strin
 interface MemberRegisterDto{
     username: string;
     password: string;
+    phoneNum: string;
+	gender: string;
+	birthDate: string;
+	email: string;
 }
 
 // 회원가입
@@ -56,12 +60,21 @@ export const memberLogin = async(username: string, password: string) => {
     return res.data;
 }
 
-// 회원 정보 조회(username)
-export const selectUsername = async(memberId: number) => {
-    const res = await axios.get(`${API_SERVER_URL}/selectUsername`, {params: {memberId}});
+// 회원 정보 조회(username, phone_num, gender, birth_date, email)
+export const selectUserInfo = async(memberId: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectUserInfo`, {params: {memberId}});
     return res.data;
 }
-
+// 회원 아이디 찾기
+export const selectUserName = async(email: string) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectUserName`, {params: {email}});
+    return res.data;
+}
+// 회원 비밀번호 찾기(실제 구현X, 이메일 입력하면 존재하는 회원인지만 체크해서 메일 발송 알림만)
+export const isUserExist = async(email: string) => {
+    const res = await axios.get(`${API_SERVER_URL}/isUserExist`, {params: {email}});
+    return res.data;
+}
 
 // -------------------------- 리뷰  --------------------------
 interface HospitalReviewDto{
