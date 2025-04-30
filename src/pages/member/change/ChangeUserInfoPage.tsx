@@ -4,79 +4,113 @@ import Title from "antd/es/typography/Title";
 import { useEffect, useState, KeyboardEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { memberRegister } from "../../api/chartboardApi";
+import { changeUserInfo, selectUserInfo } from "../../../api/chartboardApi";
+import moment from "moment";
 // If using Ant Design v4 or need specific date object handling, you might need:
 // import moment from 'moment'; // or dayjs
 // import type { DatePickerProps } from 'antd';
 
 const { Option } = Select; // Destructure Option from Select
 
-const SignupPage = () => {
+const ChangeUserInfoPage = () => {
 
     const navigate = useNavigate();
 
+    // 회원의 기본 정보
+    const [userinfo, setUserinfo] = useState<UserinfoDto | undefined>(undefined);
+    interface UserinfoDto{
+        username: string;
+        phone_num: string;
+        gender: string;
+        birth_date: string;
+        email: string;
+    }
+
+    const [password, setPassword] = useState('');
+
     useEffect(() => {
-        //  로그인 되어 있으면 접근 X
-        if (sessionStorage.getItem('isLoggedIn') === 'true') {
-            alert('이미 로그인 되어 있습니다.');
-            navigate('/');
+        //  로그인 안되어 있으면 접근 X
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            alert('로그인이 필요합니다.');
+            navigate('/login');
         }
     }, [])
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [gender, setGender] = useState<string | undefined>(undefined); // placeholder 보이도록
-    const [dateOfBirth, setDateOfBirth] = useState<string | null>(null); 
-    const [email, setEmail] = useState('');
+    useEffect(() => {
+        // 회원의 기본 정보
+        selectUserInfo(Number(sessionStorage.getItem("userId")))
+            .then((data) => {
+                console.log("selectUserInfo: ", data);
+                setUserinfo(data)
+            })
+            .catch((err) => {
+                console.log("selectUserInfo 실패: ", err);
+                alert("회원 정보를 불러오지 못했습니다.")
+            })
+    }, [])
+
+    // const [username, setUsername] = useState('');
+    // const [password, setPassword] = useState('');
+    // const [phoneNumber, setPhoneNumber] = useState('');
+    // const [gender, setGender] = useState<string | undefined>(undefined); // placeholder 보이도록
+    // const [dateOfBirth, setDateOfBirth] = useState<string | null>(null); 
+    // const [email, setEmail] = useState('');
     // --------------------------
 
-    //  회원가입 버튼 클릭 시
-    const handleSignup = () => {
+
+
+    //  정보 수정 완료 버튼 클릭 시, 
+    const handleChangeUserInfo = () => {
+        if (!userinfo) {
+            alert("회원 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요."); 
+            return; 
+        }
+
         // --- 유효성 검사 ---
-        if (!username.trim() || !password.trim() || !phoneNumber.trim() || !gender || !dateOfBirth || !email.trim()) {
+        if (!userinfo.username.trim() || !userinfo.phone_num.trim() || !userinfo.gender || !userinfo.birth_date || !userinfo.email.trim()) {
             alert("아이디, 비밀번호를 포함한 모든 필수 정보를 입력해주세요."); 
             return;
         }
         
-        if (!/\S+@\S+\.\S+/.test(email.trim())) {
+        if (!/\S+@\S+\.\S+/.test(userinfo.email.trim())) {
             alert("유효한 이메일 주소를 입력해주세요.");
             return;
         }
         
-        const registrationData = {
-            username: username,
-            password: password,
-            phoneNum: phoneNumber,
-            gender: gender,
-            birthDate: dateOfBirth, 
-            email: email
+        const changedUserData = {
+            id: Number(sessionStorage.getItem("userId")),
+            phoneNum: userinfo.phone_num,
+            gender: userinfo.gender,
+            birthDate: userinfo.birth_date, 
+            email: userinfo.email,
+            password: password
         };
     
-        memberRegister(registrationData)
+        changeUserInfo(changedUserData)
             .then((bool) => {
                 if(bool){
-                    alert("회원가입 되었습니다.")
-                    navigate('/login');
+                    alert("정보가 수정되었습니다.")
+                    navigate('/mypage');
 
                 }
                 else{
-                    alert("이미 존재하는 아이디 또는 이메일입니다.")
+                    alert("정보 수정에 실패했습니다.")
                 }
             })
             .catch((err) => {
-                console.log("memberRegister 실패: ", err); 
-                alert("서버 오류로 회원가입 실패했습니다.")
+                console.log("changeUserInfo 실패: ", err); 
+                alert("서버 오류로 정보 수정에 실패했습니다.")
             })
     };
 
     const handleEmailKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            handleSignup();
+            handleChangeUserInfo();
         }
     };
 
     const handleDateChange = (date: any, dateString: string | string[]) => {
-        setDateOfBirth(dateString as string);
+        setUserinfo(prev => prev ? { ...prev, birth_date: dateString as string } : undefined)
     };
 
 
@@ -84,7 +118,7 @@ const SignupPage = () => {
         <>
             <div style={{ textAlign: 'center', marginTop: '40px', marginBottom: '30px' }}>
                 <Title level={2}>
-                    Doctor K 회원가입
+                    회원 정보 수정
                 </Title>
             </div>
 
@@ -98,18 +132,16 @@ const SignupPage = () => {
                     padding: '0 20px',
                 }}
             >
-                {/* 아이디 입력 */}
                 <div style={{ marginBottom: '20px', width: '100%' }}>
                     <Input
                         size="large"
-                        value={username}
-                        onChange={(e) => { setUsername(e.target.value) }}
+                        value={userinfo?.username || ''}
                         placeholder="아이디"
                         prefix={<UserOutlined />}
+                        disabled
                     />
                 </div>
 
-                {/* 비밀번호 입력 */}
                 <div style={{ marginBottom: '20px', width: '100%' }}>
                     <Input.Password
                         size="large"
@@ -125,8 +157,8 @@ const SignupPage = () => {
                 <div style={{ marginBottom: '20px', width: '100%' }}>
                     <Input
                         size="large"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        value={userinfo?.phone_num || ''}
+                        onChange={(e) => setUserinfo(prev => prev ? { ...prev, phone_num: e.target.value } : undefined)}
                         placeholder="전화번호 (예: 010-1234-5678)"
                         prefix={<PhoneOutlined />}
                         type="tel"
@@ -137,8 +169,8 @@ const SignupPage = () => {
                 <div style={{ marginBottom: '20px', width: '100%' }}>
                     <Select
                         size="large"
-                        value={gender}
-                        onChange={(value) => setGender(value)}
+                        value={userinfo?.gender}
+                        onChange={(value) => setUserinfo(prev => prev ? { ...prev, gender: value } : undefined)}
                         placeholder="성별 선택"
                         style={{ width: '100%' }} 
                     >
@@ -157,6 +189,7 @@ const SignupPage = () => {
                         style={{ width: '100%' }} 
                         format="YYYY-MM-DD" 
                         picker="date"
+                        value={userinfo?.birth_date ? moment(userinfo.birth_date, 'YYYY-MM-DD') : null}
                     />
                 </div>
 
@@ -164,8 +197,8 @@ const SignupPage = () => {
                 <div style={{ marginBottom: '20px', width: '100%' }}>
                     <Input
                         size="large"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={userinfo?.email || ""}
+                        onChange={(e) => setUserinfo(prev => prev ? { ...prev, email: e.target.value } : undefined)}
                         placeholder="이메일 주소"
                         prefix={<MailOutlined />}
                         type="email" 
@@ -175,28 +208,22 @@ const SignupPage = () => {
                 {/* -------------------------- */}
 
 
-                {/* 회원가입 버튼 */}
+                {/* 완료 버튼 */}
                 <div style={{ width: '100%', marginTop: '10px' }}>
                     <Button
                         type="primary"
-                        onClick={handleSignup}
+                        onClick={handleChangeUserInfo}
                         style={{ width: '100%' }}
                         size="large"
                     >
-                        회원가입
+                        완료
                     </Button>
                 </div>
 
-                {/* 로그인 링크 */}
-                <div style={{ width: '100%', textAlign: 'center', marginTop: '20px', marginBottom: '20px' }}>
-                    <Link to="/login" style={{ color: '#1677ff', fontSize: '0.9em' }}>
-                        이미 계정이 있으신가요? 로그인
-                    </Link>
-
-                </div>
+                
             </div>
         </>
     );
 }
 
-export default SignupPage;
+export default ChangeUserInfoPage;

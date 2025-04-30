@@ -75,7 +75,19 @@ export const isUserExist = async(email: string) => {
     const res = await axios.get(`${API_SERVER_URL}/isUserExist`, {params: {email}});
     return res.data;
 }
-
+// 회원 정보 수정
+export const changeUserInfo = async(memberInfoChangedDto: MemberInfoChangedDto) => {
+    const res = await axios.put(`${API_SERVER_URL}/changeUserInfo`, memberInfoChangedDto)
+    return res.data;
+}
+interface MemberInfoChangedDto{
+    id: number;
+	phoneNum: string;
+	gender: string;
+	birthDate: string;
+	email: string;
+    password: string;
+}
 // -------------------------- 리뷰  --------------------------
 interface HospitalReviewDto{
     memberId: number;
@@ -104,6 +116,18 @@ export const selectReviewByMemberId = async(memberId: number) => {
     return res.data;
 }
 
+// 리뷰 수정
+export const changeReview = async(changedReviewDto: ChangedReviewDto) => {
+    const res = await axios.put(`${API_SERVER_URL}/changeReview`, changedReviewDto)
+    return res.data;
+}
+
+interface ChangedReviewDto{
+    rate: number;
+    originalTxt: string;
+    reviewId: number;
+}
+
 // -------------------------- 진료예약 관련--------------------------	
 interface HospitalReservationDto{
     language: string;
@@ -126,6 +150,22 @@ export const selectFromHospitalReservation = async(memberId: number) => {
     const res = await axios.get(`${API_SERVER_URL}/selectFromHospitalReservation`, {params: {memberId}});
     return res.data;
 }
+
+// 예약한 진료 수정
+export const changeReservation = async(changedReservationDto: ChangedReservationDto) => {
+    const res = await axios.put(`${API_SERVER_URL}/changeReservation`, changedReservationDto)
+    return res.data;
+}
+
+interface ChangedReservationDto{
+    language: string,
+    mainSymptom: string,
+    subSymptom: string,
+    detailSymptom: string,
+    reservationTime: string,
+    reservationId: number
+}
+
 
 // -------------------------- 즐겨찾기 관련--------------------------	
 interface MemberFavoriteDto{

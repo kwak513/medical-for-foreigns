@@ -93,11 +93,32 @@ const ChartBoardLayout: React.FC = () => {
     alert("로그아웃 되었습니다.")
     navigate("/login")
   }
-  
+
+  // useEffect(() => {
+  //   const script = document.createElement('script');
+  //   script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  //   script.async = true;
+  //   script.onload = () => {
+  //     new window.google.translate.TranslateElement({ pageLanguage: 'ko' }, 'google_translate_element');
+  //   };
+  //   document.body.appendChild(script);
+
+  //   return () => {
+  //     const googleScript = document.querySelector('script[src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"]');
+  //     if (googleScript) {
+  //       document.body.removeChild(googleScript);
+  //     }
+  //   };
+
+  // }, []);
 
   return (
-    <Layout style={{ minHeight: '100vh', marginLeft: 200 }}>
-      <Sider /* collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} */style={{ height: '100vh', overflow: 'auto', position: 'fixed', left: 0, top: 0}}>
+    <Layout style={{ minHeight: '100vh', marginLeft: 200}}>
+      <div style={{width: '100%', height: '38px', position: 'fixed', left: 0, top: 0, backgroundColor: 'oklch(0.19 0.05 247.28)', zIndex: 1000, textAlign: 'center', color: '#fff', lineHeight: '38px'}}>
+        Welcome to Doctor K
+      </div>
+
+      <Sider /* collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} */style={{ height: '100vh', overflow: 'auto', position: 'fixed', left: 0, top: '38px'}}>
         <Menu theme="dark" defaultSelectedKeys={['/hospital']} mode="inline" items={items} onClick={handleMenuClick} />
       </Sider>
       <Layout>
@@ -105,7 +126,7 @@ const ChartBoardLayout: React.FC = () => {
       <Header
         style={{
           position: "fixed",
-          top: 0,
+          top: '38px',
           left: 200,
           width: "calc(100% - 200px)",
           zIndex: 1,
@@ -114,6 +135,7 @@ const ChartBoardLayout: React.FC = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          // overflow: 'hidden'
         }}
       >
         {/* 왼쪽: 로고 */}
@@ -124,6 +146,11 @@ const ChartBoardLayout: React.FC = () => {
 
         {/* 오른쪽: 검색창 + 버튼 */}
         <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+
+        {/* 구글 언어 선택
+        <div id="google_translate_element" style={{ marginRight: "10px", width: "100px", height: "50px"}}></div> */}
+
+
           <Search
             placeholder="병원명 검색하기"
             onSearch={onSearch}
@@ -143,7 +170,21 @@ const ChartBoardLayout: React.FC = () => {
 
 
 
-        <Content style={{ margin: '16px', marginTop: 80 }}>
+        <Content style={{ margin: '16px', marginTop: '118px' }}>
+
+        {/* <Content
+          style={{
+            position: 'fixed',  // 구글 번역 header 생기면, 밀려서 방지하고자 marginTop 대신 fixed로 바꿈
+            top: '118px',
+            left: '200px', // Sider 너비
+            right: '0',
+            bottom: '0',
+            padding: '16px',
+            overflow: 'auto', // 넘치면 내부 스크롤
+          }}
+          id="scrollable-content"
+        > */}
+  
           {/* <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
             <Breadcrumb.Item>Bill</Breadcrumb.Item>
@@ -164,6 +205,12 @@ const ChartBoardLayout: React.FC = () => {
         </Footer>
 
         <FloatButton.BackTop visibilityHeight={0} />
+
+        <FloatButton.BackTop
+        visibilityHeight={0}
+        // target={() => document.getElementById('scrollable-content')}
+/>
+
       </Layout>
     </Layout>
   );

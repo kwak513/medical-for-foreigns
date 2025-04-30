@@ -8,6 +8,24 @@
   </head>
   <body>
     <div id="root"></div>
+
+<!-- 구글 번역 -->
+<script>
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement(
+      { pageLanguage: 'ko', includedLanguages: 'en,ko' },
+      'google_translate_element'
+    );
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .goog-logo-link { display: none !important; }
+      .goog-te-gadget { font-size: 0 !important; }
+    `;
+    document.head.appendChild(style);
+  }
+</script>
+
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

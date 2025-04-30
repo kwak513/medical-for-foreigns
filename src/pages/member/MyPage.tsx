@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { selectFromHospitalReservation, selectFromMemberFavorite, selectReviewByMemberId, selectUserInfo, selectUsername } from "../../api/chartboardApi";
-import { CalendarOutlined, DeleteOutlined, EnvironmentOutlined, HeartOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons";
+import { deleteMemberFavorite, selectFromHospitalReservation, selectFromMemberFavorite, selectReviewByMemberId, selectUserInfo, selectUsername } from "../../api/chartboardApi";
+import { CalendarOutlined, DeleteOutlined, EditOutlined, EnvironmentOutlined, HeartOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
-import { Button, Card, Descriptions, Divider, List, Popconfirm, Rate, Tag, Typography } from "antd";
+import { Button, Card, Descriptions, Divider, List, Popconfirm, Rate, Space, Tag, Typography } from "antd";
 import Paragraph from "antd/es/typography/Paragraph";
 const { Text } = Typography;
 
@@ -38,11 +38,12 @@ const MyPage = () => {
         hospital_name: string;
         reservation_time: string;
         source: string;
-        hospital_id: number;
+        hospital_id: number; 
     }
     const [writtenReview, setWrittenReview] = useState<ReviewDto[]>([]);
 
-    interface ReviewDto{        
+    interface ReviewDto{    
+        review_id: number;    
         rate: number;
         created_at: string;
         original_text: string;
@@ -52,6 +53,7 @@ const MyPage = () => {
     const [favoriteHospital, setFavoriteHospital] = useState<FavoriteHospitalDto[]>([]);
 
     interface FavoriteHospitalDto{
+        hospital_source: string;
         hospital_id: number;
         hospital_name: string;
         hospital_main_address: string;
@@ -61,11 +63,11 @@ const MyPage = () => {
 
 
     useEffect(() => {
-        // 회원의 username
+        // 회원의 기본 정보
         selectUserInfo(Number(sessionStorage.getItem("userId")))
             .then((data) => {setUserinfo(data)})
             .catch((err) => {
-                console.log("selectUsername 실패: ", err);
+                console.log("selectUserInfo 실패: ", err);
                 alert("회원 정보를 불러오지 못했습니다.")
             })
         
@@ -100,11 +102,50 @@ const MyPage = () => {
         })
     }, [])
     
+    // 회원 정보 수정
+    const handleUserInfoChange = () => {
+        navigate("/changeuserinfo")
+    }
+
+    const handleDeleteFavorite = (uid, hid, hsource) => {
+        deleteMemberFavorite(uid, hid, hsource)
+            .then((bool) => {
+                if(bool){
+                    alert("즐겨찾기에서 해제되었습니다.");
+                    
+                    // 즐겨찾기한 병원 조회
+                    selectFromMemberFavorite(Number(sessionStorage.getItem("userId")))
+                    .then((data) => {
+                        setFavoriteHospital(data);
+                    })
+                    .catch((err) => {
+                        console.log("selectFromMemberFavorite 실패: ", err);
+                        alert("즐겨찾기한 병원 정보를 불러오지 못했습니다.")
+                    })
 
 
-    
+                }
+            })
+            .catch((err) => {
+                console.log("deleteMemberFavorite 실패: ", err);
+                alert("즐겨찾기를 해제하지 못했습니다.")
+            })
+    }
 
 
+    const handleFavoriteHospitalClick = (hospitalId, hospitalSource) => {
+        navigate("/hospital/info", {state: {hospitalId,hospitalSource}})
+    }
+    // 리뷰 수정 클릭 시,
+    const handleChangeReview = (reviewId, rate, text, hospitalName) => {
+        navigate("/changereview", {state: {reviewId, rate, text, hospitalName}})
+    }
+
+    // 진료 수정 클릭 시,
+    const handleEditReservation = (
+        hospitalId, hospitalName, source, language, mainSymptom, subSymptom, detailSymptom, reservationTime) => {
+        navigate("/changereservation", {state: {hospitalId, hospitalName, source, language, mainSymptom, subSymptom, detailSymptom, reservationTime}})
+    }
     return (
         <>
             <div style={{ padding: '20px' }}>
@@ -124,7 +165,7 @@ const MyPage = () => {
                             <Descriptions.Item label="생년월일">{userinfo.birth_date}</Descriptions.Item>
                             <Descriptions.Item label="성별" span={2}>{userinfo.gender}</Descriptions.Item>
                         </Descriptions>
-                        <Button type="link" style={{ marginTop: '10px' }}>정보 수정</Button>
+                        <Button type="link" style={{ marginTop: '10px' }} onClick={handleUserInfoChange}>정보 수정</Button>
                     </Card>
                 ) : (
                     <Text type="secondary">회원 정보를 불러오는 중...</Text>
@@ -145,15 +186,27 @@ const MyPage = () => {
                                 <Card
                                     title={item.hospital_name}
                                     extra={ // Delete Icon Added Here
-                                        <Popconfirm
-                                            title="예약을 삭제하시겠습니까?"
-                                            // onConfirm={() => handleDeleteReservation(item)}
-                                            okText="삭제"
-                                            cancelText="취소"
-                                            
-                                        >
-                                            <DeleteOutlined style={{ color: 'red', cursor: 'pointer', fontSize: '16px' }}/>
-                                        </Popconfirm>
+                                        <Space>
+                                <Button
+                                    type="text"
+                                    icon={<EditOutlined />}
+                                    onClick={() =>  handleEditReservation(item.hospital_id, item.hospital_name, item.source, item.language, item.main_symptom, item.sub_symptom, item.detail_symptom, item.reservation_time) } 
+                                    aria-label="예약 수정" // Accessibility
+                                />
+                                <Popconfirm
+                                    title="예약을 삭제하시겠습니까?"
+                                    // onConfirm={() => handleDeleteReservation(item)} // TODO: Implement delete reservation functionality
+                                    okText="삭제"
+                                    cancelText="취소"
+                                >
+                                    <Button
+                                        type="text"
+                                        danger
+                                        icon={<DeleteOutlined />}
+                                        aria-label="예약 삭제" // Accessibility
+                                    />
+                                </Popconfirm>
+                            </Space>
                                     }
                                 >
                                     {/* reservation_time을 직접 출력 */}
@@ -189,20 +242,35 @@ const MyPage = () => {
                                 <Card
                                     title={item.hospital_name}
                                     extra={ // Delete Icon Added Here
-                                        <Popconfirm
-                                            title="리뷰를 삭제하시겠습니까?"
-                                            // onConfirm={() => handleDeleteReview(item)}
-                                            okText="삭제"
-                                            cancelText="취소"
-                                        >
-                                            <DeleteOutlined style={{ color: 'red', cursor: 'pointer', fontSize: '16px' }}/>
-                                        </Popconfirm>
+                                        <Space>
+                                            <Button
+                                                type="text"
+                                                icon={<EditOutlined />}
+                                                onClick={() =>  handleChangeReview(item.review_id, item.rate, item.original_text, item.hospital_name)} 
+                                                aria-label="리뷰 수정" 
+                                            />
+                                            <Popconfirm
+                                                title="리뷰를 삭제하시겠습니까?"
+                                                // onConfirm={() => handleDeleteReview(item)} // TODO: Implement delete review functionality
+                                                okText="삭제"
+                                                cancelText="취소"
+                                            >
+                                                <Button
+                                                    type="text"
+                                                    danger
+                                                    icon={<DeleteOutlined />}
+                                                    aria-label="리뷰 삭제" // Accessibility
+                                                />
+                                            </Popconfirm>
+                                        </Space>
                                     }
                                 >
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                         <Rate disabled defaultValue={item.rate} style={{ fontSize: '16px' }} />
                                         {/* Apply formatDate */}
-                                        <Text type="secondary" style={{ fontSize: '0.9em' }}>{(item.created_at)}</Text>
+                                        <Text type="secondary" style={{ fontSize: '0.9em' }}>
+                                            {new Date(item.created_at).toLocaleString('ko-KR')}
+                                        </Text>
                                     </div>
                                     <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: '더보기' }}>
                                         {item.original_text}
@@ -227,11 +295,11 @@ const MyPage = () => {
                         dataSource={favoriteHospital}
                         renderItem={item => (
                             <List.Item
-                                actions={[ // Delete Icon Added Here using Button
+                                actions={[ 
                                     <Popconfirm
                                         key={`delete-${item.hospital_id}`} // Add key for list actions
                                         title="즐겨찾기를 삭제하시겠습니까?"
-                                        // onConfirm={() => handleDeleteFavorite(item)}
+                                        onConfirm={() => handleDeleteFavorite(Number(sessionStorage.getItem("userId")), item.hospital_id, item.hospital_source)}
                                         okText="삭제"
                                         cancelText="취소"
                                     >
@@ -240,7 +308,15 @@ const MyPage = () => {
                                 ]}
                             >
                                 <List.Item.Meta
-                                    title={<Text>{item.hospital_name}</Text>}
+                                    title={
+                                        <Button
+                                            type="link"
+                                            style={{ padding: 0, height: 'auto', textAlign: 'left', color: 'black'}} 
+                                            onClick={() => handleFavoriteHospitalClick(item.hospital_id, item.hospital_source)}
+                                        >
+                                            {item.hospital_name}
+                                        </Button>
+                                    }
                                     description={<><EnvironmentOutlined /> {item.hospital_main_address}</>}
                                 />
                             </List.Item>
