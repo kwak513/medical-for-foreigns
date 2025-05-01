@@ -3,10 +3,13 @@ import { Input, Button, Typography, Card, Alert, Space, message } from 'antd'; /
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom'; // Optional: Link back to login
 import { isUserExist } from '../../api/chartboardApi';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
 const FindPasswordPage = () => {
+    const { t } = useTranslation();
+
     const [email, setEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [messageSent, setMessageSent] = useState(false); 
@@ -14,13 +17,15 @@ const FindPasswordPage = () => {
     const handlePasswordResetRequest = () => {
         // 유효성 검사
         if (!email.trim()) {
-            setError("이메일 주소를 입력해주세요.");
+            // setError("이메일 주소를 입력해주세요.");
+            setError(t('findIdPage.enterEmail'));
             setMessageSent(false);
             return;
         }
 
         if (!/\S+@\S+\.\S+/.test(email)) {
-            setError("유효한 이메일 형식이 아닙니다.");
+            // setError("유효한 이메일 형식이 아닙니다.");
+            setError(t('signupPage.invalidEmail'));
             setMessageSent(false);
             return;
         }
@@ -34,13 +39,15 @@ const FindPasswordPage = () => {
                     setMessageSent(true);
                 }
                 else{
-                    setError("일치하는 회원 정보가 없습니다.");
+                    // setError("일치하는 회원 정보가 없습니다.");
+                    setError(t('findIdPage.noMatch'));
                 }
                 
             })
             .catch((err) => {
                 console.log("isUserExist 실패: ", err);
-                alert("서버 오류로 회원 존재 여부를 불러오지 못했습니다.")
+                // alert("서버 오류로 회원 존재 여부를 불러오지 못했습니다.")
+                alert(t('findPasswordPage.checkError'));
             })
     };
 
@@ -48,14 +55,17 @@ const FindPasswordPage = () => {
         <div style={{ maxWidth: '450px', margin: '40px auto', padding: '20px' }}>
             <Card>
                 <Title level={3} style={{ textAlign: 'center', marginBottom: '30px' }}>
-                    <LockOutlined /> 비밀번호 찾기
+                    <LockOutlined />{" "}
+                    {/* 비밀번호 찾기 */}
+                    {t('findPassword')}
                 </Title>
 
                 <Space direction="vertical" style={{ width: '100%' }} size="large">
                     <Input
                         size="large"
                         prefix={<MailOutlined />}
-                        placeholder="가입 시 등록한 이메일 주소"
+                        // placeholder="가입 시 등록한 이메일 주소"
+                        placeholder={t('findIdPage.emailPlaceholder')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         onPressEnter={handlePasswordResetRequest}
@@ -68,7 +78,8 @@ const FindPasswordPage = () => {
                         block
                         size="large"
                     >
-                        비밀번호 재설정 메일 요청
+                        {/* 비밀번호 재설정 메일 요청 */}
+                        {t('findPasswordPage.requestButton')}
                     </Button>
 
                     {error && (
@@ -77,15 +88,20 @@ const FindPasswordPage = () => {
 
                     {messageSent && (
                         <Alert
-                            message="메일 전송 완료"
-                            description="이메일로 비밀번호 재설정 링크를 발송했습니다. (미구현)"
+                            // message="메일 전송 완료"
+                            // description="이메일로 비밀번호 재설정 링크를 발송했습니다. (미구현)"
+                            message={t('findPasswordPage.mailSentTitle')}
+                            description={t('findPasswordPage.mailSentDescription')}
                             type="success"
                             showIcon
                         />
                     )}
 
                     <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                        <Link to="/login">로그인 페이지로 돌아가기</Link>
+                        <Link to="/login">
+                            {/* 로그인 페이지로 돌아가기 */}
+                            {t('findIdPage.backToLogin')}
+                        </Link>
                     </div>
                 </Space>
             </Card>

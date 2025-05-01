@@ -1,0 +1,171 @@
+{
+"login": "Login",
+"signup": "Sign Up",
+"logout": "Logout",
+"mypage": "My Page",
+"findId": "Find ID",
+"findPassword": "Find Password",
+"searchPlaceholder": "Search for hospital name",
+"hospitalList": "Hospital List",
+"moreHospitals": "More Hospitals",
+"noResults": "No hospital information matches the searched name.",
+"filter": {
+    "availableLanguages": "Available Languages",
+    "allLanguages": "All Languages",
+    "korean": "Korean",
+    "english": "English",
+    "chinese": "Chinese",
+    "japanese": "Japanese",
+    "russian": "Russian",
+    "vietnamese": "Vietnamese",
+    "mongolian": "Mongolian",
+    "middleEastern": "Middle Eastern",
+    "uzbek": "Uzbek",
+    "medicalDepartment": "Medical Department",
+    "allDepartments": "All Departments",
+    "selectDepartment": "Select Medical Department",
+    "region": "Region",
+    "allRegions": "All Seoul",
+    "selectRegion": "Select Region",
+    "regionNotice": "※ Currently, only information for Gangnam-gu and Gangdong-gu is provided."
+},
+"hospitalInfo": {
+    "availableLanguages": "Available Languages",
+    "medicalDepartment": "Medical Department",
+    "operatingHours": "Operating Hours",
+    "dummyTimeNotice": "※ This information is dummy data, not actual hospital data.",
+    "location": "Location",
+    "copyAddress": "Copy",
+    "addressCopied": "Address copied to clipboard.",
+    "copyFailed": "Copy failed:",
+    "reviews": "Reviews",
+    "writeReview": "Write a Review",
+    "noReviews": "No reviews have been registered yet.",
+    "originalLanguage": "Original Language",
+    "bookAppointment": "Book an Appointment",
+    "addFavorite": "Add to Favorites",
+    "removeFavorite": "Remove from Favorites",
+    "favoriteAdded": "Added to favorites.",
+    "favoriteRemoved": "Removed from favorites.",
+    "favoriteAddFailed": "Failed to add to favorites.",
+    "favoriteRemoveFailed": "Failed to remove from favorites.",
+    "favoriteCheckFailed": "Failed to load favorite status."
+},
+"loginPage": {
+    "title": "Login",
+    "usernamePlaceholder": "Username",
+    "passwordPlaceholder": "Password",
+    "loginSuccess": "Login successful.",
+    "loginFailed": "Please check your username or password.",
+    "loginError": "Login failed due to a server error.",
+    "missingCredentials": "Please enter both username and password."
+},
+"signupPage": {
+    "title": "Sign Up",
+    "alreadyLoggedIn": "You are already logged in.",
+    "missingInfo": "Please enter all required information, including username and password.",
+    "invalidEmail": "Please enter a valid email address.",
+    "signupSuccess": "Sign up successful.",
+    "alreadyExists": "Username or email already exists.",
+    "signupError": "Sign up failed due to a server error.",
+    "phonePlaceholder": "Phone Number (e.g., 010-1234-5678)",
+    "genderPlaceholder": "Select Gender",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderOther": "Other",
+    "birthDatePlaceholder": "Date of Birth (YYYY-MM-DD)",
+    "emailPlaceholder": "Email Address",
+    "alreadyHaveAccount": "Already have an account? Login"
+},
+"findIdPage": {
+    "enterEmail": "Please enter your email address.",
+    "noMatch": "No matching member information found.",
+    "fetchError": "Failed to load ID information.",
+    "emailPlaceholder": "Email address registered during sign-up",
+    "foundSuccessTitle": "Find ID Successful",
+    "foundIdMessage": "Your ID is {{username}}",
+    "backToLogin": "Back to Login Page"
+},
+"findPasswordPage": {
+    "requestButton": "Request Password Reset Email",
+    "checkError": "Failed to check user existence due to a server error.",
+    "mailSentTitle": "Email Sent",
+    "mailSentDescription": "A password reset link has been sent to your email. (Not implemented)"
+},
+"myPage": {
+    "loginRequired": "Login is required.",
+    "userInfo": {
+        "title": "Member Information",
+        "idLabel": "Username",
+        "emailLabel": "Email",
+        "phoneLabel": "Phone Number",
+        "birthDateLabel": "Date of Birth",
+        "genderLabel": "Gender",
+        "editButton": "Edit Information",
+        "loading": "Loading member information...",
+        "fetchError": "Failed to load member information."
+    },
+    "reservations": {
+        "title": "Booked Appointments ({{count}})",
+        "editAriaLabel": "Edit Reservation",
+        "deleteConfirmTitle": "Are you sure you want to delete this reservation?",
+        "deleteOkText": "Delete",
+        "deleteCancelText": "Cancel",
+        "deleteAriaLabel": "Delete Reservation",
+        "timeLabel": "Reservation Time",
+        "symptomLabel": "Main Symptom",
+        "languageLabel": "Preferred Language",
+        "detailsLabel": "Detailed Symptoms",
+        "expandSymbol": "more",
+        "noReservations": "No booked appointments.",
+        "fetchError": "Failed to load member's booked appointment information.",
+        "deleteSuccess": "The booked appointment has been cancelled.",
+        "deleteError": "Failed to cancel the appointment due to a server error."
+    },
+    "reviews": {
+        "title": "Written Reviews ({{count}})",
+        "editAriaLabel": "Edit Review",
+        "deleteConfirmTitle": "Are you sure you want to delete this review?",
+        "deleteOkText": "Delete",
+        "deleteCancelText": "Cancel",
+        "deleteAriaLabel": "Delete Review",
+        "expandSymbol": "more",
+        "noReviews": "No written reviews.",
+        "fetchError": "Failed to load written review information.",
+        "deleteSuccess": "Review deleted successfully.",
+        "deleteError": "Failed to delete the review due to a server error."
+    },
+    "favorites": {
+        "title": "Favorite Hospitals ({{count}})",
+        "deleteConfirmTitle": "Are you sure you want to remove this hospital from favorites?",
+        "deleteOkText": "Delete",
+        "deleteCancelText": "Cancel",
+        "noFavorites": "No favorite hospitals.",
+        "fetchError": "Failed to load favorite hospital information.",
+        "deleteSuccess": "Removed from favorites.",
+        "deleteError": "Failed to remove from favorites."
+    }
+},
+"changeUserInfoPage": {
+    "title": "Edit Member Information",
+    "loadingError": "Loading member information. Please try again later.",
+    "passwordPlaceholder": "New Password (enter to change)",
+    "updateSuccess": "Information updated successfully.",
+    "updateFailed": "Failed to update information.",
+    "updateError": "Failed to update information due to a server error.",
+    "completeButton": "Complete"
+},
+"layout": {
+    "menu": {
+        "findHospital": "Find Hospital",
+        "mypage": "My Page"
+    },
+    "welcomeMessage": "Welcome to Doctor K",
+    "loginSignup": "Login · Sign Up",
+    "logoutSuccess": "Logged out successfully."
+}
+
+
+
+
+}

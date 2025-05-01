@@ -1,0 +1,170 @@
+{
+"login": "로그인",
+"signup": "회원가입",
+"logout": "로그아웃",
+"mypage": "마이페이지",
+"findId": "아이디 찾기",
+"findPassword": "비밀번호 찾기",
+"searchPlaceholder": "병원명을 검색하세요",
+"hospitalList": "병원 목록",
+"moreHospitals": "병원 더보기",
+"noResults": "검색한 병원명과 일치하는 병원 정보가 없습니다.",
+"filter": {
+    "availableLanguages": "가능 언어",
+    "allLanguages": "전체 언어",
+    "korean": "한국어",
+    "english": "영어",
+    "chinese": "중국어",
+    "japanese": "일본어",
+    "russian": "러시아어",
+    "vietnamese": "베트남어",
+    "mongolian": "몽골어",
+    "middleEastern": "중동어",
+    "uzbek": "우즈베키스탄어",
+    "medicalDepartment": "진료 과목",
+    "allDepartments": "전체 과목",
+    "selectDepartment": "진료 과목 선택",
+    "region": "지역",
+    "allRegions": "서울시 전체",
+    "selectRegion": "지역 선택",
+    "regionNotice": "※ 현재 강남구와 강동구 정보만 제공됩니다."
+},
+"hospitalInfo": {
+    "availableLanguages": "가능 언어",
+    "medicalDepartment": "진료 과목",
+    "operatingHours": "진료 시간",
+    "dummyTimeNotice": "※ 해당 정보는 실제 병원 데이터가 아닌 더미 데이터입니다.",
+    "location": "오시는 길",
+    "copyAddress": "복사",
+    "addressCopied": "주소가 복사되었습니다.",
+    "copyFailed": "복사 실패:",
+    "reviews": "리뷰",
+    "writeReview": "리뷰 작성하기",
+    "noReviews": "아직 등록된 리뷰가 없습니다.",
+    "originalLanguage": "원본 언어",
+    "bookAppointment": "진료 예약하기",
+    "addFavorite": "즐겨찾기 추가",
+    "removeFavorite": "즐겨찾기 해제",
+    "favoriteAdded": "즐겨찾기에 추가되었습니다.",
+    "favoriteRemoved": "즐겨찾기에서 해제되었습니다.",
+    "favoriteAddFailed": "즐겨찾기를 추가하지 못했습니다.",
+    "favoriteRemoveFailed": "즐겨찾기를 해제하지 못했습니다.",
+    "favoriteCheckFailed": "즐겨찾기 여부를 불러오지 못했습니다."
+},
+"loginPage": {
+    "title": "로그인",
+    "usernamePlaceholder": "아이디",
+    "loginSuccess": "로그인 되었습니다.",
+    "passwordPlaceholder": "비밀번호",
+    "loginFailed": "아이디 또는 비밀번호를 확인해주세요.",
+    "loginError": "서버 오류로 로그인 실패했습니다.",
+    "missingCredentials": "아이디와 비밀번호를 모두 입력해주세요."
+},
+"signupPage": {
+    "title": "회원가입",
+    "alreadyLoggedIn": "이미 로그인 되어 있습니다.",
+    "missingInfo": "아이디, 비밀번호를 포함한 모든 필수 정보를 입력해주세요.",
+    "invalidEmail": "유효한 이메일 주소를 입력해주세요.",
+    "signupSuccess": "회원가입 되었습니다.",
+    "alreadyExists": "이미 존재하는 아이디 또는 이메일입니다.",
+    "signupError": "서버 오류로 회원가입 실패했습니다.",
+    "phonePlaceholder": "전화번호 (예: 010-1234-5678)",
+    "genderPlaceholder": "성별 선택",
+    "genderMale": "남성",
+    "genderFemale": "여성",
+    "genderOther": "기타",
+    "birthDatePlaceholder": "생년월일 (YYYY-MM-DD)",
+    "emailPlaceholder": "이메일 주소",
+    "alreadyHaveAccount": "이미 계정이 있으신가요? 로그인"
+},
+"findIdPage": {
+    "enterEmail": "이메일 주소를 입력해주세요.",
+    "noMatch": "일치하는 회원 정보가 없습니다.",
+    "fetchError": "아이디 정보를 불러오지 못했습니다.",
+    "emailPlaceholder": "가입 시 등록한 이메일 주소",
+    "foundSuccessTitle": "아이디 찾기 성공",
+    "foundIdMessage": "회원님의 아이디는 {{username}} 입니다.",
+    "backToLogin": "로그인 페이지로 돌아가기"
+},
+"findPasswordPage": {
+    "requestButton": "비밀번호 재설정 메일 요청",
+    "checkError": "서버 오류로 회원 존재 여부를 불러오지 못했습니다.",
+    "mailSentTitle": "메일 전송 완료",
+    "mailSentDescription": "이메일로 비밀번호 재설정 링크를 발송했습니다. (미구현)"
+},
+"myPage": {
+    "loginRequired": "로그인이 필요합니다.",
+    "userInfo": {
+        "title": "회원 정보",
+        "idLabel": "아이디",
+        "emailLabel": "이메일",
+        "phoneLabel": "전화번호",
+        "birthDateLabel": "생년월일",
+        "genderLabel": "성별",
+        "editButton": "정보 수정",
+        "loading": "회원 정보를 불러오는 중...",
+        "fetchError": "회원 정보를 불러오지 못했습니다."
+    },
+    "reservations": {
+        "title": "예약한 진료 ({{count}})",
+        "editAriaLabel": "예약 수정",
+        "deleteConfirmTitle": "예약을 삭제하시겠습니까?",
+        "deleteOkText": "삭제",
+        "deleteCancelText": "취소",
+        "deleteAriaLabel": "예약 삭제",
+        "timeLabel": "예약 시간",
+        "symptomLabel": "주요 증상",
+        "languageLabel": "희망 언어",
+        "detailsLabel": "상세 증상",
+        "expandSymbol": "더보기",
+        "noReservations": "예약된 진료가 없습니다.",
+        "fetchError": "회원의 예약된 진료 정보를 불러오지 못했습니다.",
+        "deleteSuccess": "예약한 진료가 취소되었습니다.",
+        "deleteError": "서버 오류로 진료를 취소하지 못했습니다."
+    },
+    "reviews": {
+        "title": "작성한 리뷰 ({{count}})",
+        "editAriaLabel": "리뷰 수정",
+        "deleteConfirmTitle": "리뷰를 삭제하시겠습니까?",
+        "deleteOkText": "삭제",
+        "deleteCancelText": "취소",
+        "deleteAriaLabel": "리뷰 삭제",
+        "expandSymbol": "더보기",
+        "noReviews": "작성한 리뷰가 없습니다.",
+        "fetchError": "작성한 리뷰 정보를 불러오지 못했습니다.",
+        "deleteSuccess": "리뷰가 삭제되었습니다.",
+        "deleteError": "서버 오류로 리뷰를 삭제하지 못했습니다."
+    },
+    "favorites": {
+        "title": "즐겨찾기한 병원 ({{count}})",
+        "deleteConfirmTitle": "즐겨찾기를 삭제하시겠습니까?",
+        "deleteOkText": "삭제",
+        "deleteCancelText": "취소",
+        "noFavorites": "즐겨찾기한 병원이 없습니다.",
+        "fetchError": "즐겨찾기한 병원 정보를 불러오지 못했습니다.",
+        "deleteSuccess": "즐겨찾기에서 해제되었습니다.",
+        "deleteError": "즐겨찾기를 해제하지 못했습니다."
+    }
+},
+"changeUserInfoPage": {
+    "title": "회원 정보 수정",
+    "loadingError": "회원 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
+    "passwordPlaceholder": "새 비밀번호 (변경 시 입력)",
+    "updateSuccess": "정보가 수정되었습니다.",
+    "updateFailed": "정보 수정에 실패했습니다.",
+    "updateError": "서버 오류로 정보 수정에 실패했습니다.",
+    "completeButton": "완료"
+},
+"layout": {
+    "menu": {
+        "findHospital": "병원 찾기",
+        "mypage": "마이페이지"
+    },
+    "welcomeMessage": "Welcome to Doctor K",
+    "loginSignup": "로그인 · 회원가입",
+    "logoutSuccess": "로그아웃 되었습니다."
+}
+
+
+
+}

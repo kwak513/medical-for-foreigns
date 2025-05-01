@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { memberRegister } from "../../api/chartboardApi";
 import { changeUserInfo, selectUserInfo } from "../../../api/chartboardApi";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 // If using Ant Design v4 or need specific date object handling, you might need:
 // import moment from 'moment'; // or dayjs
 // import type { DatePickerProps } from 'antd';
@@ -14,6 +15,7 @@ const { Option } = Select; // Destructure Option from Select
 
 const ChangeUserInfoPage = () => {
 
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     // 회원의 기본 정보
@@ -31,7 +33,8 @@ const ChangeUserInfoPage = () => {
     useEffect(() => {
         //  로그인 안되어 있으면 접근 X
         if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-            alert('로그인이 필요합니다.');
+            // alert('로그인이 필요합니다.');
+            alert(t('myPage.loginRequired'));
             navigate('/login');
         }
     }, [])
@@ -45,7 +48,8 @@ const ChangeUserInfoPage = () => {
             })
             .catch((err) => {
                 console.log("selectUserInfo 실패: ", err);
-                alert("회원 정보를 불러오지 못했습니다.")
+                // alert("회원 정보를 불러오지 못했습니다.")
+                alert(t('myPage.userInfo.fetchError')); 
             })
     }, [])
 
@@ -62,18 +66,21 @@ const ChangeUserInfoPage = () => {
     //  정보 수정 완료 버튼 클릭 시, 
     const handleChangeUserInfo = () => {
         if (!userinfo) {
-            alert("회원 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요."); 
+            // alert("회원 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요."); 
+            alert(t('changeUserInfoPage.loadingError'));
             return; 
         }
 
         // --- 유효성 검사 ---
-        if (!userinfo.username.trim() || !userinfo.phone_num.trim() || !userinfo.gender || !userinfo.birth_date || !userinfo.email.trim()) {
-            alert("아이디, 비밀번호를 포함한 모든 필수 정보를 입력해주세요."); 
+        if (!userinfo.username.trim() || !password.trim() || !userinfo.phone_num.trim() || !userinfo.gender || !userinfo.birth_date || !userinfo.email.trim()) {
+            // alert("아이디, 비밀번호를 포함한 모든 필수 정보를 입력해주세요."); 
+            alert(t('signupPage.missingInfo'));
             return;
         }
         
         if (!/\S+@\S+\.\S+/.test(userinfo.email.trim())) {
-            alert("유효한 이메일 주소를 입력해주세요.");
+            // alert("유효한 이메일 주소를 입력해주세요.");
+            alert(t('signupPage.invalidEmail'));
             return;
         }
         
@@ -89,17 +96,20 @@ const ChangeUserInfoPage = () => {
         changeUserInfo(changedUserData)
             .then((bool) => {
                 if(bool){
-                    alert("정보가 수정되었습니다.")
+                    // alert("정보가 수정되었습니다.")
+                    alert(t('changeUserInfoPage.updateSuccess'));
                     navigate('/mypage');
 
                 }
                 else{
-                    alert("정보 수정에 실패했습니다.")
+                    // alert("정보 수정에 실패했습니다.")
+                    alert(t('changeUserInfoPage.updateFailed'));
                 }
             })
             .catch((err) => {
                 console.log("changeUserInfo 실패: ", err); 
-                alert("서버 오류로 정보 수정에 실패했습니다.")
+                // alert("서버 오류로 정보 수정에 실패했습니다.")
+                alert(t('changeUserInfoPage.updateError'));
             })
     };
 
@@ -118,7 +128,8 @@ const ChangeUserInfoPage = () => {
         <>
             <div style={{ textAlign: 'center', marginTop: '40px', marginBottom: '30px' }}>
                 <Title level={2}>
-                    회원 정보 수정
+                    {/* 회원 정보 수정 */}
+                    {t('changeUserInfoPage.title')}
                 </Title>
             </div>
 
@@ -136,7 +147,7 @@ const ChangeUserInfoPage = () => {
                     <Input
                         size="large"
                         value={userinfo?.username || ''}
-                        placeholder="아이디"
+                        placeholder={t('loginPage.usernamePlaceholder')} //"아이디"
                         prefix={<UserOutlined />}
                         disabled
                     />
@@ -147,7 +158,7 @@ const ChangeUserInfoPage = () => {
                         size="large"
                         value={password}
                         onChange={(e) => { setPassword(e.target.value) }}
-                        placeholder="비밀번호"
+                        placeholder={t('changeUserInfoPage.passwordPlaceholder')} //"비밀번호"
                         prefix={<LockOutlined />}
                         
                     />
@@ -159,7 +170,8 @@ const ChangeUserInfoPage = () => {
                         size="large"
                         value={userinfo?.phone_num || ''}
                         onChange={(e) => setUserinfo(prev => prev ? { ...prev, phone_num: e.target.value } : undefined)}
-                        placeholder="전화번호 (예: 010-1234-5678)"
+                        // placeholder="전화번호 (예: 010-1234-5678)"
+                        placeholder={t('signupPage.phonePlaceholder')}
                         prefix={<PhoneOutlined />}
                         type="tel"
                     />
@@ -171,12 +183,16 @@ const ChangeUserInfoPage = () => {
                         size="large"
                         value={userinfo?.gender}
                         onChange={(value) => setUserinfo(prev => prev ? { ...prev, gender: value } : undefined)}
-                        placeholder="성별 선택"
+                        placeholder={t('signupPage.genderPlaceholder')} //"성별 선택"
                         style={{ width: '100%' }} 
                     >
-                        <Option value="남성">남성</Option>
+                        {/* <Option value="남성">남성</Option>
                         <Option value="여성">여성</Option>
-                        <Option value="기타">기타</Option>
+                        <Option value="기타">기타</Option> */}
+                        <Option value={t('signupPage.genderMale')}>{t('signupPage.genderMale')}</Option> {/* 번역 적용 */}
+                        <Option value={t('signupPage.genderFemale')}>{t('signupPage.genderFemale')}</Option> {/* 번역 적용 */}
+                        <Option value={t('signupPage.genderOther')}>{t('signupPage.genderOther')}</Option> {/* 번역 적용 */}
+                    
                     </Select>
                 </div>
 
@@ -185,7 +201,7 @@ const ChangeUserInfoPage = () => {
                     <DatePicker
                         size="large"
                         onChange={handleDateChange}
-                        placeholder="생년월일 (YYYY-MM-DD)"
+                        placeholder={t('signupPage.birthDatePlaceholder')} //"생년월일 (YYYY-MM-DD)"
                         style={{ width: '100%' }} 
                         format="YYYY-MM-DD" 
                         picker="date"
@@ -199,7 +215,7 @@ const ChangeUserInfoPage = () => {
                         size="large"
                         value={userinfo?.email || ""}
                         onChange={(e) => setUserinfo(prev => prev ? { ...prev, email: e.target.value } : undefined)}
-                        placeholder="이메일 주소"
+                        placeholder={t('signupPage.emailPlaceholder')} //"이메일 주소"
                         prefix={<MailOutlined />}
                         type="email" 
                         onKeyDown={handleEmailKeyDown}
@@ -216,7 +232,8 @@ const ChangeUserInfoPage = () => {
                         style={{ width: '100%' }}
                         size="large"
                     >
-                        완료
+                        {/* 완료 */}
+                        {t('changeUserInfoPage.completeButton')}
                     </Button>
                 </div>
 

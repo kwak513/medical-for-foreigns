@@ -5,16 +5,19 @@ import { CalendarOutlined, DeleteOutlined, EditOutlined, EnvironmentOutlined, He
 import Title from "antd/es/typography/Title";
 import { Button, Card, Descriptions, Divider, List, Popconfirm, Rate, Space, Tag, Typography } from "antd";
 import Paragraph from "antd/es/typography/Paragraph";
+import { useTranslation } from "react-i18next";
 const { Text } = Typography;
 
 const MyPage = () => {
 
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     useEffect(() => {
         // 로그인 안되어있으면 접근 X
         if (sessionStorage.getItem('isLoggedIn') !== 'true') {
-            alert('로그인이 필요합니다.');
+            // alert('로그인이 필요합니다.');
+            alert(t('myPage.loginRequired'));
             navigate('/login'); 
         }
     }, [])
@@ -71,7 +74,8 @@ const MyPage = () => {
             .then((data) => {setUserinfo(data)})
             .catch((err) => {
                 console.log("selectUserInfo 실패: ", err);
-                alert("회원 정보를 불러오지 못했습니다.")
+                // alert("회원 정보를 불러오지 못했습니다.")
+                alert(t('myPage.userInfo.fetchError'));
             })
         
         // 회원이 예약한 진료 조회
@@ -91,7 +95,8 @@ const MyPage = () => {
             })
             .catch((err) => {
                 console.log("selectReviewByMemberId 실패: ", err);
-                alert("작성한 리뷰 정보를 불러오지 못했습니다.")
+                // alert("작성한 리뷰 정보를 불러오지 못했습니다.")
+                alert(t('myPage.reviews.fetchError'));
             })
 
         // 즐겨찾기한 병원 조회
@@ -101,7 +106,8 @@ const MyPage = () => {
         })
         .catch((err) => {
             console.log("selectFromMemberFavorite 실패: ", err);
-            alert("즐겨찾기한 병원 정보를 불러오지 못했습니다.")
+            // alert("즐겨찾기한 병원 정보를 불러오지 못했습니다.")
+            alert(t('myPage.favorites.fetchError'));
         })
     }, [])
     
@@ -114,7 +120,8 @@ const MyPage = () => {
         deleteMemberFavorite(uid, hid, hsource)
             .then((bool) => {
                 if(bool){
-                    alert("즐겨찾기에서 해제되었습니다.");
+                    // alert("즐겨찾기에서 해제되었습니다.");
+                    alert(t('myPage.favorites.deleteSuccess'));
                     
                     // 즐겨찾기한 병원 조회
                     selectFromMemberFavorite(Number(sessionStorage.getItem("userId")))
@@ -123,7 +130,8 @@ const MyPage = () => {
                     })
                     .catch((err) => {
                         console.log("selectFromMemberFavorite 실패: ", err);
-                        alert("즐겨찾기한 병원 정보를 불러오지 못했습니다.")
+                        // alert("즐겨찾기한 병원 정보를 불러오지 못했습니다.")
+                        alert(t('myPage.favorites.fetchError'));
                     })
 
 
@@ -131,7 +139,8 @@ const MyPage = () => {
             })
             .catch((err) => {
                 console.log("deleteMemberFavorite 실패: ", err);
-                alert("즐겨찾기를 해제하지 못했습니다.")
+                // alert("즐겨찾기를 해제하지 못했습니다.")
+                alert(t('myPage.favorites.deleteError'));
             })
     }
 
@@ -149,7 +158,8 @@ const MyPage = () => {
         deleteReview(reviewId, hSource)
         .then((bool) => {
             if(bool){
-                alert("리뷰가 삭제되었습니다.");
+                // alert("리뷰가 삭제되었습니다.");
+                alert(t('myPage.reviews.deleteSuccess'));
                 
                 // 작성한 리뷰 조회
                 selectReviewByMemberId(Number(sessionStorage.getItem("userId")))
@@ -158,7 +168,8 @@ const MyPage = () => {
                 })
                 .catch((err) => {
                     console.log("selectReviewByMemberId 실패: ", err);
-                    alert("작성한 리뷰 정보를 불러오지 못했습니다.")
+                    // alert("작성한 리뷰 정보를 불러오지 못했습니다.")
+                    alert(t('myPage.reviews.fetchError'));
                 })
 
 
@@ -166,7 +177,8 @@ const MyPage = () => {
         })
         .catch((err) => {
             console.log("deleteReview 실패: ", err);
-            alert("서버 오류로 리뷰를 삭제하지 못했습니다.")
+            // alert("서버 오류로 리뷰를 삭제하지 못했습니다.")
+            alert(t('myPage.reviews.deleteError'));
         })
 
 
@@ -183,7 +195,8 @@ const MyPage = () => {
         deleteReservation(reservationId, source)
         .then((bool) => {
             if(bool){
-                alert("예약한 진료가 취소되었습니다.");
+                // alert("예약한 진료가 취소되었습니다.");
+                alert(t('myPage.reservations.deleteSuccess'));
                 
                 // 회원이 예약한 진료 조회
                 selectFromHospitalReservation(Number(sessionStorage.getItem("userId")))
@@ -192,7 +205,8 @@ const MyPage = () => {
                 })
                 .catch((err) => {
                     console.log("selectFromHospitalReservation 실패: ", err);
-                    alert("회원의 예약된 진료 정보를 불러오지 못했습니다.")
+                    // alert("회원의 예약된 진료 정보를 불러오지 못했습니다.")
+                    alert(t('myPage.reservations.fetchError'));
                 })
 
 
@@ -200,32 +214,50 @@ const MyPage = () => {
         })
         .catch((err) => {
             console.log("deleteReservation 실패: ", err);
-            alert("서버 오류로 진료를 취소하지 못했습니다.")
+            // alert("서버 오류로 진료를 취소하지 못했습니다.")
+            alert(t('myPage.reservations.deleteError'));
         })
     }
     return (
         <>
             <div style={{ padding: '20px' }}>
             <Title level={2} style={{ textAlign: 'center', marginBottom: '30px' }}>
-                <UserOutlined /> 마이페이지
+                <UserOutlined /> {" "}
+                {/* 마이페이지 */}
+                {t('mypage')}
             </Title>
 
             {/* --- 회원 정보 --- */}
             <section style={{ marginBottom: '40px' }}>
-                <Title level={3}>회원 정보</Title>
+                <Title level={3}>
+                    {/* 회원 정보 */}
+                    {t('myPage.userInfo.title')}
+                </Title>
                 {userinfo ? (
                     <Card>
                         <Descriptions bordered column={{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }} size="default">
-                            <Descriptions.Item label="아이디">{userinfo.username}</Descriptions.Item>
+                            {/* <Descriptions.Item label="아이디">{userinfo.username}</Descriptions.Item>
                             <Descriptions.Item label="이메일">{userinfo.email}</Descriptions.Item>
                             <Descriptions.Item label="전화번호">{userinfo.phone_num}</Descriptions.Item>
                             <Descriptions.Item label="생년월일">{userinfo.birth_date}</Descriptions.Item>
-                            <Descriptions.Item label="성별" span={2}>{userinfo.gender}</Descriptions.Item>
+                            <Descriptions.Item label="성별" span={2}>{userinfo.gender}</Descriptions.Item> */}
+
+                            <Descriptions.Item label={t('myPage.userInfo.idLabel')}>{userinfo.username}</Descriptions.Item> 
+                            <Descriptions.Item label={t('myPage.userInfo.emailLabel')}>{userinfo.email}</Descriptions.Item> 
+                            <Descriptions.Item label={t('myPage.userInfo.phoneLabel')}>{userinfo.phone_num}</Descriptions.Item> 
+                            <Descriptions.Item label={t('myPage.userInfo.birthDateLabel')}>{userinfo.birth_date}</Descriptions.Item> 
+                            <Descriptions.Item label={t('myPage.userInfo.genderLabel')} span={2}>{userinfo.gender}</Descriptions.Item> 
                         </Descriptions>
-                        <Button type="link" style={{ marginTop: '10px' }} onClick={handleUserInfoChange}>정보 수정</Button>
+                        <Button type="link" style={{ marginTop: '10px' }} onClick={handleUserInfoChange}>
+                            {/* 정보 수정 */}
+                            {t('myPage.userInfo.editButton')}
+                        </Button>
                     </Card>
                 ) : (
-                    <Text type="secondary">회원 정보를 불러오는 중...</Text>
+                    <Text type="secondary">
+                        {/* 회원 정보를 불러오는 중... */}
+                        {t('myPage.userInfo.loading')}
+                    </Text>
                 )}
             </section>
 
@@ -233,7 +265,12 @@ const MyPage = () => {
 
             {/* 예약한 진료 섹션 */}
             <section style={{ marginBottom: '40px' }}>
-                <Title level={3}><CalendarOutlined /> 예약한 진료 ({reservationInfo.length})</Title>
+                <Title level={3}>
+                    <CalendarOutlined /> {" "}
+                    {/* 예약한 진료 ({reservationInfo.length}) */}
+
+                    {t('myPage.reservations.title', { count: reservationInfo.length })}
+                </Title>
                 {reservationInfo.length > 0 ? (
                     <List
                         grid={{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3 }} 
@@ -248,32 +285,44 @@ const MyPage = () => {
                                     type="text"
                                     icon={<EditOutlined />}
                                     onClick={() =>  handleEditReservation(item.hospital_id, item.hospital_name, item.source, item.language, item.main_symptom, item.sub_symptom, item.detail_symptom, item.reservation_time, item.hospital_languages, item.hospital_reservation_id) } 
-                                    aria-label="예약 수정" 
+                                    aria-label={t('myPage.reservations.editAriaLabel')} // 예약 수정
                                 /> 
                                 <Popconfirm
-                                    title="예약을 삭제하시겠습니까?"
+                                    title={t('myPage.reservations.deleteConfirmTitle')} //"예약을 삭제하시겠습니까?"
                                     onConfirm={() => handleDeleteReservation(item.hospital_reservation_id, item.source)} 
-                                    okText="삭제"
-                                    cancelText="취소"
+                                    okText={t('myPage.reservations.deleteOkText')} //"삭제"
+                                    cancelText={t('myPage.reservations.deleteCancelText')} //"취소"
                                 >
                                     <Button
                                         type="text"
                                         danger
                                         icon={<DeleteOutlined />}
-                                        aria-label="예약 삭제" // Accessibility
+                                        aria-label={t('myPage.reservations.deleteAriaLabel')} //"예약 삭제" // Accessibility
                                     />
                                 </Popconfirm>
                             </Space>
                                     }
                                 >
                                     {/* reservation_time을 직접 출력 */}
-                                    <p><strong>예약 시간:</strong> {item.reservation_time}</p>
+                                    <p><strong>
+                                        {/* 예약 시간: */}
+                                        {t('myPage.reservations.timeLabel')}
+                                    </strong> {item.reservation_time}</p>
 
-                                    <p><strong>주요 증상:</strong> {item.main_symptom} ({item.sub_symptom})</p>
+                                    <p><strong>
+                                        {/* 주요 증상: */}
+                                        {t('myPage.reservations.symptomLabel')}
+                                    </strong> {item.main_symptom} ({item.sub_symptom})</p>
                                     
-                                    <p><strong>희망 언어:</strong> <Tag>{item.language}</Tag></p>
+                                    <p><strong>
+                                        {/* 희망 언어: */}
+                                        {t('myPage.reservations.languageLabel')}
+                                    </strong> <Tag>{item.language}</Tag></p>
 
-                                    {item.detail_symptom && <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: '더보기' }}><strong>상세 증상:</strong> {item.detail_symptom}</Paragraph>}
+                                    {item.detail_symptom && <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: t('myPage.reservations.expandSymbol') }}><strong>
+                                        {/* 상세 증상: */}
+                                        {t('myPage.reservations.detailsLabel')}
+                                    </strong> {item.detail_symptom}</Paragraph>}
                                 
                                 
                                 </Card>
@@ -281,7 +330,10 @@ const MyPage = () => {
                         )}
                     />
                 ) : (
-                    <Text type="secondary">예약된 진료가 없습니다.</Text>
+                    <Text type="secondary">
+                        {/* 예약된 진료가 없습니다. */}
+                        {t('myPage.reservations.noReservations')}
+                    </Text>
                 )}
             </section>
 
@@ -289,7 +341,11 @@ const MyPage = () => {
 
             {/* 작성한 리뷰 섹션 */}
             <section style={{ marginBottom: '40px' }}>
-                <Title level={3}><MessageOutlined /> 작성한 리뷰 ({writtenReview.length})</Title>
+                <Title level={3}>
+                    <MessageOutlined /> {" "}
+                    {/* 작성한 리뷰 ({writtenReview.length}) */}
+                    {t('myPage.reviews.title', { count: writtenReview.length })}
+                </Title>
                 {writtenReview.length > 0 ? (
                     <List
                         grid={{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3 }}
@@ -304,19 +360,19 @@ const MyPage = () => {
                                                 type="text"
                                                 icon={<EditOutlined />}
                                                 onClick={() =>  handleChangeReview(item.review_id, item.rate, item.original_text, item.hospital_name)} 
-                                                aria-label="리뷰 수정" 
+                                                aria-label={t('myPage.reviews.editAriaLabel')} //"리뷰 수정" 
                                             />
                                             <Popconfirm
                                                 title="리뷰를 삭제하시겠습니까?"
                                                 onConfirm={() => handleDeleteReview(item.review_id, item.source)} 
-                                                okText="삭제"
-                                                cancelText="취소"
+                                                okText={t('myPage.reviews.deleteOkText')} //"삭제"
+                                                cancelText={t('myPage.reviews.deleteCancelText')}  //"취소"
                                             >
                                                 <Button
                                                     type="text"
                                                     danger
                                                     icon={<DeleteOutlined />}
-                                                    aria-label="리뷰 삭제" // Accessibility
+                                                    aria-label={t('myPage.reviews.deleteAriaLabel')} //"리뷰 삭제" 
                                                 />
                                             </Popconfirm>
                                         </Space>
@@ -329,7 +385,7 @@ const MyPage = () => {
                                             {new Date(item.created_at).toLocaleString('ko-KR')}
                                         </Text>
                                     </div>
-                                    <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: '더보기' }}>
+                                    <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: t('myPage.reviews.expandSymbol') }}>
                                         {item.original_text}
                                     </Paragraph>
                                 </Card>
@@ -337,7 +393,10 @@ const MyPage = () => {
                         )}
                     />
                 ) : (
-                    <Text type="secondary">작성한 리뷰가 없습니다.</Text>
+                    <Text type="secondary">
+                        {/* 작성한 리뷰가 없습니다. */}
+                        {t('myPage.reviews.noReviews')}
+                    </Text>
                 )}
             </section>
 
@@ -345,7 +404,11 @@ const MyPage = () => {
 
             {/* 즐겨찾기한 병원 섹션 */}
             <section>
-                <Title level={3}><HeartOutlined /> 즐겨찾기한 병원 ({favoriteHospital.length})</Title>
+                <Title level={3}>
+                    <HeartOutlined /> {" "}
+                    {/* 즐겨찾기한 병원 ({favoriteHospital.length}) */}
+                    {t('myPage.favorites.title', { count: favoriteHospital.length })}
+                </Title>
                 {favoriteHospital.length > 0 ? (
                     <List
                         itemLayout="horizontal"
@@ -355,10 +418,10 @@ const MyPage = () => {
                                 actions={[ 
                                     <Popconfirm
                                         key={`delete-${item.hospital_id}`} // Add key for list actions
-                                        title="즐겨찾기를 삭제하시겠습니까?"
+                                        title={t('myPage.favorites.deleteConfirmTitle')} //"즐겨찾기를 삭제하시겠습니까?"
                                         onConfirm={() => handleDeleteFavorite(Number(sessionStorage.getItem("userId")), item.hospital_id, item.hospital_source)}
-                                        okText="삭제"
-                                        cancelText="취소"
+                                        okText={t('myPage.favorites.deleteOkText')} //"삭제"
+                                        cancelText={t('myPage.favorites.deleteCancelText')} //"취소"
                                     >
                                         <Button type="text" danger icon={<DeleteOutlined />} />
                                     </Popconfirm>
@@ -380,7 +443,10 @@ const MyPage = () => {
                         )}
                     />
                 ) : (
-                    <Text type="secondary">즐겨찾기한 병원이 없습니다.</Text>
+                    <Text type="secondary">
+                        {/* 즐겨찾기한 병원이 없습니다. */}
+                        {t('myPage.favorites.noFavorites')}
+                    </Text>
                 )}
             </section>
         </div>

@@ -9,6 +9,8 @@ import { Button, FloatButton, Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import longLogoResize from '../assets/longLogoResize.png';
 import Search from 'antd/es/input/Search';
+import LanguageSwitcher from '../components/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -31,16 +33,23 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuItem[] = [
-  getItem('병원 찾기', '/hospital', <SafetyOutlined />),
-  getItem('마이페이지', '/mypage', <UserOutlined/>),
-  // getItem('응급실 찾기', '/emergency', <PlusSquareOutlined />),
-];
+// const items: MenuItem[] = [
+//   getItem('병원 찾기', '/hospital', <SafetyOutlined />),
+//   getItem('마이페이지', '/mypage', <UserOutlined/>),
+//   // getItem('응급실 찾기', '/emergency', <PlusSquareOutlined />),
+// ];
 
 
 
 const ChartBoardLayout: React.FC = () => {
   // const [collapsed, setCollapsed] = useState(false);
+  const { t } = useTranslation();
+
+  // 메뉴 아이템 정의 (컴포넌트 내부로 이동)
+  const items: MenuItem[] = [
+    getItem(t('layout.menu.findHospital'), '/hospital', <SafetyOutlined />),
+    getItem(t('layout.menu.mypage'), '/mypage', <UserOutlined/>)
+  ];
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -90,7 +99,8 @@ const ChartBoardLayout: React.FC = () => {
 
   const handleLogoutClick = () => {
     sessionStorage.removeItem('isLoggedIn');
-    alert("로그아웃 되었습니다.")
+    // alert("로그아웃 되었습니다.");
+    alert(t('layout.logoutSuccess'));
     navigate("/login")
   }
 
@@ -115,7 +125,8 @@ const ChartBoardLayout: React.FC = () => {
   return (
     <Layout style={{ minHeight: '100vh', marginLeft: 200}}>
       <div style={{width: '100%', height: '38px', position: 'fixed', left: 0, top: 0, backgroundColor: 'oklch(0.19 0.05 247.28)', zIndex: 1000, textAlign: 'center', color: '#fff', lineHeight: '38px'}}>
-        Welcome to Doctor K
+        {/* Welcome to Doctor K */}
+        {t('layout.welcomeMessage')}
       </div>
 
       <Sider /* collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} */style={{ height: '100vh', overflow: 'auto', position: 'fixed', left: 0, top: '38px'}}>
@@ -150,9 +161,13 @@ const ChartBoardLayout: React.FC = () => {
         {/* 구글 언어 선택
         <div id="google_translate_element" style={{ marginRight: "10px", width: "100px", height: "50px"}}></div> */}
 
+          {/* 언어 전환 버튼 추가 */}
+          <LanguageSwitcher />
+
 
           <Search
-            placeholder="병원명 검색하기"
+            // placeholder="병원명 검색하기"
+            placeholder={t('searchPlaceholder')}
             onSearch={onSearch}
             style={{ width: 300 }}
             value={searchHospitalName}
@@ -160,10 +175,16 @@ const ChartBoardLayout: React.FC = () => {
           />
 
           {sessionStorage.getItem("isLoggedIn") !== "true" &&
-            <Button onClick={handleMemberClick}>로그인 · 회원가입</Button>
+            <Button onClick={handleMemberClick}>
+              {/* 로그인 · 회원가입 */}
+              {t('layout.loginSignup')}
+            </Button>
           }
           {sessionStorage.getItem("isLoggedIn") === "true" &&
-            <Button onClick={handleLogoutClick}>로그아웃</Button>
+            <Button onClick={handleLogoutClick}>
+              {/* 로그아웃 */}
+              {t('logout')}
+            </Button>
           }
         </div>
       </Header>
