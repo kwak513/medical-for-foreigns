@@ -128,6 +128,13 @@ interface ChangedReviewDto{
     reviewId: number;
 }
 
+// 리뷰 삭제 - hospital_review, gangnam_review/ gangdong_review, member_review 테이블에서 모두 삭제해야함.
+export const deleteReview = async(hospitalReviewId: number, source: string) => {
+    const res = await axios.delete(`${API_SERVER_URL}/deleteReview`, {params: {hospitalReviewId, source}});
+    return res.data;
+}
+
+
 // -------------------------- 진료예약 관련--------------------------	
 interface HospitalReservationDto{
     language: string;
@@ -166,7 +173,11 @@ interface ChangedReservationDto{
     reservationId: number
 }
 
-
+// 예약한 진료 삭제 - hospital_reservation, gangnam_reservation/ gangdong_reservation, member_reservation 테이블에서 모두 삭제해야함.
+export const deleteReservation = async(reservationId: number, source: string) => {
+    const res = await axios.delete(`${API_SERVER_URL}/deleteReservation`, {params: {reservationId, source}});
+    return res.data;
+}
 // -------------------------- 즐겨찾기 관련--------------------------	
 interface MemberFavoriteDto{
     memberId: number;

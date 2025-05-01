@@ -16,7 +16,7 @@ const FindPasswordPage = lazy(() => import("../pages/member/FindPasswordPage"));
 
 const ChangeUserInfoPage = lazy(() => import("../pages/member/change/ChangeUserInfoPage"));
 const ChangeReviewPage = lazy(() => import("../pages/hospital/review/ChangeReviewPage"));
-const ChangeReservtationPage = lazy(() => import("../pages/hospital/change/ChangeReservtationPage"));
+const ChangeReservtationPage = lazy(() => import("../pages/hospital/change/ChangeReservationPage"));
 // const Collection1 = lazy(() => import("../pages/collections/Collection1Page"));
 // const CollectionMain = lazy(() => import("../pages/collections/CollectionMainPage"));
 // const CollectionChartList = lazy(() => import("../pages/collections/CollectionChartListPage"));

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteMemberFavorite, selectFromHospitalReservation, selectFromMemberFavorite, selectReviewByMemberId, selectUserInfo, selectUsername } from "../../api/chartboardApi";
+import { deleteMemberFavorite, deleteReservation, deleteReview, selectFromHospitalReservation, selectFromMemberFavorite, selectReviewByMemberId, selectUserInfo, selectUsername } from "../../api/chartboardApi";
 import { CalendarOutlined, DeleteOutlined, EditOutlined, EnvironmentOutlined, HeartOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import { Button, Card, Descriptions, Divider, List, Popconfirm, Rate, Space, Tag, Typography } from "antd";
@@ -29,9 +29,11 @@ const MyPage = () => {
     }
 
     const [reservationInfo, setReservationInfo] = useState<ReservationDto[]>([]);
-
+    
     interface ReservationDto{
+        hospital_reservation_id: number
         sub_symptom: string;
+        hospital_languages: string;
         language: string;
         main_symptom: string;
         detail_symptom: string;
@@ -48,6 +50,7 @@ const MyPage = () => {
         created_at: string;
         original_text: string;
         hospital_name: string;
+        source: string;
     }
 
     const [favoriteHospital, setFavoriteHospital] = useState<FavoriteHospitalDto[]>([]);
@@ -141,10 +144,64 @@ const MyPage = () => {
         navigate("/changereview", {state: {reviewId, rate, text, hospitalName}})
     }
 
+    // 리뷰 삭제 클릭 시, 
+    const handleDeleteReview = (reviewId, hSource) => {
+        deleteReview(reviewId, hSource)
+        .then((bool) => {
+            if(bool){
+                alert("리뷰가 삭제되었습니다.");
+                
+                // 작성한 리뷰 조회
+                selectReviewByMemberId(Number(sessionStorage.getItem("userId")))
+                .then((data) => {
+                    setWrittenReview(data);
+                })
+                .catch((err) => {
+                    console.log("selectReviewByMemberId 실패: ", err);
+                    alert("작성한 리뷰 정보를 불러오지 못했습니다.")
+                })
+
+
+            }
+        })
+        .catch((err) => {
+            console.log("deleteReview 실패: ", err);
+            alert("서버 오류로 리뷰를 삭제하지 못했습니다.")
+        })
+
+
+    }
+
     // 진료 수정 클릭 시,
     const handleEditReservation = (
-        hospitalId, hospitalName, source, language, mainSymptom, subSymptom, detailSymptom, reservationTime) => {
-        navigate("/changereservation", {state: {hospitalId, hospitalName, source, language, mainSymptom, subSymptom, detailSymptom, reservationTime}})
+        hospitalId, hospitalName, source, language, mainSymptom, subSymptom, detailSymptom, reservationTime, hospitalLanguages,hospitalReservationId) => {
+        navigate("/changereservation", {state: {hospitalId, hospitalName, source, language, mainSymptom, subSymptom, detailSymptom, reservationTime, hospitalLanguages, hospitalReservationId}})
+    }
+
+    // 진료 삭제 클릭 시,
+    const handleDeleteReservation = (reservationId, source) => {
+        deleteReservation(reservationId, source)
+        .then((bool) => {
+            if(bool){
+                alert("예약한 진료가 취소되었습니다.");
+                
+                // 회원이 예약한 진료 조회
+                selectFromHospitalReservation(Number(sessionStorage.getItem("userId")))
+                .then((data) => {
+                    setReservationInfo(data);
+                })
+                .catch((err) => {
+                    console.log("selectFromHospitalReservation 실패: ", err);
+                    alert("회원의 예약된 진료 정보를 불러오지 못했습니다.")
+                })
+
+
+            }
+        })
+        .catch((err) => {
+            console.log("deleteReservation 실패: ", err);
+            alert("서버 오류로 진료를 취소하지 못했습니다.")
+        })
     }
     return (
         <>
@@ -190,12 +247,12 @@ const MyPage = () => {
                                 <Button
                                     type="text"
                                     icon={<EditOutlined />}
-                                    onClick={() =>  handleEditReservation(item.hospital_id, item.hospital_name, item.source, item.language, item.main_symptom, item.sub_symptom, item.detail_symptom, item.reservation_time) } 
-                                    aria-label="예약 수정" // Accessibility
-                                />
+                                    onClick={() =>  handleEditReservation(item.hospital_id, item.hospital_name, item.source, item.language, item.main_symptom, item.sub_symptom, item.detail_symptom, item.reservation_time, item.hospital_languages, item.hospital_reservation_id) } 
+                                    aria-label="예약 수정" 
+                                /> 
                                 <Popconfirm
                                     title="예약을 삭제하시겠습니까?"
-                                    // onConfirm={() => handleDeleteReservation(item)} // TODO: Implement delete reservation functionality
+                                    onConfirm={() => handleDeleteReservation(item.hospital_reservation_id, item.source)} 
                                     okText="삭제"
                                     cancelText="취소"
                                 >
@@ -251,7 +308,7 @@ const MyPage = () => {
                                             />
                                             <Popconfirm
                                                 title="리뷰를 삭제하시겠습니까?"
-                                                // onConfirm={() => handleDeleteReview(item)} // TODO: Implement delete review functionality
+                                                onConfirm={() => handleDeleteReview(item.review_id, item.source)} 
                                                 okText="삭제"
                                                 cancelText="취소"
                                             >
