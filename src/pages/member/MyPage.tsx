@@ -93,7 +93,8 @@ const MyPage = () => {
             })
             .catch((err) => {
                 console.log("selectFromHospitalReservation 실패: ", err);
-                alert("회원의 예약된 진료 정보를 불러오지 못했습니다.")
+                // alert("회원의 예약된 진료 정보를 불러오지 못했습니다.")
+                alert(t('myPage.reservations.fetchError'));
             })
         
         // 작성한 리뷰 조회
