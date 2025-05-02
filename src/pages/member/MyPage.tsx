@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteMemberFavorite, deleteReservation, deleteReview, selectFromHospitalReservation, selectFromMemberFavorite, selectReviewByMemberId, selectUserInfo, selectUsername } from "../../api/chartboardApi";
+import { deleteMemberFavorite, deleteReservation, deleteReview, selectFromHospitalReservation, selectFromHospitalReservationEn, selectFromMemberFavorite, selectFromMemberFavoriteEn, selectReviewByMemberId, selectReviewByMemberIdEn, selectUserInfo, selectUsername } from "../../api/chartboardApi";
 import { CalendarOutlined, DeleteOutlined, EditOutlined, EnvironmentOutlined, HeartOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import { Button, Card, Descriptions, Divider, List, Popconfirm, Rate, Space, Tag, Typography } from "antd";
@@ -10,7 +10,9 @@ const { Text } = Typography;
 
 const MyPage = () => {
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const currentLang = i18n.language; // 'ko' or 'en'
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -54,6 +56,7 @@ const MyPage = () => {
         original_text: string;
         hospital_name: string;
         source: string;
+        hospital_id: number;
     }
 
     const [favoriteHospital, setFavoriteHospital] = useState<FavoriteHospitalDto[]>([]);
@@ -69,6 +72,11 @@ const MyPage = () => {
 
 
     useEffect(() => {
+        const selectFavorite = currentLang === 'ko' ? selectFromMemberFavorite : selectFromMemberFavoriteEn;
+        const selectReservation = currentLang === 'ko' ? selectFromHospitalReservation : selectFromHospitalReservationEn;
+        const selectReview = currentLang === 'ko' ? selectReviewByMemberId : selectReviewByMemberIdEn;
+
+        
         // 회원의 기본 정보
         selectUserInfo(Number(sessionStorage.getItem("userId")))
             .then((data) => {setUserinfo(data)})
@@ -79,7 +87,7 @@ const MyPage = () => {
             })
         
         // 회원이 예약한 진료 조회
-        selectFromHospitalReservation(Number(sessionStorage.getItem("userId")))
+        selectReservation(Number(sessionStorage.getItem("userId")))
             .then((data) => {
                 setReservationInfo(data);
             })
@@ -89,27 +97,27 @@ const MyPage = () => {
             })
         
         // 작성한 리뷰 조회
-        selectReviewByMemberId(Number(sessionStorage.getItem("userId")))
+        selectReview(Number(sessionStorage.getItem("userId")))
             .then((data) => {
                 setWrittenReview(data);
             })
             .catch((err) => {
-                console.log("selectReviewByMemberId 실패: ", err);
+                console.log("selectReview 실패: ", err);
                 // alert("작성한 리뷰 정보를 불러오지 못했습니다.")
                 alert(t('myPage.reviews.fetchError'));
             })
 
         // 즐겨찾기한 병원 조회
-        selectFromMemberFavorite(Number(sessionStorage.getItem("userId")))
+        selectFavorite(Number(sessionStorage.getItem("userId")))
         .then((data) => {
             setFavoriteHospital(data);
         })
         .catch((err) => {
-            console.log("selectFromMemberFavorite 실패: ", err);
+            console.log("selectFavorite 실패: ", err);
             // alert("즐겨찾기한 병원 정보를 불러오지 못했습니다.")
             alert(t('myPage.favorites.fetchError'));
         })
-    }, [])
+    }, [currentLang])
     
     // 회원 정보 수정
     const handleUserInfoChange = () => {
@@ -149,8 +157,8 @@ const MyPage = () => {
         navigate("/hospital/info", {state: {hospitalId,hospitalSource}})
     }
     // 리뷰 수정 클릭 시,
-    const handleChangeReview = (reviewId, rate, text, hospitalName) => {
-        navigate("/changereview", {state: {reviewId, rate, text, hospitalName}})
+    const handleChangeReview = (reviewId, rate, text, hospitalName, source, hospitalId) => {
+        navigate("/changereview", {state: {reviewId, rate, text, hospitalName, source, hospitalId}})
     }
 
     // 리뷰 삭제 클릭 시, 
@@ -359,7 +367,7 @@ const MyPage = () => {
                                             <Button
                                                 type="text"
                                                 icon={<EditOutlined />}
-                                                onClick={() =>  handleChangeReview(item.review_id, item.rate, item.original_text, item.hospital_name)} 
+                                                onClick={() =>  handleChangeReview(item.review_id, item.rate, item.original_text, item.hospital_name, item.source, item.hospital_id)} 
                                                 aria-label={t('myPage.reviews.editAriaLabel')} //"리뷰 수정" 
                                             />
                                             <Popconfirm

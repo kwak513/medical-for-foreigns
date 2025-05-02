@@ -23,22 +23,58 @@
     "uzbek": "Uzbek",
     "medicalDepartment": "Medical Department",
     "allDepartments": "All Departments",
+
+    "department": {
+        "pediatrics": "Pediatrics",
+        "dentistry": "Dentistry",
+        "ent": "ENT",
+        "dermatology": "Dermatology",
+        "obgyn": "Obstetrics & Gynecology",
+        "ophthalmology": "Ophthalmology",
+        "psychiatry": "Psychiatry",
+        "plasticSurgery": "Plastic Surgery",
+        "orthopedics": "Orthopedics",
+        "oriental": "Oriental Medicine",
+        "urology": "Urology",
+        "familyMedicine": "Family Medicine",
+        "internal": "Internal Medicine",
+        "surgery": "Surgery",
+        "thoracicSurgery": "Thoracic Surgery",
+        "anesthesiology": "Anesthesiology",
+        "radiology": "Radiology",
+        "neurology": "Neurology",
+        "neurosurgery": "Neurosurgery",
+        "rehabilitation": "Rehabilitation Medicine"
+    },
+
     "selectDepartment": "Select Medical Department",
     "region": "Region",
     "allRegions": "All Seoul",
     "selectRegion": "Select Region",
-    "regionNotice": "※ Currently, only information for Gangnam-gu and Gangdong-gu is provided."
+    "regionNotice": "※ Currently, only information for Gangnam-gu and Gangdong-gu is provided.",
+
+    "regions": {
+        "gangnam": "Gangnam-gu",
+        "gangdong": "Gangdong-gu"
+    }
+
 },
 "hospitalInfo": {
     "availableLanguages": "Available Languages",
     "medicalDepartment": "Medical Department",
     "operatingHours": "Operating Hours",
+    "operatingHoursDetails": { 
+      "weekdays": "Mon-Fri 09:00-18:00",
+      "lunch": "(Lunch Break 12:00-13:00)",
+      "saturday": "Saturday 09:00-13:00",
+      "closed": "Closed on Sundays/Holidays"
+    },
     "dummyTimeNotice": "※ This information is dummy data, not actual hospital data.",
     "location": "Location",
     "copyAddress": "Copy",
     "addressCopied": "Address copied to clipboard.",
-    "copyFailed": "Copy failed:",
-    "reviews": "Reviews",
+    "copyFailed": "Failed to copy address.",
+    "reviews": "Reviews ({{count}})",
     "writeReview": "Write a Review",
     "noReviews": "No reviews have been registered yet.",
     "originalLanguage": "Original Language",
@@ -163,9 +199,68 @@
     "welcomeMessage": "Welcome to Doctor K",
     "loginSignup": "Login · Sign Up",
     "logoutSuccess": "Logged out successfully."
+},
+"alert": {
+    "filterFailed": "Failed to filter hospitals.",
+    "loadFailed": "Failed to load hospital information.",
+    "loadHospitalDetailFailed": "Failed to load hospital details.", 
+    "loadReviewsFailed": "Failed to load hospital reviews.",
+    "selectDateTime": "Please select the date and time for your appointment.",
+    "selectSymptom": "Please select the symptom/department." 
+    
+},
+"hospitalRegisterPage": {
+    "pageTitleSuffix": "Book Appointment",
+    "hospitalNameLabel": "Hospital Name:",
+    "dateTimeLabel": "Date and Time:",
+    "datePlaceholder": "Select date",
+    "languageLabel": "Preferred Language:",
+    "symptomLabel": "Symptom/Department:",
+    "detailsLabel": "Detailed Symptoms:",
+    "detailsPlaceholder": "ex) I have a headache and fever.",
+    "submitButton": "Book Appointment",
+    "confirmMessage": "Do you want to proceed with the booking?",
+    "successMessage": "Your appointment has been successfully booked.",
+    "failureMessage": "Failed to book the appointment.",
+    "serverErrorMessage": "Failed to book due to a server error.",
+    "loginRequired": "Login is required. Redirecting to login page.", 
+    "symptoms": { 
+        "coldFlu": "Cold/Flu",
+        "subColdFlu": "Cold"
+    }
+},
+"changeReservationPage": {
+    "pageTitleSuffix": "Change Appointment",
+    "noHospitalInfo": "No Hospital Info",
+    "validationError": "Please select the date and time, preferred language, and symptom/department.",
+    "confirmMessage": "Do you want to change the reservation?",
+    "successMessage": "Appointment changed successfully.",
+    "failureMessage": "Failed to change the appointment.",
+    "serverErrorMessage": "Failed to change the appointment due to a server error.",
+    "submitButton": "Change Reservation"
+},
+"hospitalReviewPage": {
+    "pageTitleSuffix": "Review",
+    "noHospitalInfo": "No Hospital Info",
+    "ratingLabel": "Rating:",
+    "reviewTextLabel": "Review:",
+    "reviewTextPlaceholder": "Please leave a review about your visit.",
+    "submitButton": "Submit Review",
+    "validationRating": "Please select a rating.",
+    "validationText": "Please enter your review.",
+    "successMessage": "Review submitted successfully.",
+    "failureMessage": "Failed to submit review.",
+    "serverErrorMessage": "Failed to submit review due to a server error."
+},
+"changeReviewPage": {
+    "pageTitleSuffix": "Edit Review",
+    "defaultHospitalName": "Hospital",
+    "reviewTextPlaceholder": "Enter the review content to modify.",
+    "submitButton": "Update Review",
+    "missingInfoError": "Review information to modify is missing. Redirecting to My Page.",
+    "successMessage": "Review updated successfully.",
+    "failureMessage": "Failed to update review.",
+    "serverErrorMessage": "Failed to update review due to a server error."
 }
-
-
-
 
 }

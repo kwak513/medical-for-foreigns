@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { deleteMemberFavorite, insertIntoMemberFavorite, isFavoriteCheck, selectFromGangdongHospital, selectFromGangnamHospital, selectFromHospitalReview, selectFromMemberFavorite } from "../../api/chartboardApi";
+import { deleteMemberFavorite, insertIntoMemberFavorite, isFavoriteCheck, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital, selectFromHospitalReview, selectFromMemberFavorite } from "../../api/chartboardApi";
 import hospitalRandom1 from '../../assets/hospitalImg/hospitalRandom1.jpg';
 import hospitalRandom2 from '../../assets/hospitalImg/hospitalRandom2.jpg';
 import hospitalRandom3 from '../../assets/hospitalImg/hospitalRandom3.jpg';
@@ -10,8 +10,12 @@ import hospitalRandom0 from '../../assets/hospitalImg/hospitalRandom6.jpg';
 import Title from "antd/es/typography/Title";
 import { Button,  Card,  Divider, Rate, Tag } from "antd";
 import { AppstoreAddOutlined, ClockCircleOutlined, CopyOutlined, EnvironmentOutlined, GlobalOutlined, MessageOutlined, PhoneOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const HospitalInfoPage = () => {
+
+    const { t, i18n } = useTranslation();
+    const currentLang = i18n.language; // 'ko' or 'en'
 
     // HospitalMainPage에서 state로 보낸 값(hospitalId, hospitalSource)을 location으로 받기
     const location = useLocation();
@@ -30,30 +34,36 @@ const HospitalInfoPage = () => {
 
 
     useEffect(() => {
+
+        const searchFromGangnam = currentLang === 'ko' ? selectFromGangnamHospital : selectFromEnGangnamHospital;
+        const searchFromGangdong = currentLang === 'ko' ? selectFromGangdongHospital : selectFromEnGangdongHospital;
+
         if(hospitalSource == "gangnam"){
-            selectFromGangnamHospital(hospitalId)
+            searchFromGangnam(hospitalId)
                 .then((data) => {
-console.log("selectFromGangnamHospital data: ", data);
+console.log("searchFromGangnam data: ", data);
                     setHospitalDetail(data);
                 })
                 .catch((err) => {
-                    console.log("selectFromGangnamHospital 실패: ", err);
-                    alert("병원 상세 정보를 불러오지 못했습니다.")
+                    console.log("searchFromGangnam 실패: ", err);
+                    // alert("병원 상세 정보를 불러오지 못했습니다.")
+                    alert(t('alert.loadHospitalDetailFailed'));
                 })
         }
         else if(hospitalSource == "gangdong"){
-            selectFromGangdongHospital(hospitalId)
+            searchFromGangdong(hospitalId)
                 .then((data) => {
-console.log("selectFromGangdongHospital data: ", data);                    
+console.log("searchFromGangdong data: ", data);                    
                     setHospitalDetail(data);
                 })
                 .catch((err) => {
-                    console.log("selectFromGangdongHospital 실패: ", err);
-                    alert("병원 상세 정보를 불러오지 못했습니다.")
+                    console.log("searchFromGangdong 실패: ", err);
+                    // alert("병원 상세 정보를 불러오지 못했습니다.")
+                    alert(t('alert.loadHospitalDetailFailed'));
                 })
 
         }
-    }, [])
+    }, [currentLang])
 
     interface HospitalReview{
         "original_language": string;
@@ -61,20 +71,25 @@ console.log("selectFromGangdongHospital data: ", data);
         "created_at": string;
         "id": number;
         "original_text": string;
+        "translated_text": string;
     }
+
     // 병원의 리뷰 정보 가져오기
     const [hospitalReview, setHospitalReview] = useState<HospitalReview[]>([]);
     useEffect(() => {
-        selectFromHospitalReview(hospitalId, hospitalSource)
+
+
+        selectFromHospitalReview(hospitalId, hospitalSource, currentLang)
             .then((list) => {
                 setHospitalReview(list);
 
             })
             .catch((err) => {
                 console.log("selectFromHospitalReview 실패: ", err);
-                alert("병원 리뷰를 불러오지 못했습니다.")
+                // alert("병원 리뷰를 불러오지 못했습니다.")
+                alert(t('alert.loadReviewsFailed'));
             })
-    }, [])
+    }, [currentLang])
 
     //  병원 이미지 데모 데이터
     const images = [
@@ -86,25 +101,12 @@ console.log("selectFromGangdongHospital data: ", data);
         hospitalRandom0
     ];
 
-    // '강남구' 데이터에서 '미국/일본/중국/러시아/중동/몽골/베트남'로 넘어오는 걸 언어로 변환
-    const languageMapping  = {
-        '미국': '영어',
-        '일본': '일본어',
-        '중국': '중국어',
-        '러시아': '러시아어',
-        '중동': '중동어',
-        '몽골': '몽골어',
-        '베트남': '베트남어'
-    };
-
-    const getRefinedLanguages = (languages: string) => {
-        return languages.split('/').map((language) => languageMapping[language.trim() as keyof typeof languageMapping] || language).join(', ');
-    }
 
     // 주소 '복사' 버튼 로직
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text).then(() => {
-            alert("주소가 복사되었습니다.");
+            // alert("주소가 복사되었습니다.");
+            alert(t('hospitalInfo.addressCopied'));
         }).catch((err) => {
             console.error("복사 실패:", err);
         });
@@ -137,7 +139,8 @@ console.log("selectFromGangdongHospital data: ", data);
             })
             .catch((err) => {
                 console.log("isFavoriteCheck 실패: ", err);
-                alert("즐겨찾기 여부를 불러오지 못했습니다.")
+                // alert("즐겨찾기 여부를 불러오지 못했습니다.")
+                alert(t('hospitalInfo.favoriteCheckFailed'));
             })
 
     }, [isBookmarked])
@@ -157,13 +160,15 @@ console.log("selectFromGangdongHospital data: ", data);
                 .then((bool) => {
                     if(bool == true){
                         setIsBookmarked(true);
-                        alert("즐겨찾기에 추가되었습니다.");
+                        // alert("즐겨찾기에 추가되었습니다.");
+                        alert(t('hospitalInfo.favoriteAdded'));
                     }
                     
                 })
                 .catch((err) => {
                     console.log("insertIntoMemberFavorite 실패: ", err);
-                    alert("즐겨찾기를 추가하지 못했습니다.")
+                    // alert("즐겨찾기를 추가하지 못했습니다.")
+                    alert(t('hospitalInfo.favoriteAddFailed'));
                 })
         } 
         //  즐겨찾기 취소
@@ -172,13 +177,15 @@ console.log("selectFromGangdongHospital data: ", data);
                 .then((bool) => {
                     if(bool == true){
                         setIsBookmarked(false);
-                        alert("즐겨찾기에서 해제되었습니다.");
+                        // alert("즐겨찾기에서 해제되었습니다.");
+                        alert(t('hospitalInfo.favoriteRemoved'));
                     }
                     
                 })
                 .catch((err) => {
                     console.log("deleteMemberFavorite 실패: ", err);
-                    alert("즐겨찾기를 해제하지 못했습니다.")
+                    // alert("즐겨찾기를 해제하지 못했습니다.")
+                    alert(t('hospitalInfo.favoriteRemoveFailed'));
                 })
         }
     };
@@ -201,7 +208,7 @@ console.log("selectFromGangdongHospital data: ", data);
                         <Title level={2} className="!mb-2">{hospitalDetail.length > 0 && hospitalDetail[0].hospital_name}</Title>
                     </div>
                     <div className="flex items-baseline mb-1">
-                        <EnvironmentOutlined />
+                        <EnvironmentOutlined /> 
                         <span className="ml-2">
                             <Title level={5} className="text-gray-600 !mb-0">{hospitalDetail.length > 0 && hospitalDetail[0].hospital_main_address}</Title>
                         </span>
@@ -214,7 +221,8 @@ console.log("selectFromGangdongHospital data: ", data);
                     </div>
                     {sessionStorage.getItem("isLoggedIn") === "true" &&
                         <Button variant="solid" style={{backgroundColor: "rgb(14 137 136)", color: "#fff"}} className="mt-3 self-start md:self-auto" onClick={handleRegisterHospitalClick}>
-                            진료 예약하기
+                            {/* 진료 예약하기 */}
+                            {t('hospitalInfo.bookAppointment')}
                         </Button>
                     }
                 </div>
@@ -228,7 +236,8 @@ console.log("selectFromGangdongHospital data: ", data);
                         onClick={handleBookmarkClick}
                         size="large"
                     >
-                        {isBookmarked ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+                        {/* {isBookmarked ? '즐겨찾기 해제' : '즐겨찾기 추가'} */}
+                        {isBookmarked ? t('hospitalInfo.removeFavorite') : t('hospitalInfo.addFavorite')} 
                     </Button>
                 </div>
             )}
@@ -241,21 +250,18 @@ console.log("selectFromGangdongHospital data: ", data);
 
             <div>
                 <Title level={4}>
-                    <GlobalOutlined />  가능 언어:
-                    
+                    <GlobalOutlined />  {" "}
+                    {/* 가능 언어: */}
+                    {t('hospitalInfo.availableLanguages')}: 
                 </Title>
 
                 <Title level={5}>
-                    {/* {
-                    hospitalDetail.length > 0 && 
-                        (hospitalDetail[0].hospital_languages.length > 0 ?
-                            ` 한국어, ${getRefinedLanguages(hospitalDetail[0].hospital_languages)}` :
-                            " 한국어"
-                        )
-                    } */}
-                    <Tag style={{fontSize: '16px', padding: '5px'}}>한국어</Tag>
+                    <Tag style={{fontSize: '16px', padding: '5px'}}>
+                        {/* 한국어 */}
+                        {t('filter.korean')}
+                    </Tag>
                     {hospitalDetail.length > 0 &&  hospitalDetail[0].hospital_languages.length > 0 &&
-                        getRefinedLanguages(hospitalDetail[0].hospital_languages).split(",").map((language, idx) => {
+                        hospitalDetail[0].hospital_languages.split(",").map((language, idx) => {
                             return (
                                 <Tag key={idx} style={{ fontSize: '16px', marginBottom: '10px',  marginRight: '10px', padding: '5px'}}>
                                     {language.trim()}
@@ -266,7 +272,9 @@ console.log("selectFromGangdongHospital data: ", data);
                 </Title>
 
                 <Title level={4}>
-                    <AppstoreAddOutlined />  진료 과목:
+                    <AppstoreAddOutlined />  {" "}
+                    {/* 진료 과목: */}
+                    {t('hospitalInfo.medicalDepartment')}:
                     
                 </Title>
 
@@ -288,18 +296,30 @@ console.log("selectFromGangdongHospital data: ", data);
             <Divider />
             <div>
                 <Title level={4}>
-                    <ClockCircleOutlined />  진료 시간:
+                    <ClockCircleOutlined />   {" "}
+                    {/* 진료 시간: */}
+                    {t('hospitalInfo.operatingHours')}: 
                     
                 </Title>
 
                 <Title level={5}>
-                    <div className="mb-1">• 월~금 09:00~18:00 (점심시간 12:00~13:00)</div>
-                    <div className="mb-1">• 토요일 09:00~13:00</div>
-                    <div className="mb-1">• 일요일/공휴일 휴무</div>
+                    <div className="mb-1">
+                        {/* • 월~금 09:00~18:00 (점심시간 12:00~13:00) */}
+                        • {t('hospitalInfo.operatingHoursDetails.weekdays')}
+                    </div>
+                    <div className="mb-1">
+                        {/* • 토요일 09:00~13:00 */}
+                        • {t('hospitalInfo.operatingHoursDetails.saturday')}
+                    </div>
+                    <div className="mb-1">
+                        {/* • 일요일/공휴일 휴무 */}
+                        • {t('hospitalInfo.operatingHoursDetails.closed')}
+                    </div>
                 </Title>
 
                 <small style={{ color: "#888", display: "block", marginTop: "10px" }}>
-                    ※ 해당 정보는 실제 병원 데이터가 아닌 더미 데이터입니다.
+                    {/* ※ 해당 정보는 실제 병원 데이터가 아닌 더미 데이터입니다. */}
+                    {t('hospitalInfo.dummyTimeNotice')}
                 </small>
 
             </div>
@@ -310,7 +330,9 @@ console.log("selectFromGangdongHospital data: ", data);
 
             <div>
                 <Title level={3}>
-                    <EnvironmentOutlined />  오시는 길
+                    <EnvironmentOutlined />   {" "}
+                    {/* 오시는 길 */}
+                    {t('hospitalInfo.location')}
                     
                 </Title>
             
@@ -319,7 +341,7 @@ console.log("selectFromGangdongHospital data: ", data);
                     <div style={{ width: "100%", height: "450px", marginTop: "30px", marginBottom: "30px"}}>
                         <iframe
                             title="hospital-location"
-                            src={`https://www.google.com/maps?q=${encodeURIComponent(hospitalDetail[0].hospital_name + ' ' + hospitalDetail[0].hospital_address)}&output=embed`}
+                            src={`https://www.google.com/maps?q=${encodeURIComponent(hospitalDetail[0].hospital_name + ' ' + hospitalDetail[0].hospital_address)}&output=embed&hl=${currentLang}`}
                             width="100%"
                             height="100%"
                             style={{ border: 0 }}
@@ -340,7 +362,8 @@ console.log("selectFromGangdongHospital data: ", data);
                         onClick={() => copyToClipboard(hospitalDetail[0].hospital_address)}
                         style={{ marginLeft: '20px' }}
                     >
-                        복사
+                        {/* 복사 */}
+                        {t('hospitalInfo.copyAddress')}
                     </Button>
                 </div>
             </div>
@@ -352,12 +375,17 @@ console.log("selectFromGangdongHospital data: ", data);
             <div>
                 <div className="flex justify-between items-center mb-4"> 
                     <Title level={3} style={{ marginBottom: 0 }}> 
-                        <MessageOutlined />  리뷰 ({hospitalReview.length})
+                        <MessageOutlined />   {" "}
+                        {/* 리뷰 ({hospitalReview.length}) */}
+                        {t('hospitalInfo.reviews', { count: hospitalReview.length })}
                     </Title>
 
                     {/* 로그인 상태일 때만 리뷰 작성 버튼 표시 */}
                     {sessionStorage.getItem("isLoggedIn") === "true" &&
-                        <Button onClick={handleWriteReviewClick}>리뷰 작성하기</Button>
+                        <Button onClick={handleWriteReviewClick}>
+                            {/* 리뷰 작성하기 */}
+                            {t('hospitalInfo.writeReview')}
+                        </Button>
                     }
                 </div>
 
@@ -375,15 +403,19 @@ console.log("selectFromGangdongHospital data: ", data);
                                     </span>
                                 </div>
                                 
-                                <p>{review.original_text}</p>
-                                <small style={{ color: '#aaa' }}>원본 언어: {review.original_language}</small>
+                                <p>{review.translated_text}</p>
+                                <small style={{ color: '#aaa' }}>
+                                    {/* 원본 언어:  */}
+                                    {t('hospitalInfo.originalLanguage')}{": "}
+                                    {review.original_language}</small>
                             </Card>
                         ))}
                     </div>
                 ) : (
                     // 리뷰가 없을 때 메시지 표시
                     <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
-                        아직 등록된 리뷰가 없습니다.
+                        {/* 아직 등록된 리뷰가 없습니다. */}
+                        {t('hospitalInfo.noReviews')}
                     </div>
                 )}
             </div>

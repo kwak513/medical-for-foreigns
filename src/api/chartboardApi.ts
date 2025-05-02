@@ -2,6 +2,7 @@ import axios from "axios";
 
 const API_SERVER_URL = "http://localhost:8080";
 
+//------------------------ 병원 관련 ------------------------
 // 메인 리스트 페이지에서 사용할 강남구와 강동구 병원 정보 가져오기(id, 병원명, 시·구 주소, 가능 언어, 대표과 1개)
 export const select15FromGangnamGangDongHospital = async(offsetNum:number) => {
     const res = await axios.get(`${API_SERVER_URL}/select15FromGangnamGangDongHospital`, {params: {offsetNum}});
@@ -20,23 +21,36 @@ export const selectFromGangdongHospital = async(hospitalId:number) => {
     return res.data;
 }
 
-// // 병원명 검색하기
-// export const selectByHospitalName = async(hospitalName:string, offsetNum: number) => {
-//     const res = await axios.get(`${API_SERVER_URL}/selectByHospitalName`, {params: {hospitalName, offsetNum}});
-//     return res.data;
-// }
-
-// // 필터링 기능(사용 언어, 진료과목, 지역)
-// export const filterHospitalByLangDepartLocation = async(language:string, department:string, location:string, offsetNum: number) => {
-//     const res = await axios.get(`${API_SERVER_URL}/filterHospitalByLangDepartLocation`, {params: {language, department, location, offsetNum}});
-//     return res.data;
-// }
-
 // 병원 & 필터링 기능(사용 언어, 진료과목, 지역) 동시에.
 export const searchAndFilterHospital = async(hospitalName:string, language:string, department:string, location:string, offsetNum: number) => {
     const res = await axios.get(`${API_SERVER_URL}/searchAndFilterHospital`, {params: {hospitalName, language, department, location, offsetNum}});
     return res.data;
 }
+//------------------------ 병원 관련(영어 버전) ------------------------	
+// *영어* 메인 리스트 페이지에서 사용할 강남구와 강동구 병원 정보 가져오기(id, 병원명, 시·구 주소, 가능 언어, 대표과 1개)
+export const select15FromEnHospital = async(offsetNum:number) => {
+    const res = await axios.get(`${API_SERVER_URL}/select15FromEnHospital`, {params: {offsetNum}});
+    return res.data;
+}
+
+// *영어* 병원 상세 페이지에서 사용할 '강남구' 병원 정보 가져오기
+export const selectFromEnGangnamHospital = async(hospitalId:number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromEnGangnamHospital`, {params: {hospitalId}});
+    return res.data;
+}
+
+// *영어* 병원 상세 페이지에서 사용할 '강동구' 병원 정보 가져오기
+export const selectFromEnGangdongHospital = async(hospitalId:number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromEnGangdongHospital`, {params: {hospitalId}});
+    return res.data;
+}
+
+// *영어* 병원 & 필터링 기능(사용 언어, 진료과목, 지역) 동시에.
+export const searchAndFilterEnHospital = async(hospitalName:string, language:string, department:string, location:string, offsetNum: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/searchAndFilterEnHospital`, {params: {hospitalName, language, department, location, offsetNum}});
+    return res.data;
+}
+
 
 // -------------------------- 회원  --------------------------
 interface MemberRegisterDto{
@@ -104,8 +118,8 @@ export const insertHospitalReview = async(hospitalReviewDto: HospitalReviewDto) 
 }
 
 // 병원 id 통해서, hospital_review select 해오기
-export const selectFromHospitalReview = async(hospitalId: number, source: string) => {
-    const res = await axios.get(`${API_SERVER_URL}/selectFromHospitalReview`, {params: {hospitalId, source}});
+export const selectFromHospitalReview = async(hospitalId: number, source: string, targetLanguage: string) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromHospitalReview`, {params: {hospitalId, source, targetLanguage}});
     return res.data;
 }
 
@@ -113,6 +127,12 @@ export const selectFromHospitalReview = async(hospitalId: number, source: string
 // 회원이 작성한 리뷰 조회
 export const selectReviewByMemberId = async(memberId: number) => {
     const res = await axios.get(`${API_SERVER_URL}/selectReviewByMemberId`, {params: {memberId}});
+    return res.data;
+}
+
+// *영어* 회원이 작성한 리뷰 조회
+export const selectReviewByMemberIdEn = async(memberId: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectReviewByMemberIdEn`, {params: {memberId}});
     return res.data;
 }
 
@@ -178,6 +198,13 @@ export const deleteReservation = async(reservationId: number, source: string) =>
     const res = await axios.delete(`${API_SERVER_URL}/deleteReservation`, {params: {reservationId, source}});
     return res.data;
 }
+
+// *영어* 회원의 진료 조회 - member id 통해서, hospital_reservation select 해오기(language, main_symptom, sub_symptom, detail_symptom, gangnam_name/ gangdong_name)
+export const selectFromHospitalReservationEn = async(memberId: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromHospitalReservationEn`, {params: {memberId}});
+    return res.data;
+}
+
 // -------------------------- 즐겨찾기 관련--------------------------	
 interface MemberFavoriteDto{
     memberId: number;
@@ -194,6 +221,12 @@ export const insertIntoMemberFavorite = async(memberFavoriteDto: MemberFavoriteD
 // 회원의 즐겨찾기 조회(병원 id, 병원명, 병원 메인 주소)
 export const selectFromMemberFavorite = async(memberId: number) => {
     const res = await axios.get(`${API_SERVER_URL}/selectFromMemberFavorite`, {params: {memberId}});
+    return res.data;
+}
+//------------------------ 병원 관련(영어 버전) ------------------------	
+// *영어*  회원의 즐겨찾기 조회(병원 id, 병원명, 병원 메인 주소)
+export const selectFromMemberFavoriteEn = async(memberId: number) => {
+    const res = await axios.get(`${API_SERVER_URL}/selectFromMemberFavoriteEn`, {params: {memberId}});
     return res.data;
 }
 

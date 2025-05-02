@@ -5,18 +5,22 @@ import hospitalRandom3 from '../../assets/hospitalImg/hospitalRandom3.jpg';
 import hospitalRandom4 from '../../assets/hospitalImg/hospitalRandom4.jpg';
 import hospitalRandom5 from '../../assets/hospitalImg/hospitalRandom5.jpg';
 import hospitalRandom0 from '../../assets/hospitalImg/hospitalRandom6.jpg';
-import { useEffect, useState } from "react";
-import { filterHospitalByLangDepartLocation, searchAndFilterHospital, select15FromGangnamGangDongHospital, selectByHospitalName } from "../../api/chartboardApi";
+import { useEffect, useState, useMemo } from "react"; // Re-add useMemo for clarity if preferred, or remove later
+import { filterHospitalByLangDepartLocation, searchAndFilterEnHospital, searchAndFilterHospital, select15FromEnHospital, select15FromGangnamGangDongHospital, selectByHospitalName } from "../../api/chartboardApi";
 import { AppstoreAddOutlined, DownOutlined, EnvironmentOutlined, GlobalOutlined, SmileOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import Title from "antd/es/typography/Title";
 import type { MenuProps } from 'antd';
+import { useTranslation } from "react-i18next";
 
 
 
 
 
 const HospitalMainPage = () => {
+
+    const { t, i18n } = useTranslation();
+    const currentLang = i18n.language; // 'ko' or 'en'
 
     // 페이지 접속 시, 스크롤바 맨 위로.
     useEffect(() => {
@@ -49,83 +53,65 @@ const HospitalMainPage = () => {
     const [hasMoreInfo, setHasMoreInfo] = useState(true);
 
 
-    // '강남구' 데이터에서 '미국/일본/중국/러시아/중동/몽골/베트남'로 넘어오는 걸 언어로 변환
-    const languageMapping  = {
-        '미국': '영어',
-        '일본': '일본어',
-        '중국': '중국어',
-        '러시아': '러시아어',
-        '중동': '중동어',
-        '몽골': '몽골어',
-        '베트남': '베트남어'
+    // 필터링 조건 바뀌면 키 값
+    const [selectedLanguageKey, setSelectedLanguageKey] = useState('allLanguages');
+    const [selectedDepartmentKey, setSelectedDepartmentKey] = useState('allDepartments');
+    const [selectedLocationKey, setSelectedLocationKey] = useState('allRegions');
+
+    // 필터링 조건 바뀔때 화면에 보여줄 값
+    const selectedLanguageDisplay = t(`filter.${selectedLanguageKey}`);
+    const selectedDepartmentDisplay = selectedDepartmentKey === 'allDepartments' ? t('filter.allDepartments') : t(`filter.department.${selectedDepartmentKey}`); 
+    const selectedLocationDisplay = selectedLocationKey === 'allRegions' ? t('filter.allRegions') : t(`filter.regions.${selectedLocationKey}`);
+
+    // 필터링 조건 선택되었는지 확인
+    const isFilterSelected = 
+        selectedLanguageKey !== 'allLanguages' ||
+        selectedDepartmentKey !== 'allDepartments' ||
+        selectedLocationKey !== 'allRegions';
+
+    // 사용자가 선택한 key를 보고, 백엔드에 보낼 값으로 매핑
+    const getApiFilterValue = (key: string) => {
+        // 필터링 조건 선택 X,
+        if (key === 'allLanguages' || key === 'allDepartments' || key === 'allRegions') {
+            return ''; 
+        }
+
+        const koMap = {
+            // Languages
+            korean: '한국어', english: '영어', chinese: '중국어', japanese: '일본어', russian: '러시아어', vietnamese: '베트남어', mongolian: '몽골어', middleEastern: '아랍어', uzbek: '우즈베키스탄어',
+            // Departments
+            pediatrics: '소아청소년과', dentistry: '치과', ent: '이비인후과', dermatology: '피부과', obgyn: '산부인과', ophthalmology: '안과', psychiatry: '정신건강의학과', plasticSurgery: '성형외과', orthopedics: '정형외과', oriental: '한방각과', urology: '비뇨기과', familyMedicine: '가정의학과', internal: '내과', surgery: '외과', thoracicSurgery: '흉부외과', anesthesiology: '마취통증의학과', radiology: '영상의학과', neurology: '신경과', neurosurgery: '신경외과', rehabilitation: '재활의학과',
+            // Regions
+            gangnam: '강남구', gangdong: '강동구'
+        };
+        const enMap = {
+                // Languages
+            korean: 'Korean', english: 'English', chinese: 'Chinese', japanese: 'Japanese', russian: 'Russian', vietnamese: 'Vietnamese', mongolian: 'Mongolian', middleEastern: 'Middle Eastern', uzbek: 'Uzbek',
+            // Departments
+            // Match case/format from DB examples (mostly lowercase) based on provided list
+            pediatrics: 'pediatrics', dentistry: 'dentistry', ent: 'otolaryngology', dermatology: 'dermatology', obgyn: 'obstetrics and gynecology', ophthalmology: 'ophthalmology', psychiatry: 'psychiatry', plasticSurgery: 'plastic surgery', orthopedics: 'orthopedics', oriental: 'oriental medicine department', urology: 'urology', familyMedicine: 'family medicine', internal: 'internal medicine', surgery: 'surgery', thoracicSurgery: 'thoracic surgery', anesthesiology: 'anesthesiology and pain medicine', radiology: 'radiology', neurology: 'neurology', neurosurgery: 'neurosurgery', rehabilitation: 'rehabilitation medicine',
+            // Regions // Keep region mapping as is
+            gangnam: 'Gangnam-gu', gangdong: 'Gangdong-gu'
+        };
+
+        const map = currentLang === 'ko' ? koMap : enMap;
+        return map[key as keyof typeof map] || ''; 
     };
-
-    const getRefinedLanguages = (languages: string) => {
-        return languages.split('/').map((language) => languageMapping[language.trim() as keyof typeof languageMapping] || language).join(', ');
-    }
-
-    //  필터링 기준 - 가능 언어
-    const [selectedLanguage, setSelectedLanguage] = useState('가능 언어');
-    //  선택한 진료과
-    const [selectedDepartment, setSelectedDepartment] = useState('진료 과목');
-    //  선택한 지역
-    const [selectedLocation, setSelectedLocation] = useState('지역');
-
-
-    const isFilterSelected = (
-        selectedLanguage !== '가능 언어' ||
-        selectedDepartment !== '진료 과목' ||
-        selectedLocation !== '지역'
-      );
-
-
-    // //  필터링 하기
-    // useEffect(() => {
-    // if (selectedLanguage !== '가능 언어' || selectedDepartment !== '진료 과목' || selectedLocation !== '지역'){
-    //     filterHospitalByLangDepartLocation(
-    //         filterMapping.language[selectedLanguage as keyof typeof filterMapping.language] ?? selectedLanguage,
-    //         filterMapping.department[selectedDepartment as keyof typeof filterMapping.department] ?? selectedDepartment,
-    //         filterMapping.location[selectedLocation as keyof typeof filterMapping.location] ?? selectedLocation,
-    
-            
-    //         offset
-    //     )
-    //     .then((list) => {
-    //         console.log("filterHospitalByLangDepartLocation 결과: ", list);
-
-    //         if (list.length < 30) { // 데이터가 30개 미만이면, '더보기' 버튼 비활성화
-    //             setHasMoreInfo(false);
-    //         } else {
-    //             setHasMoreInfo(true); // 30개면 더보기 버튼 활성화 (백엔드에서 데이터 로딩 시, limit 30임)
-    //         }
-    //         setHospitalInfo((prev) => offset === 0 ? list : [...prev, ...list]); // offset 0이면 초기화, 아니면 데이터 누적
-    //     })
-    //         .catch((err) => {
-    //             console.log("filterHospitalByLangDepartLocation 병원 필터링 실패: ", err);
-    //             alert("병원 필터링을 실패했습니다.");
-    //         });
-    // }
-    // }, [selectedLanguage, selectedDepartment, selectedLocation, offset])
-
-
-
-
-
 
     // 병원 데이터 불러오기
     const loadHospitalData = () => {
+
+        // key 값 기준으로, 백엔드에 보낼 값 매핑하는 getApiFilterValue 호출
+        const apiLangValue = getApiFilterValue(selectedLanguageKey);
+        const apiDeptValue = getApiFilterValue(selectedDepartmentKey);
+        const apiLocValue = getApiFilterValue(selectedLocationKey);
+
         if(searchHospitalName || isFilterSelected){
-            searchAndFilterHospital(
-                searchHospitalName,
-                filterMapping.language[selectedLanguage as keyof typeof filterMapping.language] ?? selectedLanguage,
-                filterMapping.department[selectedDepartment as keyof typeof filterMapping.department] ?? selectedDepartment,
-                filterMapping.location[selectedLocation as keyof typeof filterMapping.location] ?? selectedLocation,
-            
-                    
-                offset
-            )
+            const searchFn = currentLang === 'ko' ? searchAndFilterHospital : searchAndFilterEnHospital;
+            // 필터링 결과
+            searchFn(searchHospitalName, apiLangValue, apiDeptValue, apiLocValue, offset)
             .then((list) => {
-                console.log("searchAndFilterHospital 결과: ", list);
+                console.log("searchAndFilterHospital/searchAndFilterEnHospital 결과: ", list);
     
                 if (list.length < 15) { // 데이터가 15개 미만이면, '더보기' 버튼 비활성화
                     setHasMoreInfo(false);
@@ -136,81 +122,16 @@ const HospitalMainPage = () => {
             })
                 .catch((err) => {
                     console.log("searchAndFilterHospital 병원 필터링 실패: ", err);
-                    alert("병원 필터링을 실패했습니다.");
+                    // alert("병원 필터링을 실패했습니다.");
+                    alert(t('alert.filterFailed'));
                 });
         }
-        // if(searchHospitalName && isFilterSelected){
-            // searchAndFilterHospital(
-            //     searchHospitalName,
-            //     filterMapping.language[selectedLanguage as keyof typeof filterMapping.language] ?? selectedLanguage,
-            //     filterMapping.department[selectedDepartment as keyof typeof filterMapping.department] ?? selectedDepartment,
-            //     filterMapping.location[selectedLocation as keyof typeof filterMapping.location] ?? selectedLocation,
-            
-                    
-            //     offset
-            // )
-            // .then((list) => {
-            //     console.log("searchAndFilterHospital 결과: ", list);
-    
-            //     if (list.length < 15) { // 데이터가 15개 미만이면, '더보기' 버튼 비활성화
-            //         setHasMoreInfo(false);
-            //     } else {
-            //         setHasMoreInfo(true); // 15개면 더보기 버튼 활성화 (백엔드에서 데이터 로딩 시, limit 15임)
-            //     }
-            //     setHospitalInfo((prev) => offset === 0 ? list : [...prev, ...list]); // offset 0이면 초기화, 아니면 데이터 누적
-            // })
-            //     .catch((err) => {
-            //         console.log("searchAndFilterHospital 병원 필터링 실패: ", err);
-            //         alert("병원 필터링을 실패했습니다.");
-            //     });
-        // }
-        // if (searchHospitalName) {   // 검색어가 있다면, 
-        //     selectByHospitalName(searchHospitalName, offset)
-        //         .then((list) => {
-        //             console.log("searchHospitalName 결과: ", list);
-
-        //             if (list.length < 30) { // 데이터가 30개 미만이면, '더보기' 버튼 비활성화
-        //                 setHasMoreInfo(false);
-        //             } else {
-        //                 setHasMoreInfo(true); // 30개면 더보기 버튼 활성화 (백엔드에서 데이터 로딩 시, limit 30임)
-        //             }
-        //             setHospitalInfo((prev) => offset === 0 ? list : [...prev, ...list]); // offset 0이면 초기화, 아니면 데이터 누적
-        //         })
-        //         .catch((err) => {
-        //             console.log("병원 검색 실패: ", err);
-        //             alert("병원 검색을 실패했습니다.");
-        //         });
-        // } 
-        // else if(isFilterSelected){
-        //     if (selectedLanguage !== '가능 언어' || selectedDepartment !== '진료 과목' || selectedLocation !== '지역'){
-        //         filterHospitalByLangDepartLocation(
-        //             filterMapping.language[selectedLanguage as keyof typeof filterMapping.language] ?? selectedLanguage,
-        //             filterMapping.department[selectedDepartment as keyof typeof filterMapping.department] ?? selectedDepartment,
-        //             filterMapping.location[selectedLocation as keyof typeof filterMapping.location] ?? selectedLocation,
-            
-                    
-        //             offset
-        //         )
-        //         .then((list) => {
-        //             console.log("filterHospitalByLangDepartLocation 결과: ", list);
-        
-        //             if (list.length < 15) { // 데이터가 15개 미만이면, '더보기' 버튼 비활성화
-        //                 setHasMoreInfo(false);
-        //             } else {
-        //                 setHasMoreInfo(true); // 15개면 더보기 버튼 활성화 (백엔드에서 데이터 로딩 시, limit 15임)
-        //             }
-        //             setHospitalInfo((prev) => offset === 0 ? list : [...prev, ...list]); // offset 0이면 초기화, 아니면 데이터 누적
-        //         })
-        //             .catch((err) => {
-        //                 console.log("filterHospitalByLangDepartLocation 병원 필터링 실패: ", err);
-        //                 alert("병원 필터링을 실패했습니다.");
-        //             });
-        //     }
-        // }
         else {    // 검색어 없으면 기본 정보 (where hospitalName 없는거)
-            select15FromGangnamGangDongHospital(offset)
+            const selectFn = currentLang === 'ko' ? select15FromGangnamGangDongHospital : select15FromEnHospital;
+
+            selectFn(offset)
                 .then((list) => {
-                    console.log("select15FromGangnamGangDongHospital 결과: ", list);
+                    console.log("select15FromGangnamGangDongHospital/select15FromEnHospital 결과: ", list);
 
                     if (list.length < 30) { // 데이터가 30개 미만이면, '더보기' 버튼 비활성화
                         setHasMoreInfo(false); 
@@ -221,7 +142,7 @@ const HospitalMainPage = () => {
                 })
                 .catch((err) => {
                     console.log("병원 정보 불러오기 실패: ", err);
-                    alert("병원 정보를 불러오지 못했습니다.");
+                    alert(t('alert.loadFailed'));
                 });
         }
     };
@@ -230,28 +151,14 @@ const HospitalMainPage = () => {
 //  검색어 바뀔때마다, 기존 offset과 hospitalInfo 데이터 초기화
 useEffect(() => {
     setOffset(0); 
-    setHospitalInfo([]); 
-}, [searchHospitalName, selectedLanguage, selectedDepartment, selectedLocation]); 
+    setHospitalInfo([]);
+}, [searchHospitalName, selectedLanguageKey, selectedDepartmentKey, selectedLocationKey, currentLang]); // Use key states
 
 // 검색어나 offset이 바뀌면, 데이터 새로 로딩
 useEffect(() => {
     loadHospitalData();
-}, [searchHospitalName, offset, selectedLanguage, selectedDepartment, selectedLocation]); 
+}, [searchHospitalName, offset, selectedLanguageKey, selectedDepartmentKey, selectedLocationKey, currentLang]); // Use key states
 
-
-    // 병원 데모 데이터
-    // const cards = [
-    //     { title: 'Card 1', address: 'Card address 1', language: 'English', category: '치과'},
-    //     { title: 'Card 2', address: 'Card address 2', language: 'English', category: '치과'},
-    //     { title: 'Card 3', address: 'Card address 3', language: 'English', category: '치과'},
-    //     { title: 'Card 4', address: 'Card address 4', language: 'English', category: '치과'},
-    //     { title: 'Card 5', address: 'Card address 5', language: 'English', category: '치과'},
-    //     { title: 'Card 6', address: 'Card address 6', language: 'English', category: '치과'},
-    //     { title: 'Card 7', address: 'Card address 7', language: 'English', category: '치과'},
-    //     { title: 'Card 8', address: 'Card address 8', language: 'English', category: '치과'},
-    //     { title: 'Card 9', address: 'Card address 9', language: 'English', category: '치과'},
-
-    // ];
 
     //  병원 이미지 데모 데이터
     const images = [
@@ -274,24 +181,26 @@ useEffect(() => {
         navigate("/hospital/info", {state: {hospitalId, hospitalSource}})
     }
 
-    // //  필터링 기준 - 가능 언어
-    // const [selectedLanguage, setSelectedLanguage] = useState('가능 언어');
-
     const languageItems: MenuProps['items'] = [
-        {key: '0',label: (<span>전체 언어</span>), onClick: () => {setSelectedLanguage('전체 언어')}},
-        {key: '1',label: (<span>한국어</span>), onClick: () => {setSelectedLanguage('한국어')}},
-        {key: '2',label: (<span>영어</span>), onClick: () => {setSelectedLanguage('영어')},},
-        {key: '3',label: (<span>중국어</span>), onClick: () => {setSelectedLanguage('중국어')},},
-        {key: '4',label: (<span>일본어</span>), onClick: () => {setSelectedLanguage('일본어')}},
-        {key: '5',label: (<span>러시아어</span>), onClick: () => {setSelectedLanguage('러시아어')},},
-        {key: '6',label: (<span>베트남어</span>), onClick: () => {setSelectedLanguage('베트남어')},},
-        {key: '7',label: (<span>몽골어</span>), onClick: () => {setSelectedLanguage('몽골어')},},
-        {key: '8',label: (<span>중동어</span>), onClick: () => {setSelectedLanguage('중동어')},},
-        {key: '9',label: (<span>우즈베키스탄어</span>), onClick: () => {setSelectedLanguage('우즈베키스탄어')}}
-        
+        // Set the key state on click
+        {key: 'allLanguages', label: (<span>{t('filter.allLanguages')}</span>), onClick: () => {setSelectedLanguageKey('allLanguages')}},
+        {key: 'korean', label: (<span>{t('filter.korean')}</span>), onClick: () => {setSelectedLanguageKey('korean')}},
+        {key: 'english', label: (<span>{t('filter.english')}</span>), onClick: () => {setSelectedLanguageKey('english')}},
+        {key: 'chinese', label: (<span>{t('filter.chinese')}</span>), onClick: () => {setSelectedLanguageKey('chinese')}},
+        {key: 'japanese', label: (<span>{t('filter.japanese')}</span>), onClick: () => {setSelectedLanguageKey('japanese')}},
+        {key: 'russian', label: (<span>{t('filter.russian')}</span>), onClick: () => {setSelectedLanguageKey('russian')}},
+        {key: 'vietnamese', label: (<span>{t('filter.vietnamese')}</span>), onClick: () => {setSelectedLanguageKey('vietnamese')}},
+        {key: 'mongolian', label: (<span>{t('filter.mongolian')}</span>), onClick: () => {setSelectedLanguageKey('mongolian')}},
+        {key: 'middleEastern', label: (<span>{t('filter.middleEastern')}</span>), onClick: () => {setSelectedLanguageKey('middleEastern')}},
+        {key: 'uzbek', label: (<span>{t('filter.uzbek')}</span>), onClick: () => {setSelectedLanguageKey('uzbek')}}
+    
     ];
 
 // -----------------------------------
+
+    // //  필터링 기준 - 가능 언어
+    // const [selectedLanguage, setSelectedLanguage] = useState('가능 언어');
+
 
     // //  선택한 진료과
     // const [selectedDepartment, setSelectedDepartment] = useState('진료 과목');
@@ -309,7 +218,9 @@ useEffect(() => {
 
     const handleCancel = () => {
         setIsDepartmentModalOpen(false);
-        setSelectedDepartment('전체 과목');
+        // setSelectedDepartment('전체 과목');
+        // Reset key state
+        setSelectedDepartmentKey('allDepartments');
     };
 
     // 진료과 모달 내부의 카드 css
@@ -324,9 +235,6 @@ useEffect(() => {
 
 // -----------------------------------
 
-    // //  선택한 지역
-    // const [selectedLocation, setSelectedLocation] = useState('지역');
-
     // 지역 관련 모달
     const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
@@ -340,7 +248,9 @@ useEffect(() => {
 
     const handleLocationCancel = () => {
         setIsLocationModalOpen(false);
-        setSelectedLocation('서울시 전체')
+        // setSelectedLocation('서울시 전체');
+        // Reset key state
+        setSelectedLocationKey('allRegions');
     };
 
     
@@ -352,22 +262,22 @@ useEffect(() => {
     };
 
 // -------------------------------------
-    const filterMapping = {
-    language: {
-        '가능 언어': '',
-        '전체 언어': '',
-        '한국어': ''
-    },
-    department: {
-        '진료 과목': '',
-        '전체 과목': ''
+    // const filterMapping = {
+    // language: {
+    //     '가능 언어': '',
+    //     '전체 언어': '',
+    //     '한국어': ''
+    // },
+    // department: {
+    //     '진료 과목': '',
+    //     '전체 과목': ''
         
-    },
-    location: {
-        '지역': '',
-        '서울시 전체': ''
-    }
-    };
+    // },
+    // location: {
+    //     '지역': '',
+    //     '서울시 전체': ''
+    // }
+    // };
 
 
 
@@ -385,7 +295,7 @@ useEffect(() => {
                     // setSelectedLanguage(e.target.key)
                     }}>
                 <Space>
-                    {selectedLanguage}
+                    {selectedLanguageDisplay} 
                     <DownOutlined />
                 </Space>
                 </a>
@@ -394,35 +304,33 @@ useEffect(() => {
             {/* 진료과목 필터링 */}
             <div>
                 <Button onClick={showModal} style={{color: 'rgb(22 119 255)'}}>
-                    {selectedDepartment}
+                    {selectedDepartmentDisplay} 
                 </Button>
-                <Modal title="진료 과목 선택" open={isDepartmentModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                    {/* <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p> */}
+                <Modal title={t('filter.selectDepartment')} //"진료 과목 선택" 
+                    open={isDepartmentModalOpen} onOk={handleOk} onCancel={handleCancel}>
                     <Card>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('전체 과목')}>전체 과목</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('소아청소년과')}>소아청소년과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('치과')}>치과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('이비인후과')}>이비인후과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('피부과')}>피부과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('산부인과')}>산부인과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('안과')}>안과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('정신건강의학과')}>정신건강의학과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('성형외과')}>성형외과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('정형외과')}>정형외과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('한방각과')}>한방각과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('비뇨기과')}>비뇨기과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('가정의학과')}>가정의학과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('내과')}>내과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('외과')}>외과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('흉부외과')}>흉부외과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('마취통증의학과')}>마취통증의학과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('영상의학과')}>영상의학과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('신경과')}>신경과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('신경외과')}>신경외과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('재활의학과')}>재활의학과</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartment('정신건강의학과')}>정신건강의학과</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('allDepartments')}>{t('filter.allDepartments')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('pediatrics')}>{t('filter.department.pediatrics')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('dentistry')}>{t('filter.department.dentistry')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('ent')}>{t('filter.department.ent')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('dermatology')}>{t('filter.department.dermatology')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('obgyn')}>{t('filter.department.obgyn', '산부인과')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('ophthalmology')}>{t('filter.department.ophthalmology')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('psychiatry')}>{t('filter.department.psychiatry')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('plasticSurgery')}>{t('filter.department.plasticSurgery')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('orthopedics')}>{t('filter.department.orthopedics')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('oriental')}>{t('filter.department.oriental')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('urology')}>{t('filter.department.urology')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('familyMedicine')}>{t('filter.department.familyMedicine')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('internal')}>{t('filter.department.internal', '내과')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('surgery')}>{t('filter.department.surgery')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('thoracicSurgery')}>{t('filter.department.thoracicSurgery')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('anesthesiology')}>{t('filter.department.anesthesiology')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('radiology')}>{t('filter.department.radiology')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('neurology')}>{t('filter.department.neurology')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('neurosurgery')}>{t('filter.department.neurosurgery')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('rehabilitation')}>{t('filter.department.rehabilitation')}</Card.Grid>
+                        
                     </Card>
                 </Modal>
             </div>       
@@ -430,43 +338,20 @@ useEffect(() => {
             {/* 지역 필터링 */}
             <div>
                 <Button onClick={showLocationModal} style={{color: 'rgb(22 119 255)'}}>
-                    {selectedLocation}
+                    {selectedLocationDisplay} {/* Display translated text */}
                 </Button>
-                <Modal title="지역 선택" open={isLocationModalOpen} onOk={handleLocationOk} onCancel={handleLocationCancel}>
-                    {/* <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p> */}
+                <Modal title={t('filter.selectRegion')} //"지역 선택" 
+                    open={isLocationModalOpen} onOk={handleLocationOk} onCancel={handleLocationCancel}>
                     <small style={{ color: "#888", display: "block", marginTop: "10px", marginBottom: "10px" }}>
-                        ※ 현재 강남구와 강동구 정보만 제공됩니다. 
+                        {/* ※ 현재 강남구와 강동구 정보만 제공됩니다.  */}
+                        {t('filter.regionNotice')}
                     </small>
 
                     <Card>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedLocation('서울시 전체')}>서울시 전체</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedLocation('강남구')}>강남구</Card.Grid>
-                        <Card.Grid style={gridStyle} onClick={() => setSelectedLocation('강동구')}>강동구</Card.Grid>
-                        {/* <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('강북구')}>강북구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('강서구')}>강서구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('관악구')}>관악구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('광진구')}>광진구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('구로구')}>구로구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('금천구')}>금천구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('노원구')}>노원구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('도봉구')}>도봉구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('동대문구')}>동대문구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('동작구')}>동작구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('마포구')}>마포구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('서대문구')}>서대문구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('서초구')}>서초구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('성동구')}>성동구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('성북구')}>성북구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('송파구')}>송파구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('양천구')}>양천구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('영등포구')}>영등포구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('용산구')}>용산구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('은평구')}>은평구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('종로구')}>종로구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('중구')}>중구</Card.Grid>
-                        <Card.Grid style={gridStyle25} onClick={() => setSelectedLocation('중랑구')}>중랑구</Card.Grid> */}
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedLocationKey('allRegions')}>{t('filter.allRegions')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedLocationKey('gangnam')}>{t('filter.regions.gangnam')}</Card.Grid>
+                        <Card.Grid style={gridStyle} onClick={() => setSelectedLocationKey('gangdong')}>{t('filter.regions.gangdong')}</Card.Grid>
+                        
                     </Card>
                 </Modal>
             </div>   
@@ -480,8 +365,8 @@ useEffect(() => {
                 <Card
                     key={index}
                     title={info.hospital_name}
-                    className="min-h-[160px] cursor-pointer border border-gray-200 hover:shadow-md transition-shadow duration-200" // Tailwind 클래스 사용
-                    onClick={() => {handleHospitalCardClick(info.hospital_id, info.source, info.hospital_id)}}
+                    className="min-h-[160px] cursor-pointer border border-gray-200 hover:shadow-md transition-shadow duration-200"
+                    onClick={() => {handleHospitalCardClick(info.hospital_id, info.source)}}
                 >
                     <div className="flex justify-between items-start h-full">
                         <div className="flex flex-col justify-between h-full flex-grow pr-2">
@@ -490,8 +375,8 @@ useEffect(() => {
                                     <EnvironmentOutlined className="mr-1" /> {info.hospital_main_address}
                                 </p>
                                 <p className="text-sm text-gray-600 mb-1">
-                                    <GlobalOutlined className="mr-1" />
-                                    {getRefinedLanguages(info.hospital_languages) ? " 한국어, " + getRefinedLanguages(info.hospital_languages) : " 한국어"}
+                                    <GlobalOutlined className="mr-1"/> {info.hospital_languages || (currentLang === 'ko' ? t('filter.korean') : t('filter.english'))} 
+                                
                                 </p>
                                 <p className="text-sm text-gray-600">
                                     <AppstoreAddOutlined className="mr-1" /> {info.hospital_main_category}
@@ -511,14 +396,20 @@ useEffect(() => {
 
         {hasMoreInfo && hospitalInfo.length > 0 &&
             <div className="flex justify-center items-center mt-7">
-                <Button size="large" className="w-80" onClick={handleMoreHospitalClick}>병원 더보기</Button>
+                <Button size="large" className="w-80" onClick={handleMoreHospitalClick}>
+                    {/* 병원 더보기 */}
+                    {t('moreHospitals')}
+                </Button>
             </div>
         }
 
 
         {hospitalInfo == null || hospitalInfo.length <= 0 &&
             <div className="flex justify-center">
-                <Title level={5}>검색한 병원명과 일치하는 병원 정보가 없습니다.</Title>
+                <Title level={5}>
+                    {/* 검색한 병원명과 일치하는 병원 정보가 없습니다. */}
+                    {t('noResults')}
+                </Title>
             </div>
             
         }
