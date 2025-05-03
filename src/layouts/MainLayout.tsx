@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
+  InfoCircleOutlined,
+  MailOutlined,
   SafetyOutlined,
   UserOutlined,
 
@@ -48,7 +50,9 @@ const ChartBoardLayout: React.FC = () => {
   // 메뉴 아이템 정의 (컴포넌트 내부로 이동)
   const items: MenuItem[] = [
     getItem(t('layout.menu.findHospital'), '/hospital', <SafetyOutlined />),
-    getItem(t('layout.menu.mypage'), '/mypage', <UserOutlined/>)
+    getItem(t('layout.menu.mypage'), '/mypage', <UserOutlined/>),
+    getItem(t('layout.menu.aboutUs'), '/about', <InfoCircleOutlined />), // 회사 소개 추가
+    getItem(t('layout.menu.contact'), '/contact', <MailOutlined />)
   ];
 
   const {

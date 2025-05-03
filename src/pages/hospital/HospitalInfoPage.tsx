@@ -6,7 +6,44 @@ import hospitalRandom2 from '../../assets/hospitalImg/hospitalRandom2.jpg';
 import hospitalRandom3 from '../../assets/hospitalImg/hospitalRandom3.jpg';
 import hospitalRandom4 from '../../assets/hospitalImg/hospitalRandom4.jpg';
 import hospitalRandom5 from '../../assets/hospitalImg/hospitalRandom5.jpg';
-import hospitalRandom0 from '../../assets/hospitalImg/hospitalRandom6.jpg';
+import hospitalRandom6 from '../../assets/hospitalImg/hospitalRandom6.jpg';
+import hospitalRandom7 from '../../assets/hospitalImg/hospitalRandom7.jpg';
+import hospitalRandom8 from '../../assets/hospitalImg/hospitalRandom8.jpg';
+import hospitalRandom9 from '../../assets/hospitalImg/hospitalRandom9.jpg';
+import hospitalRandom10 from '../../assets/hospitalImg/hospitalRandom10.jpg';
+import hospitalRandom11 from '../../assets/hospitalImg/hospitalRandom11.jpg';
+import hospitalRandom12 from '../../assets/hospitalImg/hospitalRandom12.jpg';
+import hospitalRandom13 from '../../assets/hospitalImg/hospitalRandom13.jpg';
+import hospitalRandom14 from '../../assets/hospitalImg/hospitalRandom14.jpg';
+import hospitalRandom15 from '../../assets/hospitalImg/hospitalRandom15.jpg';
+import hospitalRandom16 from '../../assets/hospitalImg/hospitalRandom16.jpg';
+import hospitalRandom17 from '../../assets/hospitalImg/hospitalRandom17.jpg';
+import hospitalRandom18 from '../../assets/hospitalImg/hospitalRandom18.jpg';
+import hospitalRandom19 from '../../assets/hospitalImg/hospitalRandom19.jpg';
+import hospitalRandom20 from '../../assets/hospitalImg/hospitalRandom20.jpg';
+import hospitalRandom21 from '../../assets/hospitalImg/hospitalRandom21.jpg';
+import hospitalRandom22 from '../../assets/hospitalImg/hospitalRandom22.jpg';
+import hospitalRandom23 from '../../assets/hospitalImg/hospitalRandom23.jpg';
+import hospitalRandom24 from '../../assets/hospitalImg/hospitalRandom24.jpg';
+import hospitalRandom25 from '../../assets/hospitalImg/hospitalRandom25.jpg';
+import hospitalRandom26 from '../../assets/hospitalImg/hospitalRandom26.jpg';
+import hospitalRandom27 from '../../assets/hospitalImg/hospitalRandom27.jpg';
+import hospitalRandom28 from '../../assets/hospitalImg/hospitalRandom28.jpg';
+import hospitalRandom29 from '../../assets/hospitalImg/hospitalRandom29.jpg';
+import hospitalRandom30 from '../../assets/hospitalImg/hospitalRandom30.jpg';
+import hospitalRandom31 from '../../assets/hospitalImg/hospitalRandom31.jpg';
+import hospitalRandom32 from '../../assets/hospitalImg/hospitalRandom32.jpg';
+import hospitalRandom33 from '../../assets/hospitalImg/hospitalRandom33.jpg';
+import hospitalRandom34 from '../../assets/hospitalImg/hospitalRandom34.jpg';
+import hospitalRandom35 from '../../assets/hospitalImg/hospitalRandom35.jpg';
+import hospitalRandom36 from '../../assets/hospitalImg/hospitalRandom36.jpg';
+import hospitalRandom37 from '../../assets/hospitalImg/hospitalRandom37.jpg';
+import hospitalRandom38 from '../../assets/hospitalImg/hospitalRandom38.jpg';
+import hospitalRandom39 from '../../assets/hospitalImg/hospitalRandom39.jpg';
+import hospitalRandom40 from '../../assets/hospitalImg/hospitalRandom40.jpg';
+
+
+
 import Title from "antd/es/typography/Title";
 import { Button,  Card,  Divider, Rate, Tag } from "antd";
 import { AppstoreAddOutlined, ClockCircleOutlined, CopyOutlined, EnvironmentOutlined, GlobalOutlined, MessageOutlined, PhoneOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
@@ -91,15 +128,18 @@ console.log("searchFromGangdong data: ", data);
             })
     }, [currentLang])
 
-    //  병원 이미지 데모 데이터
-    const images = [
-        hospitalRandom1,
-        hospitalRandom2,
-        hospitalRandom3,
-        hospitalRandom4,
-        hospitalRandom5,
-        hospitalRandom0
-    ];
+// 병원 이미지 데모 데이터
+const images = [
+    hospitalRandom1, hospitalRandom2, hospitalRandom3, hospitalRandom4, hospitalRandom5,
+    hospitalRandom6, hospitalRandom7, hospitalRandom8, hospitalRandom9, hospitalRandom10,
+    hospitalRandom11, hospitalRandom12, hospitalRandom13, hospitalRandom14, hospitalRandom15,
+    hospitalRandom16, hospitalRandom17, hospitalRandom18, hospitalRandom19, hospitalRandom20,
+    hospitalRandom21, hospitalRandom22, hospitalRandom23, hospitalRandom24, hospitalRandom25,
+    hospitalRandom26, hospitalRandom27, hospitalRandom28, hospitalRandom29, hospitalRandom30,
+    hospitalRandom31, hospitalRandom32, hospitalRandom33, hospitalRandom34, hospitalRandom35,
+    hospitalRandom36, hospitalRandom37, hospitalRandom38, hospitalRandom39, hospitalRandom40
+];
+
 
 
     // 주소 '복사' 버튼 로직
@@ -200,10 +240,16 @@ console.log("searchFromGangdong data: ", data);
 
             {/* 왼쪽: 이미지 + 병원 정보 */}
             <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-center w-full"> 
-                <div className="w-full max-w-xs sm:max-w-sm md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] overflow-hidden rounded-lg flex-shrink-0"> 
-                    <img alt="병원 이미지" src={images[hospitalId % 6]} className="w-full h-full object-cover" />
+                {/* 이미지와 안내 문구를 묶는 컨테이너 */}
+                <div className="flex flex-col items-center flex-shrink-0"> {/* 세로 정렬 및 크기 고정 */}
+                    <div className="w-full max-w-xs sm:max-w-sm md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] overflow-hidden rounded-lg">
+                    {/* <img alt="병원 이미지" src={images[hospitalId % 40]} className="w-full h-full object-cover" /> */}
+                    <img alt={t('hospitalInfo.hospitalImageAlt')} src={images[hospitalId % 40]} className="w-full h-full object-cover" />
+                    </div>
+                    {/* 이미지 바로 아래에 안내 문구 배치 */}
+                    <p className="text-xs text-gray-500 mt-5">{t('hospitalInfo.dummyImageNotice')}</p>
                 </div>
-                <div className="flex flex-col w-full md:w-auto"> 
+                <div className="flex flex-col w-full md:w-auto">
                     <div>
                         <Title level={2} className="!mb-2">{hospitalDetail.length > 0 && hospitalDetail[0].hospital_name}</Title>
                     </div>
@@ -220,7 +266,7 @@ console.log("searchFromGangdong data: ", data);
                         </span>
                     </div>
                     {sessionStorage.getItem("isLoggedIn") === "true" &&
-                        <Button variant="solid" style={{backgroundColor: "rgb(14 137 136)", color: "#fff"}} className="mt-3 self-start md:self-auto" onClick={handleRegisterHospitalClick}>
+                        <Button variant="solid" style={{backgroundColor: "rgb(14 137 136)", color: "#fff", maxWidth: '170px'}} className="mt-3 self-start md:self-auto" onClick={handleRegisterHospitalClick}>
                             {/* 진료 예약하기 */}
                             {t('hospitalInfo.bookAppointment')}
                         </Button>

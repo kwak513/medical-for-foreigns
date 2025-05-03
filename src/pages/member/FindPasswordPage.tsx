@@ -87,6 +87,7 @@ const FindPasswordPage = () => {
                     )}
 
                     {messageSent && (
+                    <>
                         <Alert
                             // message="메일 전송 완료"
                             // description="이메일로 비밀번호 재설정 링크를 발송했습니다. (미구현)"
@@ -95,9 +96,15 @@ const FindPasswordPage = () => {
                             type="success"
                             showIcon
                         />
+                        {/* Alert 아래에 small 태그 추가 */}
+                        <small style={{ color: "#888", display: "block", textAlign: 'center' }}>
+                            {t('findPasswordPage.mailNotReallySent')}
+                        </small>
+                    </>
+
                     )}
 
-                    <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                    <div style={{ textAlign: 'center'}}>
                         <Link to="/login">
                             {/* 로그인 페이지로 돌아가기 */}
                             {t('findIdPage.backToLogin')}

@@ -9,6 +9,7 @@
 "hospitalList": "병원 목록",
 "moreHospitals": "병원 더보기",
 "noResults": "검색한 병원명과 일치하는 병원 정보가 없습니다.",
+"loading": "불러오는 중...",
 "filter": {
     "availableLanguages": "가능 언어",
     "allLanguages": "전체 언어",
@@ -69,7 +70,7 @@
       "saturday": "토요일 09:00~13:00",
       "closed": "일요일/공휴일 휴무"
     },
-    "dummyTimeNotice": "※ 해당 정보는 실제 병원 데이터가 아닌 더미 데이터입니다.",
+    "dummyTimeNotice": "※ 표시된 진료 시간은 예시이며, 실제와 다를 수 있습니다.",
     "location": "오시는 길",
     "copyAddress": "복사",
     "addressCopied": "주소가 복사되었습니다.",
@@ -85,7 +86,9 @@
     "favoriteRemoved": "즐겨찾기에서 해제되었습니다.",
     "favoriteAddFailed": "즐겨찾기를 추가하지 못했습니다.",
     "favoriteRemoveFailed": "즐겨찾기를 해제하지 못했습니다.",
-    "favoriteCheckFailed": "즐겨찾기 여부를 불러오지 못했습니다."
+    "favoriteCheckFailed": "즐겨찾기 여부를 불러오지 못했습니다.",
+    "dummyImageNotice": "※ 이미지는 실제 병원과 다를 수 있습니다.",
+    "hospitalImageAlt": "병원 이미지"
 },
 "loginPage": {
     "title": "로그인",
@@ -126,7 +129,8 @@
     "requestButton": "비밀번호 재설정 메일 요청",
     "checkError": "서버 오류로 회원 존재 여부를 불러오지 못했습니다.",
     "mailSentTitle": "메일 전송 완료",
-    "mailSentDescription": "이메일로 비밀번호 재설정 링크를 발송했습니다. (미구현)"
+    "mailSentDescription": "이메일로 비밀번호 재설정 링크를 발송했습니다.",
+    "mailNotReallySent": "※ 실제 이메일 전송 기능은 활성화되지 않았습니다."
 },
 "myPage": {
     "loginRequired": "로그인이 필요합니다.",
@@ -194,7 +198,9 @@
 "layout": {
     "menu": {
         "findHospital": "병원 찾기",
-        "mypage": "마이페이지"
+        "mypage": "마이페이지",
+        "aboutUs": "회사 소개",
+        "contact": "문의하기"
     },
     "welcomeMessage": "Doctor K에 오신 것을 환영합니다",
     "loginSignup": "로그인 · 회원가입",
@@ -216,6 +222,7 @@
     "languageLabel": "희망 언어:",
     "symptomLabel": "증상/과목:",
     "detailsLabel": "자세한 증상 설명:",
+    "fillAllFields": "모든 항목을 입력해주세요.",
     "detailsPlaceholder": "ex) 머리가 아프고 열이 나요.",
     "submitButton": "예약하기",
     "confirmMessage": "예약을 진행하시겠습니까?",
@@ -261,5 +268,4 @@
     "failureMessage": "리뷰 수정에 실패했습니다.",
     "serverErrorMessage": "서버 오류로 리뷰 수정에 실패했습니다."
 }
-
 }

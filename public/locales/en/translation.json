@@ -9,6 +9,7 @@
 "hospitalList": "Hospital List",
 "moreHospitals": "More Hospitals",
 "noResults": "No hospital information matches the searched name.",
+"loading": "Loading...",
 "filter": {
     "availableLanguages": "Available Languages",
     "allLanguages": "All Languages",
@@ -19,7 +20,7 @@
     "russian": "Russian",
     "vietnamese": "Vietnamese",
     "mongolian": "Mongolian",
-    "middleEastern": "Middle Eastern",
+    "middleEastern": "Arabic",
     "uzbek": "Uzbek",
     "medicalDepartment": "Medical Department",
     "allDepartments": "All Departments",
@@ -69,7 +70,7 @@
       "saturday": "Saturday 09:00-13:00",
       "closed": "Closed on Sundays/Holidays"
     },
-    "dummyTimeNotice": "※ This information is dummy data, not actual hospital data.",
+    "dummyTimeNotice": "※ Operating hours information is an example and may differ from actual hours.",
     "location": "Location",
     "copyAddress": "Copy",
     "addressCopied": "Address copied to clipboard.",
@@ -85,7 +86,9 @@
     "favoriteRemoved": "Removed from favorites.",
     "favoriteAddFailed": "Failed to add to favorites.",
     "favoriteRemoveFailed": "Failed to remove from favorites.",
-    "favoriteCheckFailed": "Failed to load favorite status."
+    "favoriteCheckFailed": "Failed to load favorite status.",
+    "dummyImageNotice": "※ Image may differ from the actual hospital.",
+    "hospitalImageAlt": "Hospital Image"
 },
 "loginPage": {
     "title": "Login",
@@ -126,7 +129,8 @@
     "requestButton": "Request Password Reset Email",
     "checkError": "Failed to check user existence due to a server error.",
     "mailSentTitle": "Email Sent",
-    "mailSentDescription": "A password reset link has been sent to your email. (Not implemented)"
+    "mailSentDescription": "A password reset link has been sent to your email. ",
+    "mailNotReallySent": "※ The email sending feature is not activated."
 },
 "myPage": {
     "loginRequired": "Login is required.",
@@ -194,7 +198,9 @@
 "layout": {
     "menu": {
         "findHospital": "Find Hospital",
-        "mypage": "My Page"
+        "mypage": "My Page",
+        "aboutUs": "About Us",
+        "contact": "Contact Us"
     },
     "welcomeMessage": "Welcome to Doctor K",
     "loginSignup": "Login · Sign Up",
@@ -217,6 +223,7 @@
     "languageLabel": "Preferred Language:",
     "symptomLabel": "Symptom/Department:",
     "detailsLabel": "Detailed Symptoms:",
+    "fillAllFields": "Please fill in all fields." },
     "detailsPlaceholder": "ex) I have a headache and fever.",
     "submitButton": "Book Appointment",
     "confirmMessage": "Do you want to proceed with the booking?",

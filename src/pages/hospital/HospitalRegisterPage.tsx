@@ -228,6 +228,16 @@ useEffect(() => {
     const navigate =useNavigate();
 
     const handleRegisterClick = () => {
+      // 모든 필수 필드가 채워졌는지 한 번에 확인
+      if (
+        !selectedDate || !selectedLanguage || !mainCategory || !subCategory ||
+        !detailSymptom || detailSymptom.trim() === ''
+      ) {
+        alert(t('hospitalRegisterPage.fillAllFields'));
+        return;
+      }
+
+
       if(window.confirm((t('hospitalRegisterPage.confirmMessage')))){
         
         const reservationDto = {

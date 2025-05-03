@@ -4,7 +4,42 @@ import hospitalRandom2 from '../../assets/hospitalImg/hospitalRandom2.jpg';
 import hospitalRandom3 from '../../assets/hospitalImg/hospitalRandom3.jpg';
 import hospitalRandom4 from '../../assets/hospitalImg/hospitalRandom4.jpg';
 import hospitalRandom5 from '../../assets/hospitalImg/hospitalRandom5.jpg';
-import hospitalRandom0 from '../../assets/hospitalImg/hospitalRandom6.jpg';
+import hospitalRandom6 from '../../assets/hospitalImg/hospitalRandom6.jpg';
+import hospitalRandom7 from '../../assets/hospitalImg/hospitalRandom7.jpg';
+import hospitalRandom8 from '../../assets/hospitalImg/hospitalRandom8.jpg';
+import hospitalRandom9 from '../../assets/hospitalImg/hospitalRandom9.jpg';
+import hospitalRandom10 from '../../assets/hospitalImg/hospitalRandom10.jpg';
+import hospitalRandom11 from '../../assets/hospitalImg/hospitalRandom11.jpg';
+import hospitalRandom12 from '../../assets/hospitalImg/hospitalRandom12.jpg';
+import hospitalRandom13 from '../../assets/hospitalImg/hospitalRandom13.jpg';
+import hospitalRandom14 from '../../assets/hospitalImg/hospitalRandom14.jpg';
+import hospitalRandom15 from '../../assets/hospitalImg/hospitalRandom15.jpg';
+import hospitalRandom16 from '../../assets/hospitalImg/hospitalRandom16.jpg';
+import hospitalRandom17 from '../../assets/hospitalImg/hospitalRandom17.jpg';
+import hospitalRandom18 from '../../assets/hospitalImg/hospitalRandom18.jpg';
+import hospitalRandom19 from '../../assets/hospitalImg/hospitalRandom19.jpg';
+import hospitalRandom20 from '../../assets/hospitalImg/hospitalRandom20.jpg';
+import hospitalRandom21 from '../../assets/hospitalImg/hospitalRandom21.jpg';
+import hospitalRandom22 from '../../assets/hospitalImg/hospitalRandom22.jpg';
+import hospitalRandom23 from '../../assets/hospitalImg/hospitalRandom23.jpg';
+import hospitalRandom24 from '../../assets/hospitalImg/hospitalRandom24.jpg';
+import hospitalRandom25 from '../../assets/hospitalImg/hospitalRandom25.jpg';
+import hospitalRandom26 from '../../assets/hospitalImg/hospitalRandom26.jpg';
+import hospitalRandom27 from '../../assets/hospitalImg/hospitalRandom27.jpg';
+import hospitalRandom28 from '../../assets/hospitalImg/hospitalRandom28.jpg';
+import hospitalRandom29 from '../../assets/hospitalImg/hospitalRandom29.jpg';
+import hospitalRandom30 from '../../assets/hospitalImg/hospitalRandom30.jpg';
+import hospitalRandom31 from '../../assets/hospitalImg/hospitalRandom31.jpg';
+import hospitalRandom32 from '../../assets/hospitalImg/hospitalRandom32.jpg';
+import hospitalRandom33 from '../../assets/hospitalImg/hospitalRandom33.jpg';
+import hospitalRandom34 from '../../assets/hospitalImg/hospitalRandom34.jpg';
+import hospitalRandom35 from '../../assets/hospitalImg/hospitalRandom35.jpg';
+import hospitalRandom36 from '../../assets/hospitalImg/hospitalRandom36.jpg';
+import hospitalRandom37 from '../../assets/hospitalImg/hospitalRandom37.jpg';
+import hospitalRandom38 from '../../assets/hospitalImg/hospitalRandom38.jpg';
+import hospitalRandom39 from '../../assets/hospitalImg/hospitalRandom39.jpg';
+import hospitalRandom40 from '../../assets/hospitalImg/hospitalRandom40.jpg';
+
 import { useEffect, useState, useMemo } from "react"; // Re-add useMemo for clarity if preferred, or remove later
 import { filterHospitalByLangDepartLocation, searchAndFilterEnHospital, searchAndFilterHospital, select15FromEnHospital, select15FromGangnamGangDongHospital, selectByHospitalName } from "../../api/chartboardApi";
 import { AppstoreAddOutlined, DownOutlined, EnvironmentOutlined, GlobalOutlined, SmileOutlined } from "@ant-design/icons";
@@ -78,7 +113,7 @@ const HospitalMainPage = () => {
 
         const koMap = {
             // Languages
-            korean: '한국어', english: '영어', chinese: '중국어', japanese: '일본어', russian: '러시아어', vietnamese: '베트남어', mongolian: '몽골어', middleEastern: '아랍어', uzbek: '우즈베키스탄어',
+            korean: '', english: '영어', chinese: '중국어', japanese: '일본어', russian: '러시아어', vietnamese: '베트남어', mongolian: '몽골어', middleEastern: '아랍어', uzbek: '우즈베키스탄어',
             // Departments
             pediatrics: '소아청소년과', dentistry: '치과', ent: '이비인후과', dermatology: '피부과', obgyn: '산부인과', ophthalmology: '안과', psychiatry: '정신건강의학과', plasticSurgery: '성형외과', orthopedics: '정형외과', oriental: '한방각과', urology: '비뇨기과', familyMedicine: '가정의학과', internal: '내과', surgery: '외과', thoracicSurgery: '흉부외과', anesthesiology: '마취통증의학과', radiology: '영상의학과', neurology: '신경과', neurosurgery: '신경외과', rehabilitation: '재활의학과',
             // Regions
@@ -86,7 +121,7 @@ const HospitalMainPage = () => {
         };
         const enMap = {
                 // Languages
-            korean: 'Korean', english: 'English', chinese: 'Chinese', japanese: 'Japanese', russian: 'Russian', vietnamese: 'Vietnamese', mongolian: 'Mongolian', middleEastern: 'Middle Eastern', uzbek: 'Uzbek',
+            korean: '', english: 'English', chinese: 'Chinese', japanese: 'Japanese', russian: 'Russian', vietnamese: 'Vietnamese', mongolian: 'Mongolian', middleEastern: 'Arabic', uzbek: 'Uzbek',
             // Departments
             // Match case/format from DB examples (mostly lowercase) based on provided list
             pediatrics: 'pediatrics', dentistry: 'dentistry', ent: 'otolaryngology', dermatology: 'dermatology', obgyn: 'obstetrics and gynecology', ophthalmology: 'ophthalmology', psychiatry: 'psychiatry', plasticSurgery: 'plastic surgery', orthopedics: 'orthopedics', oriental: 'oriental medicine department', urology: 'urology', familyMedicine: 'family medicine', internal: 'internal medicine', surgery: 'surgery', thoracicSurgery: 'thoracic surgery', anesthesiology: 'anesthesiology and pain medicine', radiology: 'radiology', neurology: 'neurology', neurosurgery: 'neurosurgery', rehabilitation: 'rehabilitation medicine',
@@ -98,8 +133,13 @@ const HospitalMainPage = () => {
         return map[key as keyof typeof map] || ''; 
     };
 
+    // 로딩
+    const [isLoading, setIsLoading] = useState(true);
+
     // 병원 데이터 불러오기
     const loadHospitalData = () => {
+
+        setIsLoading(true); // 로딩 중
 
         // key 값 기준으로, 백엔드에 보낼 값 매핑하는 getApiFilterValue 호출
         const apiLangValue = getApiFilterValue(selectedLanguageKey);
@@ -119,8 +159,10 @@ const HospitalMainPage = () => {
                     setHasMoreInfo(true); // 15개면 더보기 버튼 활성화 (백엔드에서 데이터 로딩 시, limit 15임)
                 }
                 setHospitalInfo((prev) => offset === 0 ? list : [...prev, ...list]); // offset 0이면 초기화, 아니면 데이터 누적
+                setIsLoading(false); // 로딩 X
             })
                 .catch((err) => {
+                    setIsLoading(false); // 로딩 X
                     console.log("searchAndFilterHospital 병원 필터링 실패: ", err);
                     // alert("병원 필터링을 실패했습니다.");
                     alert(t('alert.filterFailed'));
@@ -139,8 +181,10 @@ const HospitalMainPage = () => {
                         setHasMoreInfo(true); // 30개면 더보기 버튼 활성화 (백엔드에서 데이터 로딩 시, limit 30임)
                     }
                     setHospitalInfo((prev) => offset === 0 ? list : [...prev, ...list]); // offset 0이면 초기화, 아니면 데이터 누적
+                    setIsLoading(false); // 로딩 X
                 })
                 .catch((err) => {
+                    setIsLoading(false); // 로딩 X
                     console.log("병원 정보 불러오기 실패: ", err);
                     alert(t('alert.loadFailed'));
                 });
@@ -160,15 +204,17 @@ useEffect(() => {
 }, [searchHospitalName, offset, selectedLanguageKey, selectedDepartmentKey, selectedLocationKey, currentLang]); // Use key states
 
 
-    //  병원 이미지 데모 데이터
-    const images = [
-        hospitalRandom1,
-        hospitalRandom2,
-        hospitalRandom3,
-        hospitalRandom4,
-        hospitalRandom5,
-        hospitalRandom0
-    ];
+// 병원 이미지 데모 데이터
+const images = [
+    hospitalRandom1, hospitalRandom2, hospitalRandom3, hospitalRandom4, hospitalRandom5,
+    hospitalRandom6, hospitalRandom7, hospitalRandom8, hospitalRandom9, hospitalRandom10,
+    hospitalRandom11, hospitalRandom12, hospitalRandom13, hospitalRandom14, hospitalRandom15,
+    hospitalRandom16, hospitalRandom17, hospitalRandom18, hospitalRandom19, hospitalRandom20,
+    hospitalRandom21, hospitalRandom22, hospitalRandom23, hospitalRandom24, hospitalRandom25,
+    hospitalRandom26, hospitalRandom27, hospitalRandom28, hospitalRandom29, hospitalRandom30,
+    hospitalRandom31, hospitalRandom32, hospitalRandom33, hospitalRandom34, hospitalRandom35,
+    hospitalRandom36, hospitalRandom37, hospitalRandom38, hospitalRandom39, hospitalRandom40
+];
 
     // '병원 더보기' 버튼 누르면, offset(시작 인덱스) 값 15씩 증가
     const handleMoreHospitalClick = () => {
@@ -280,7 +326,7 @@ useEffect(() => {
     // };
 
 
-
+    
 
 
 
@@ -307,7 +353,9 @@ useEffect(() => {
                     {selectedDepartmentDisplay} 
                 </Button>
                 <Modal title={t('filter.selectDepartment')} //"진료 과목 선택" 
-                    open={isDepartmentModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    open={isDepartmentModalOpen} onOk={handleOk} onCancel={handleCancel} 
+                    styles={{ body: {maxHeight: '60vh', overflowY: 'auto'} }}
+                    >
                     <Card>
                         <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('allDepartments')}>{t('filter.allDepartments')}</Card.Grid>
                         <Card.Grid style={gridStyle} onClick={() => setSelectedDepartmentKey('pediatrics')}>{t('filter.department.pediatrics')}</Card.Grid>
@@ -341,7 +389,9 @@ useEffect(() => {
                     {selectedLocationDisplay} {/* Display translated text */}
                 </Button>
                 <Modal title={t('filter.selectRegion')} //"지역 선택" 
-                    open={isLocationModalOpen} onOk={handleLocationOk} onCancel={handleLocationCancel}>
+                    open={isLocationModalOpen} onOk={handleLocationOk} onCancel={handleLocationCancel}
+                    styles={{ body: {maxHeight: '60vh', overflowY: 'auto'} }}
+                    >
                     <small style={{ color: "#888", display: "block", marginTop: "10px", marginBottom: "10px" }}>
                         {/* ※ 현재 강남구와 강동구 정보만 제공됩니다.  */}
                         {t('filter.regionNotice')}
@@ -386,12 +436,32 @@ useEffect(() => {
 
                         {/* 오른쪽 이미지*/}
                         <div className="w-24 h-24 overflow-hidden rounded-lg flex-shrink-0"> 
-                            <img alt="병원 이미지" src={images[info.hospital_id % 6]} className="w-full h-full object-cover" />
+                            <img alt="병원 이미지" src={images[info.hospital_id % 40]} className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </Card>
             ))}
         </div>
+
+        {!isLoading && (hospitalInfo == null || hospitalInfo.length <= 0) &&
+            <div className="flex justify-center">
+                <Title level={5}>
+                    {/* 검색한 병원명과 일치하는 병원 정보가 없습니다. */}
+                    {t('noResults')}
+                </Title>
+            </div>
+            
+        }
+
+        {/* 로딩 중일떄 화면 */}
+        {isLoading && 
+            <div className="flex justify-center">
+                <Title level={5}>
+                    {/* 불러오는 중 */}
+                    {t('loading')}
+                </Title>
+            </div>
+        }
 
 
         {hasMoreInfo && hospitalInfo.length > 0 &&
@@ -404,15 +474,7 @@ useEffect(() => {
         }
 
 
-        {hospitalInfo == null || hospitalInfo.length <= 0 &&
-            <div className="flex justify-center">
-                <Title level={5}>
-                    {/* 검색한 병원명과 일치하는 병원 정보가 없습니다. */}
-                    {t('noResults')}
-                </Title>
-            </div>
-            
-        }
+        
         </>
     );
 }
