@@ -65,10 +65,10 @@
     "medicalDepartment": "Medical Department",
     "operatingHours": "Operating Hours",
     "operatingHoursDetails": { 
-      "weekdays": "Mon-Fri 09:00-18:00",
-      "lunch": "(Lunch Break 12:00-13:00)",
-      "saturday": "Saturday 09:00-13:00",
-      "closed": "Closed on Sundays/Holidays"
+        "weekdays": "Mon-Fri 09:00-18:00",
+        "lunch": "(Lunch Break 12:00-13:00)",
+        "saturday": "Saturday 09:00-13:00",
+        "closed": "Closed on Sundays/Holidays"
     },
     "dummyTimeNotice": "※ Operating hours information is an example and may differ from actual hours.",
     "location": "Location",
@@ -223,7 +223,7 @@
     "languageLabel": "Preferred Language:",
     "symptomLabel": "Symptom/Department:",
     "detailsLabel": "Detailed Symptoms:",
-    "fillAllFields": "Please fill in all fields." },
+    "fillAllFields": "Please fill in all fields." ,
     "detailsPlaceholder": "ex) I have a headache and fever.",
     "submitButton": "Book Appointment",
     "confirmMessage": "Do you want to proceed with the booking?",
@@ -234,7 +234,7 @@
     "symptoms": { 
         "coldFlu": "Cold/Flu",
         "subColdFlu": "Cold"
-    }
+        }
 },
 "changeReservationPage": {
     "pageTitleSuffix": "Change Appointment",

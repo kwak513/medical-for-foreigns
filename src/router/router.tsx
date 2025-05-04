@@ -65,8 +65,8 @@ const router = createBrowserRouter([
             {path: "/changereview", element: <Suspense fallback={<LoadingScreen />}><ChangeReviewPage /></Suspense>},
             {path: "/changereservation", element: <Suspense fallback={<LoadingScreen />}><ChangeReservtationPage /></Suspense>},
             
-            {path: "/about", element: <Suspense fallback={<LoadingScreen />}><AboutUsPage /></Suspense>},
-            {path: "/contact", element: <Suspense fallback={<LoadingScreen />}><ContactUsPage /></Suspense>},
+            // {path: "/about", element: <Suspense fallback={<LoadingScreen />}><AboutUsPage /></Suspense>},
+            // {path: "/contact", element: <Suspense fallback={<LoadingScreen />}><ContactUsPage /></Suspense>},
         ]
 
     }
