@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteMemberFavorite, deleteReservation, deleteReview, selectFromHospitalReservation, selectFromHospitalReservationEn, selectFromMemberFavorite, selectFromMemberFavoriteEn, selectReviewByMemberId, selectReviewByMemberIdEn, selectUserInfo, selectUsername } from "../../api/chartboardApi";
+import { deleteMemberFavorite, deleteReservation, deleteReview, selectFromHospitalReservation, selectFromHospitalReservationEn, selectFromMemberFavorite, selectFromMemberFavoriteEn, selectReviewByMemberId, selectReviewByMemberIdEn, selectUserInfo } from "../../api/chartboardApi";
 import { CalendarOutlined, DeleteOutlined, EditOutlined, EnvironmentOutlined, HeartOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import { Button, Card, Descriptions, Divider, List, Popconfirm, Rate, Space, Tag, Typography } from "antd";

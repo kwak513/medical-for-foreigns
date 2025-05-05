@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_SERVER_URL = "http://localhost:8080";
+// const API_SERVER_URL = "http://localhost:8080";
+const API_SERVER_URL = "http://3.34.94.184:8080";
 
 //------------------------ 병원 관련 ------------------------
 // 메인 리스트 페이지에서 사용할 강남구와 강동구 병원 정보 가져오기(id, 병원명, 시·구 주소, 가능 언어, 대표과 1개)

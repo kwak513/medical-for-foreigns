@@ -41,7 +41,7 @@ import hospitalRandom39 from '../../assets/hospitalImg/hospitalRandom39.jpg';
 import hospitalRandom40 from '../../assets/hospitalImg/hospitalRandom40.jpg';
 
 import { useEffect, useState, useMemo } from "react"; // Re-add useMemo for clarity if preferred, or remove later
-import { filterHospitalByLangDepartLocation, searchAndFilterEnHospital, searchAndFilterHospital, select15FromEnHospital, select15FromGangnamGangDongHospital, selectByHospitalName } from "../../api/chartboardApi";
+import { searchAndFilterEnHospital, searchAndFilterHospital, select15FromEnHospital, select15FromGangnamGangDongHospital } from "../../api/chartboardApi";
 import { AppstoreAddOutlined, DownOutlined, EnvironmentOutlined, GlobalOutlined, SmileOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import Title from "antd/es/typography/Title";
@@ -66,8 +66,14 @@ const HospitalMainPage = () => {
     const location = useLocation();
     const {searchHospitalName} = location.state || {};
 
+    // 컨텍스트 타입을 정의하는 인터페이스 추가
+interface HospitalMainPageContext {
+    offset: number;
+    setOffset: React.Dispatch<React.SetStateAction<number>>;
+    }
+    
     // MainLayout에서 Outlet에 context로 보낸 걸 받아옴.
-    const { offset, setOffset} = useOutletContext();
+    const { offset, setOffset} = useOutletContext<HospitalMainPageContext>();
 
 
     // 백엔드에서 select15FromGangnamGangDongHospital, selectByHospitalName 호출하면 나올 JSON 형식
