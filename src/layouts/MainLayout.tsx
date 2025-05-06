@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
-  InfoCircleOutlined,
-  MailOutlined,
+  MenuOutlined, // 햄버거 메뉴 
   SafetyOutlined,
   UserOutlined,
 
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Button, FloatButton, Layout, Menu, theme } from 'antd';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Button, Drawer, FloatButton, Layout, Menu, theme, Grid, Row, Col } from 'antd'; 
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'; 
 import longLogoResize from '../assets/longLogoResize.png';
 import Search from 'antd/es/input/Search';
 import LanguageSwitcher from '../components/LanguageSwitcher';
@@ -16,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-
+const { useBreakpoint } = Grid; 
 
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -44,7 +43,7 @@ function getItem(
 
 
 const ChartBoardLayout: React.FC = () => {
-  // const [collapsed, setCollapsed] = useState(false);
+  const screens = useBreakpoint(); // 현재 화면 크기 
   const { t } = useTranslation();
 
   // 메뉴 아이템 정의 (컴포넌트 내부로 이동)
@@ -56,6 +55,9 @@ const ChartBoardLayout: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  // Sider 너비 
+  const siderWidth = screens.md ? 200 : 0;
 
   const navigate = useNavigate();
 
@@ -83,9 +85,8 @@ const ChartBoardLayout: React.FC = () => {
   }
 
   useEffect(() => {
-    // 검색어가 비어있으면 (공백이면) HospitalMainPage로 이동 => 사용자가 검색어 지우고 검색 버튼 안눌러도 자동으로 해줘야, 필터링 제대로 적용됨.
     if (searchHospitalName.trim() === '') {
-      navigate("/hospital"); // 검색어 없이 이동
+        navigate("/hospital"); 
     }
   }, [searchHospitalName, navigate]);
 
@@ -106,116 +107,175 @@ const ChartBoardLayout: React.FC = () => {
     navigate("/login")
   }
 
-  // useEffect(() => {
-  //   const script = document.createElement('script');
-  //   script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-  //   script.async = true;
-  //   script.onload = () => {
-  //     new window.google.translate.TranslateElement({ pageLanguage: 'ko' }, 'google_translate_element');
-  //   };
-  //   document.body.appendChild(script);
 
-  //   return () => {
-  //     const googleScript = document.querySelector('script[src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"]');
-  //     if (googleScript) {
-  //       document.body.removeChild(googleScript);
-  //     }
-  //   };
+  // 모바일에서 햄버거 메뉴
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
-  // }, []);
+  const showDrawer = () => {
+    setDrawerVisible(true);
+  };
+  const closeDrawer = () => {
+    setDrawerVisible(false);
+  }
+  
+  //내부 메뉴 클릭 시 
+  const handleDrawerMenuClick = (e: any) => {
+    handleMenuClick(e); 
+    closeDrawer(); 
+  }
+
+  // 현재 보고 있는 메뉴가 무엇인지 표시하기 위해서,
+  const location = useLocation();
 
   return (
-    <Layout style={{ minHeight: '100vh', marginLeft: 200}}>
-      <div style={{width: '100%', height: '38px', position: 'fixed', left: 0, top: 0, backgroundColor: 'oklch(0.19 0.05 247.28)', zIndex: 1000, textAlign: 'center', color: '#fff', lineHeight: '38px'}}>
-        {/* Welcome to Doctor K */}
+    <Layout style={{ minHeight: '100vh' }}> 
+      <div style={{width: '100%', height: '38px', position: 'fixed', left: 0, top: 0, backgroundColor: 'oklch(0.19 0.05 247.28)', zIndex: 1001, textAlign: 'center', color: '#fff', lineHeight: '38px'}}> 
         {t('layout.welcomeMessage')}
       </div>
 
-      <Sider /* collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} */style={{ height: '100vh', overflow: 'auto', position: 'fixed', left: 0, top: '38px'}}>
-        <Menu theme="dark" defaultSelectedKeys={['/hospital']} mode="inline" items={items} onClick={handleMenuClick} />
-      </Sider>
-      <Layout>
+      {/* md 사이즈 이상일 때만 Sider */}
+      {screens.md && (
+        <Sider
+          width={200} 
+          style={{
+            height: 'calc(100vh - 38px)', 
+            overflow: 'auto',
+            position: 'fixed',
+            left: 0,
+            top: '38px', 
+            zIndex: 1000 
+          }}>
+          <Menu theme="dark" selectedKeys={[location.pathname]} mode="inline" items={items} onClick={handleMenuClick} />
+        </Sider>
+      )}
+
+      <Layout style={{ marginLeft: siderWidth, marginTop: '38px' }}>
 
       <Header
         style={{
           position: "fixed",
           top: '38px',
-          left: 200,
-          width: "calc(100% - 200px)",
-          zIndex: 1,
-          padding: "0 16px",
+          left: siderWidth, 
+          width: `calc(100% - ${siderWidth}px)`, 
+          zIndex: 1000, 
+          padding: screens.md ? "0 16px" : "0 8px", 
           background: colorBgContainer,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          // overflow: 'hidden'
+          height: 'auto', 
+          minHeight: '64px', 
+          display: 'flex', 
+          alignItems: 'center' 
         }}
       >
-        {/* 왼쪽: 로고 */}
-        <div style={{cursor: "pointer"}} onClick={handleLogoClick}>
-          <img src={longLogoResize} style={{ height: "30px" }} />
-        </div>
-        
+        {/* Header 내용을 Row와 Col로 구성 */}
+        <Row justify="space-between" align="middle" style={{ width: '100%' }}>
+          {/* 왼쪽: 로고 (및 모바일 메뉴 버튼) */}
+          <Col xs={18} sm={18} md={8} lg={6} xl={5}> 
+             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+               {/* md 미만일 때 햄버거 버튼 표시 */}
+               {!screens.md && (
+                 <Button type="text" icon={<MenuOutlined />} onClick={showDrawer} />
+               )}
+               <div style={{ cursor: "pointer" }} onClick={handleLogoClick}>
+                 <img src={longLogoResize} style={{ height: "30px", display: 'block' }} alt="Logo" />
+               </div>
+             </div>
+          </Col>
 
-        {/* 오른쪽: 검색창 + 버튼 */}
-        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+          {/* 오른쪽: 검색창 + 버튼 */}
+          {/* md 사이즈 미만에서는 숨김 처리 */}
+          <Col xs={6} sm={6} md={16} lg={18} xl={19}> 
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "15px", 
+              flexWrap: "nowrap", 
+              justifyContent: 'flex-end', 
+            }}>
 
-        {/* 구글 언어 선택
-        <div id="google_translate_element" style={{ marginRight: "10px", width: "100px", height: "50px"}}></div> */}
+              {/* 언어 전환 버튼 (md 사이즈 이상에서만 표시) */}
+              {screens.md && <LanguageSwitcher />}
 
-          {/* 언어 전환 버튼 추가 */}
-          <LanguageSwitcher />
+              {/* 검색창 (md 사이즈 이상에서만 표시) */}
+              {screens.md && (
+                <Search
+                  placeholder={t('searchPlaceholder')}
+                  onSearch={onSearch}
+                  style={{ width: 300 }} 
+                  value={searchHospitalName}
+                  onChange={(e) => { setSearchHospitalName(e.target.value) }}
+                />
+              )}
 
-
-          <Search
-            // placeholder="병원명 검색하기"
-            placeholder={t('searchPlaceholder')}
-            onSearch={onSearch}
-            style={{ width: 300 }}
-            value={searchHospitalName}
-            onChange={(e) => {setSearchHospitalName(e.target.value)}}
-          />
-
-          {sessionStorage.getItem("isLoggedIn") !== "true" &&
-            <Button onClick={handleMemberClick}>
-              {/* 로그인 · 회원가입 */}
-              {t('layout.loginSignup')}
-            </Button>
-          }
-          {sessionStorage.getItem("isLoggedIn") === "true" &&
-            <Button onClick={handleLogoutClick}>
-              {/* 로그아웃 */}
-              {t('logout')}
-            </Button>
-          }
-        </div>
+              {/* 로그인/로그아웃 버튼 (md 사이즈 이상에서만 표시) */}
+              {screens.md && (
+                sessionStorage.getItem("isLoggedIn") !== "true" ? (
+                  <Button onClick={handleMemberClick}>
+                    {t('layout.loginSignup')}
+                  </Button>
+                ) : (
+                  <Button onClick={handleLogoutClick}>
+                    {t('logout')}
+                  </Button>
+                )
+              )}
+            </div>
+          </Col>
+        </Row>
       </Header>
 
+      {/* 모바일 메뉴 Drawer */}
+      <Drawer
+        title={t('layout.menu.title')} 
+        placement="left"
+        closable={true}
+        onClose={closeDrawer}
+        open={drawerVisible}
+        key="left-drawer"
+        width={280} // Drawer 너비 설정
+        bodyStyle={{ padding: 0 }} // flex 관련 스타일 제거
+      >
+        {/* Drawer 메뉴 영역 */}
+        <div> {/* 스크롤 및 높이 관련 스타일 제거 */}
+          <Menu
+            theme="light" 
+            mode="inline"
+            items={items}
+            onClick={handleDrawerMenuClick} 
+            selectedKeys={[location.pathname]} 
+          /> 
+        </div>
+        {/* 메뉴 하단 추가 기능 영역 (기존 하단 영역 내용을 여기로 이동) */}
+        <div style={{ padding: '16px', borderTop: '1px solid #f0f0f0' }}> {/* 구분선 및 패딩 */}
+          <div style={{ marginBottom: '10px' }}>
+            <LanguageSwitcher />
+          </div>
+          {sessionStorage.getItem("isLoggedIn") !== "true" ? (
+            <Button type="primary" block onClick={() => { handleMemberClick(); closeDrawer(); }}>
+              {t('layout.loginSignup')}
+            </Button>
+          ) : (
+            <Button block onClick={() => { handleLogoutClick(); closeDrawer(); }}>
+              {t('logout')}
+            </Button>
+          )}
+          <div style={{ marginTop: '15px' }}>
+            <Search
+              placeholder={t('searchPlaceholder')}
+              onSearch={(value) => { onSearch(); closeDrawer(); }}
+              value={searchHospitalName}
+              onChange={(e) => { setSearchHospitalName(e.target.value) }}
+            />
+          </div>
+        </div>
+      </Drawer>
 
 
-        <Content style={{ margin: '16px', marginTop: '118px' }}>
+        <Content style={{ margin: '16px', marginTop: '80px' }}>
 
-        {/* <Content
-          style={{
-            position: 'fixed',  // 구글 번역 header 생기면, 밀려서 방지하고자 marginTop 대신 fixed로 바꿈
-            top: '118px',
-            left: '200px', // Sider 너비
-            right: '0',
-            bottom: '0',
-            padding: '16px',
-            overflow: 'auto', // 넘치면 내부 스크롤
-          }}
-          id="scrollable-content"
-        > */}
-  
-          {/* <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb> */}
           <div
             style={{
               padding: 24,
-              minHeight: 360,
+              minHeight: `calc(100vh - 38px - 80px - 50px - 32px)`, 
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}
@@ -224,15 +284,11 @@ const ChartBoardLayout: React.FC = () => {
             <Outlet context={{offset, setOffset}}/>
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer style={{ textAlign: 'center', padding: '15px 0' }}> 
+          Doctor K ©2025
         </Footer>
 
         <FloatButton.BackTop visibilityHeight={0} />
-
-        <FloatButton.BackTop
-        visibilityHeight={0}
-        // target={() => document.getElementById('scrollable-content')}
-/>
 
       </Layout>
     </Layout>

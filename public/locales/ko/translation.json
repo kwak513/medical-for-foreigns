@@ -12,7 +12,7 @@
 "loading": "불러오는 중...",
 "filter": {
     "availableLanguages": "가능 언어",
-    "allLanguages": "전체 언어",
+    "allLanguages": "언어 무관",
     "korean": "한국어",
     "english": "영어",
     "chinese": "중국어",
@@ -189,7 +189,7 @@
 "changeUserInfoPage": {
     "title": "회원 정보 수정",
     "loadingError": "회원 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
-    "passwordPlaceholder": "새 비밀번호 (변경 시 입력)",
+    "passwordPlaceholder": "기존 비밀번호 또는 수정할 비밀번호",
     "updateSuccess": "정보가 수정되었습니다.",
     "updateFailed": "정보 수정에 실패했습니다.",
     "updateError": "서버 오류로 정보 수정에 실패했습니다.",
@@ -204,7 +204,8 @@
     },
     "welcomeMessage": "Doctor K에 오신 것을 환영합니다",
     "loginSignup": "로그인 · 회원가입",
-    "logoutSuccess": "로그아웃 되었습니다."
+    "logoutSuccess": "로그아웃 되었습니다.",
+    "sortByDistance": "거리순 정렬"
 },
 "alert": {
     "filterFailed": "병원 필터링을 실패했습니다.",

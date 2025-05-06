@@ -95,18 +95,21 @@ interface HospitalMainPageContext {
 
 
     // 필터링 조건 바뀌면 키 값
-    const [selectedLanguageKey, setSelectedLanguageKey] = useState('allLanguages');
+    const [selectedLanguageKey, setSelectedLanguageKey] = useState(' ');
     const [selectedDepartmentKey, setSelectedDepartmentKey] = useState('allDepartments');
     const [selectedLocationKey, setSelectedLocationKey] = useState('allRegions');
 
     // 필터링 조건 바뀔때 화면에 보여줄 값
     const selectedLanguageDisplay = t(`filter.${selectedLanguageKey}`);
+
     const selectedDepartmentDisplay = selectedDepartmentKey === 'allDepartments' ? t('filter.allDepartments') : t(`filter.department.${selectedDepartmentKey}`); 
+    
     const selectedLocationDisplay = selectedLocationKey === 'allRegions' ? t('filter.allRegions') : t(`filter.regions.${selectedLocationKey}`);
 
     // 필터링 조건 선택되었는지 확인
     const isFilterSelected = 
-        selectedLanguageKey !== 'allLanguages' ||
+        // selectedLanguageKey !== 'allLanguages' && ' ' ||
+        (selectedLanguageKey !== ' ' && selectedLanguageKey !== 'allLanguages') ||
         selectedDepartmentKey !== 'allDepartments' ||
         selectedLocationKey !== 'allRegions';
 
@@ -347,7 +350,15 @@ const images = [
                     // setSelectedLanguage(e.target.key)
                     }}>
                 <Space>
-                    {selectedLanguageDisplay} 
+                    {/* {selectedLanguageDisplay}  */}
+
+                    {/* 초기 상태('')일 때는 '가능 언어', 그 외에는 선택된 언어 표시 */}
+                    {selectedLanguageKey === ' '
+                        ? t('filter.availableLanguages')
+                        : t(`filter.${selectedLanguageKey}`)} 
+                
+
+                    
                     <DownOutlined />
                 </Space>
                 </a>
@@ -411,6 +422,15 @@ const images = [
                     </Card>
                 </Modal>
             </div>   
+
+            {/* 거리순 정렬 버튼 (보여주기용) */}
+            {/* <div>
+                <Button style={{color: 'rgb(22 119 255)'}}>
+                    <EnvironmentOutlined />
+                    {t('layout.sortByDistance')}
+                </Button>
+            </div> */}
+
 
         </div>
         <Divider />

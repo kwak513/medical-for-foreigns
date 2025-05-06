@@ -12,7 +12,7 @@
 "loading": "Loading...",
 "filter": {
     "availableLanguages": "Available Languages",
-    "allLanguages": "All Languages",
+    "allLanguages": "Any Language",
     "korean": "Korean",
     "english": "English",
     "chinese": "Chinese",
@@ -189,7 +189,7 @@
 "changeUserInfoPage": {
     "title": "Edit Member Information",
     "loadingError": "Loading member information. Please try again later.",
-    "passwordPlaceholder": "New Password (enter to change)",
+    "passwordPlaceholder": "current or new password if changing",
     "updateSuccess": "Information updated successfully.",
     "updateFailed": "Failed to update information.",
     "updateError": "Failed to update information due to a server error.",
@@ -204,7 +204,8 @@
     },
     "welcomeMessage": "Welcome to Doctor K",
     "loginSignup": "Login · Sign Up",
-    "logoutSuccess": "Logged out successfully."
+    "logoutSuccess": "Logged out successfully.",
+    "sortByDistance": "Sort by Distance"
 },
 "alert": {
     "filterFailed": "Failed to filter hospitals.",
