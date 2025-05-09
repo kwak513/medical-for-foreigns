@@ -77,6 +77,12 @@ const FindPasswordPage = () => {
                         onClick={handlePasswordResetRequest}
                         block
                         size="large"
+                        style={{
+                            height: 'auto',
+                            minHeight: '40px',
+                            whiteSpace: 'normal',
+                            wordBreak: 'keep-all'
+                        }}
                     >
                         {/* 비밀번호 재설정 메일 요청 */}
                         {t('findPasswordPage.requestButton')}

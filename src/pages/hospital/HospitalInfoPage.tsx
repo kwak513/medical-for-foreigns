@@ -242,7 +242,7 @@ const images = [
             <div className="flex flex-col md:flex-row gap-4 md:gap-8 items-center w-full"> 
                 {/* 이미지와 안내 문구를 묶는 컨테이너 */}
                 <div className="flex flex-col items-center flex-shrink-0"> {/* 세로 정렬 및 크기 고정 */}
-                    <div className="w-full max-w-xs sm:max-w-sm md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] overflow-hidden rounded-lg">
+                    <div className="w-full h-[250px] max-w-xs sm:max-w-sm md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] overflow-hidden rounded-lg">
                     {/* <img alt="병원 이미지" src={images[hospitalId % 40]} className="w-full h-full object-cover" /> */}
                     <img alt={t('hospitalInfo.hospitalImageAlt')} src={images[hospitalId % 40]} className="w-full h-full object-cover" />
                     </div>
@@ -326,15 +326,17 @@ const images = [
 
                 <Title level={5}>
                     {/* <span>&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
+                    
                     {hospitalDetail.length > 0 && 
                         hospitalDetail[0].hospital_category.split(",").map((category, idx) => {
                             return (
-                                <Tag key={idx} style={{ fontSize: '16px', marginBottom: '10px',  marginRight: '10px', padding: '5px'}}>
+                                <Tag key={idx} style={{ fontSize: '16px', marginBottom: '10px',  marginRight: '10px', padding: '5px', whiteSpace: 'normal'}}>
                                     {category.trim()}
                                 </Tag>
                             );
                         })
                     }
+                    
                 </Title>
 
             </div>

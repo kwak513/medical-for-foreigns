@@ -126,7 +126,7 @@ const ChangeUserInfoPage = () => {
     return (
         <>
             <div style={{ textAlign: 'center', marginTop: '40px', marginBottom: '30px' }}>
-                <Title level={2}>
+                <Title level={2} className="!text-[25px] md:!text-[30px]">
                     {/* 회원 정보 수정 */}
                     {t('changeUserInfoPage.title')}
                 </Title>

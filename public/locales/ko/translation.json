@@ -120,7 +120,7 @@
     "enterEmail": "이메일 주소를 입력해주세요.",
     "noMatch": "일치하는 회원 정보가 없습니다.",
     "fetchError": "아이디 정보를 불러오지 못했습니다.",
-    "emailPlaceholder": "가입 시 등록한 이메일 주소",
+    "emailPlaceholder": "이메일 주소",
     "foundSuccessTitle": "아이디 찾기 성공",
     "foundIdMessage": "회원님의 아이디는 {{username}} 입니다.",
     "backToLogin": "로그인 페이지로 돌아가기"
@@ -189,7 +189,7 @@
 "changeUserInfoPage": {
     "title": "회원 정보 수정",
     "loadingError": "회원 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
-    "passwordPlaceholder": "기존 비밀번호 또는 수정할 비밀번호",
+    "passwordPlaceholder": "기존 또는 수정할 비밀번호",
     "updateSuccess": "정보가 수정되었습니다.",
     "updateFailed": "정보 수정에 실패했습니다.",
     "updateError": "서버 오류로 정보 수정에 실패했습니다.",

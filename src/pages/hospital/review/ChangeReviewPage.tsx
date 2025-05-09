@@ -149,7 +149,7 @@ console.log("searchFromGangdong data: ", data);
         <>
             {/* 페이지 제목 수정 */}
             <div>
-                <Title level={2} style={{ width: '100%', textAlign: 'center', marginTop: '20px' }}>
+                <Title level={2} style={{ width: '100%', textAlign: 'center', marginTop: '20px' }} className="!text-[20px] md:!text-[30px]">
                     {/* {hospitalName || '병원'}  */}
                     {hospitalDetail.length > 0 && hospitalDetail[0].hospital_name}
                     {/* 리뷰 수정하기 */}
@@ -171,19 +171,19 @@ console.log("searchFromGangdong data: ", data);
             >
                 {/* 평점 (value 사용) */}
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', width: '100%' }}>
-                    <Title level={4} style={{ marginRight: '10px', width: '30%', marginBottom: 0 }}>
+                    <Title level={4} style={{ marginRight: '10px', width: '30%', marginBottom: 0 }} className="!text-[15px] md:!text-[21px]">
                         {/* 평점: */}
                         {t('hospitalReviewPage.ratingLabel')}
                     </Title>
                     <div style={{ width: '70%' }}>
                         {/* value prop을 사용하여 상태와 바인딩 */}
-                        <Rate allowHalf={false} value={rating} onChange={handleRatingChange} style={{ fontSize: 30 }}/>
+                        <Rate allowHalf={false} value={rating} onChange={handleRatingChange} className='text-[24px] md:!text-[30px]'/>
                     </div>
                 </div>
 
                 {/* 리뷰 내용 (value 사용) */}
                 <div style={{ display: 'flex', marginBottom: '20px', width: '100%' }}>
-                    <Title level={4} style={{ marginRight: '10px', width: '30%', marginTop: 0 }}>
+                    <Title level={4} style={{ marginRight: '10px', width: '30%', marginTop: 0 }} className="!text-[15px] md:!text-[21px]">
                         {/* 리뷰 내용: */}
                         {t('hospitalReviewPage.reviewTextLabel')}
                     </Title>

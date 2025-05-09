@@ -342,7 +342,7 @@ const images = [
     return (  
         <>
         {/* 언어 필터링 */}
-        <div className="flex gap-2 items-baseline">
+        <div className="flex flex-wrap gap-2 items-baseline">
             <div>
             <Dropdown menu={{ items: languageItems }}>
                 <a onClick={(e) => {

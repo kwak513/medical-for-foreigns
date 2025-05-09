@@ -230,7 +230,8 @@ const MyPage = () => {
     return (
         <>
             <div style={{ padding: '20px' }}>
-            <Title level={2} style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <Title level={2} style={{ textAlign: 'center', marginBottom: '30px' }}
+                className="!text-[25px] md:!text-[30px]">
                 <UserOutlined /> {" "}
                 {/* 마이페이지 */}
                 {t('mypage')}
@@ -238,7 +239,7 @@ const MyPage = () => {
 
             {/* --- 회원 정보 --- */}
             <section style={{ marginBottom: '40px' }}>
-                <Title level={3}>
+                <Title level={3} className="!text-[20px] md:!text-[21px] ">
                     {/* 회원 정보 */}
                     {t('myPage.userInfo.title')}
                 </Title>
@@ -273,8 +274,8 @@ const MyPage = () => {
             <Divider />
 
             {/* 예약한 진료 섹션 */}
-            <section style={{ marginBottom: '40px' }}>
-                <Title level={3}>
+            <section style={{ marginBottom: '40px' }} >
+                <Title level={3} className="!text-[20px] md:!text-[21px] ">
                     <CalendarOutlined /> {" "}
                     {/* 예약한 진료 ({reservationInfo.length}) */}
 
@@ -350,7 +351,7 @@ const MyPage = () => {
 
             {/* 작성한 리뷰 섹션 */}
             <section style={{ marginBottom: '40px' }}>
-                <Title level={3}>
+                <Title level={3} className="!text-[20px] md:!text-[21px] ">
                     <MessageOutlined /> {" "}
                     {/* 작성한 리뷰 ({writtenReview.length}) */}
                     {t('myPage.reviews.title', { count: writtenReview.length })}
@@ -413,7 +414,7 @@ const MyPage = () => {
 
             {/* 즐겨찾기한 병원 섹션 */}
             <section>
-                <Title level={3}>
+                <Title level={3} className="!text-[20px] md:!text-[21px] ">
                     <HeartOutlined /> {" "}
                     {/* 즐겨찾기한 병원 ({favoriteHospital.length}) */}
                     {t('myPage.favorites.title', { count: favoriteHospital.length })}

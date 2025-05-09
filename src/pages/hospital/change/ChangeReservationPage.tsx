@@ -256,7 +256,7 @@ console.log("searchFromGangdong data: ", data);
     return (
         <>
         <div>
-            <Title level={2} style={{ width: '100%', textAlign: 'center', marginTop: '20px' }}>
+            <Title level={2} style={{ width: '100%', textAlign: 'center', marginTop: '20px' }} className="!text-[20px] md:!text-[30px]">
                 {/* {hospitalName || '병원 정보 없음'} 진료 예약 변경 */}
 
                 {/* {hospitalName || t('changeReservationPage.noHospitalInfo')} */}
@@ -280,7 +280,7 @@ console.log("searchFromGangdong data: ", data);
         >
             {/* 병원명 */}
             <div style={{ display: 'flex', marginBottom: '20px', width: '100%' }}>
-                <Title level={5} style={{ marginRight: '10px', width: '30%', whiteSpace: 'nowrap' }}>
+                <Title level={4} style={{ marginRight: '10px', width: '30%'}}       className="!text-[15px] md:!text-[21px] ">
                     {/* 병원명: */}
                     {t('hospitalRegisterPage.hospitalNameLabel')}
                 </Title>
@@ -293,7 +293,7 @@ console.log("searchFromGangdong data: ", data);
 
             {/* 진료 날짜와 시간 */}
             <div style={{ display: 'flex', marginBottom: '20px', width: '100%' }}>
-                <Title level={5} style={{ marginRight: '10px', width: '30%', whiteSpace: 'nowrap' }}>
+                <Title level={4} style={{ marginRight: '10px', width: '30%'}}       className="!text-[15px] md:!text-[21px] ">
                     {/* 진료 날짜와 시간: */}
                     {t('hospitalRegisterPage.dateTimeLabel')}
                 </Title>
@@ -314,7 +314,8 @@ console.log("searchFromGangdong data: ", data);
 
             {/* 희망 언어 */}
             <div style={{ display: 'flex', marginBottom: '20px', width: '100%' }}> 
-            <Title level={5} style={{ marginRight: '10px', width: '30%', whiteSpace: 'nowrap' }}>
+            <Title level={4} style={{ marginRight: '10px', width: '30%'}} 
+                className="!text-[15px] md:!text-[21px] ">
                 {/* 희망 언어: */}
                 {t('hospitalRegisterPage.languageLabel')}
             </Title>
@@ -336,16 +337,16 @@ console.log("searchFromGangdong data: ", data);
 
             {/* 증상/과목 */}
             <div style={{ display: 'flex', marginBottom: '20px', width: '100%' }}>
-            <Title level={5} style={{ marginRight: '10px', width: '30%', whiteSpace: 'nowrap' }}>
+            <Title level={4} style={{ marginRight: '10px', width: '30%'}} className="!text-[15px] md:!text-[21px] ">
                 {/* 증상/과목: */}
                 {t('hospitalRegisterPage.symptomLabel')}
             </Title>
 
-            <div style={{ display: 'flex', width: '70%' }}>
+            <div className="flex flex-col md:flex-row gap-3 w-[70%]">
                 <Select
                 value={mainCategory}
                 onChange={handleCategoryChange}
-                style={{ width: '50%', marginRight: '10px' }}
+                className="w-full md:w-1/2"
                 >
                     
                     {/* {Object.keys(symptomCategoryMapping).map((category) => (
@@ -364,7 +365,7 @@ console.log("searchFromGangdong data: ", data);
                 <Select
                 value={subCategory}
                 onChange={handleSubCategoryChange}
-                style={{ width: '50%' }}
+                className="w-full md:w-1/2"
                 >
                 {symptomCategoryMapping[currentLang]?.[mainCategory]?.map((option) => (
                     <Option key={option} value={option}>{option}</Option>
@@ -375,7 +376,7 @@ console.log("searchFromGangdong data: ", data);
 
             {/* 자세한 증상 설명 */}
             <div style={{ display: 'flex', marginBottom: '20px', width: '100%' }}>
-                <Title level={5} style={{ marginRight: '10px', width: '30%', whiteSpace: 'nowrap' }}>
+                <Title level={4} style={{ marginRight: '10px', width: '30%' }} className="!text-[15px] md:!text-[21px] ">
                     {/* 자세한 증상 설명: */}
                     {t('hospitalRegisterPage.detailsLabel')}
                 </Title>

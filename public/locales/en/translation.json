@@ -120,7 +120,7 @@
     "enterEmail": "Please enter your email address.",
     "noMatch": "No matching member information found.",
     "fetchError": "Failed to load ID information.",
-    "emailPlaceholder": "Email address registered during sign-up",
+    "emailPlaceholder": "Email address",
     "foundSuccessTitle": "Find ID Successful",
     "foundIdMessage": "Your ID is {{username}}",
     "backToLogin": "Back to Login Page"
@@ -189,7 +189,7 @@
 "changeUserInfoPage": {
     "title": "Edit Member Information",
     "loadingError": "Loading member information. Please try again later.",
-    "passwordPlaceholder": "current or new password if changing",
+    "passwordPlaceholder": "current or new password",
     "updateSuccess": "Information updated successfully.",
     "updateFailed": "Failed to update information.",
     "updateError": "Failed to update information due to a server error.",
@@ -222,7 +222,7 @@
     "dateTimeLabel": "Date and Time:",
     "datePlaceholder": "Select date",
     "languageLabel": "Preferred Language:",
-    "symptomLabel": "Symptom/Department:",
+    "symptomLabel": "Symptom/ Department:",
     "detailsLabel": "Detailed Symptoms:",
     "fillAllFields": "Please fill in all fields." ,
     "detailsPlaceholder": "ex) I have a headache and fever.",
