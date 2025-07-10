@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Rate, Input, Button, Typography, message } from 'antd'; // Rate, message 추가
-import { insertHospitalReview, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital } from '../../../api/chartboardApi';
+import { insertHospitalReview, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital } from '../../../api/MedicalApi';
 import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;

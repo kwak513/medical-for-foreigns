@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { deleteMemberFavorite, insertIntoMemberFavorite, isFavoriteCheck, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital, selectFromHospitalReview, selectFromMemberFavorite } from "../../api/chartboardApi";
+import { deleteMemberFavorite, insertIntoMemberFavorite, isFavoriteCheck, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital, selectFromHospitalReview, selectFromMemberFavorite } from "../../api/MedicalApi";
 import hospitalRandom1 from '../../assets/hospitalImg/hospitalRandom1.jpg';
 import hospitalRandom2 from '../../assets/hospitalImg/hospitalRandom2.jpg';
 import hospitalRandom3 from '../../assets/hospitalImg/hospitalRandom3.jpg';

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Input, Button, Typography, Card, Alert, Space } from 'antd';
 import { MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom'; // Optional: Link back to login
-import { selectUserName } from '../../api/chartboardApi';
+import { selectUserName } from '../../api/MedicalApi';
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;

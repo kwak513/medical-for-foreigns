@@ -2,7 +2,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Input, Button, Typography, Space } from "antd";
 import { useEffect, useState, KeyboardEvent } from "react"; 
 import { Link, useNavigate } from "react-router-dom";
-import { memberLogin } from "../../api/chartboardApi";
+import { memberLogin } from "../../api/MedicalApi";
 import { useTranslation } from "react-i18next";
 
 const { Title } = Typography; // Typography에서 Title 가져오기

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Rate, Input, Button, Typography, message } from 'antd';
 // updateHospitalReview API 함수를 import 해야 합니다 (실제 이름은 다를 수 있음)
-import { changeReview, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital } from '../../../api/chartboardApi';
+import { changeReview, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital } from '../../../api/MedicalApi';
 import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;

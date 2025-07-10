@@ -41,7 +41,7 @@ import hospitalRandom39 from '../../assets/hospitalImg/hospitalRandom39.jpg';
 import hospitalRandom40 from '../../assets/hospitalImg/hospitalRandom40.jpg';
 
 import { useEffect, useState, useMemo } from "react"; // Re-add useMemo for clarity if preferred, or remove later
-import { searchAndFilterEnHospital, searchAndFilterHospital, select15FromEnHospital, select15FromGangnamGangDongHospital } from "../../api/chartboardApi";
+import { searchAndFilterEnHospital, searchAndFilterHospital, select15FromEnHospital, select15FromGangnamGangDongHospital } from "../../api/MedicalApi";
 import { AppstoreAddOutlined, DownOutlined, EnvironmentOutlined, GlobalOutlined, SmileOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import Title from "antd/es/typography/Title";

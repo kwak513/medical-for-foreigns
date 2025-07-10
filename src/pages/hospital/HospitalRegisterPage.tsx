@@ -5,7 +5,7 @@ import Title from "antd/es/typography/Title";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment, { Moment } from 'moment';
 import { useEffect, useState } from "react";
-import { insertHospitalReservation, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital } from "../../api/chartboardApi";
+import { insertHospitalReservation, selectFromEnGangdongHospital, selectFromEnGangnamHospital, selectFromGangdongHospital, selectFromGangnamHospital } from "../../api/MedicalApi";
 import { useTranslation } from "react-i18next";
 
 const HospitalRegisterPage = () => {  // DB에 저장, value/onChange, 공백 불가 로직 추가해야함

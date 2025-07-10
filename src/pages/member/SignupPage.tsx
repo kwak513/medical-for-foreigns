@@ -3,7 +3,7 @@ import { Button, Input, Select, DatePicker } from "antd"; // Added Select, DateP
 import Title from "antd/es/typography/Title";
 import { useEffect, useState, KeyboardEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { memberRegister } from "../../api/chartboardApi";
+import { memberRegister } from "../../api/MedicalApi";
 import { useTranslation } from "react-i18next";
 // If using Ant Design v4 or need specific date object handling, you might need:
 // import moment from 'moment'; // or dayjs

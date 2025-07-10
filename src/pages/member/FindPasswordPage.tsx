@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Input, Button, Typography, Card, Alert, Space, message } from 'antd'; // Added message
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom'; // Optional: Link back to login
-import { isUserExist } from '../../api/chartboardApi';
+import { isUserExist } from '../../api/MedicalApi';
 import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
