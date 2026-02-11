@@ -2,6 +2,7 @@
 
 ## 📢 서비스 한줄 소개  
 **Doctor K** — 진료 가능 언어, 진료과목, 지역 필터링이 가능한 다국어 병원 정보 웹사이트
+<img width="1919" height="905" alt="image" src="https://github.com/user-attachments/assets/79beda7f-5b2a-43f9-bc0d-b229971c4108" />
 
 
 
@@ -24,7 +25,6 @@
 - **Frontend**: React, TypeScript  
 - **Backend**: Spring Boot  
 - **Database**: MariaDB  
-
 
 
 ## 📁 주요 파일 구조
