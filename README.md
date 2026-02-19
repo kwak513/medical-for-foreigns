@@ -41,7 +41,7 @@ medical-for-foreigns/
 │ │ └── MedicalApi.ts
 │ │
 │ ├── assets/
-│ │ └── (이미지)
+│ │ └── (Images)
 │ │
 │ ├── layouts/
 │ │ └── MainLayout.tsx
